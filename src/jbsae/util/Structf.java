@@ -12,4 +12,8 @@ public class Structf{
         return (T[])(items.getClass() == Object[].class ? new Object[size] :
             Array.newInstance(items.getClass().getComponentType(), size));
     }
+
+    public static <T> boolean eql(T a, T b){
+        return a.equals(b) || a == b;
+    }
 }
