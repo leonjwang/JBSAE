@@ -35,7 +35,7 @@ public class Seq<T> implements Iterable<T>{
 
     public void remove(T value){
         T[] items = this.items;
-        for(int i = 0;i < size;i ++){
+        for(int i = 0;i < size;i++){
             if(eql(items[i], value)){
                 remove(i);
                 break;
@@ -47,8 +47,28 @@ public class Seq<T> implements Iterable<T>{
         for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
     }
 
+    public void removeAll(T... values){
+        T[] items = this.items;
+        for(T value : values){
+            for(int i = 0;i < size;i++){
+                if(eql(items[i], value)) remove(i--);
+            }
+        }
+    }
+
     public T get(int index){
         return items[index];
+    }
+
+    public boolean contains(T value){
+        for(int i = 0;i < size;i++){
+            if(eql(items[i], value)) return true;
+        }
+        return false;
+    }
+
+    public void trim(){
+        resize(size);
     }
 
     public T[] resize(int newSize){
