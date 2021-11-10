@@ -116,8 +116,7 @@ public class Set<T> implements Iterable<T>{
 
         @Override
         public void remove(){
-            //TODO: remove
-            //removeAll(table[nextIndex]);
+            removeAll(table[nextIndex]);
         }
     }
 }
