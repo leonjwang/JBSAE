@@ -28,4 +28,9 @@ public class Mathf{
     public static int max(int a, int b){
         return (int)max((float)a, (float)b);
     }
+
+
+    public static int trailZeros(int i){
+        return Integer.numberOfTrailingZeros(i);
+    }
 }

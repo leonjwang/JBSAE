@@ -11,14 +11,14 @@ public class Seq<T> implements Iterable<T>{
     public int size;
 
     public Seq(){
+        items = (T[])new Object[16];
         i1 = new SeqIterator();
         i2 = new SeqIterator();
-        items = (T[])new Object[16];
     }
 
     public Seq(Object... values){
         this();
-        for(Object t : values) add((T)t);
+        for(Object value : values) add((T)value);
     }
 
     public Object[] list(){

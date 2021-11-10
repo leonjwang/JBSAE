@@ -77,7 +77,7 @@ public class SeqTester{
             for(int i = 0;i < strings.size;i++) if(eql(strings.get(i), removeValue)) return false;
             return true;
         }).run();
-        new Test("Seq Value Contains Test", () -> {
+        new Test("Seq Contains Test", () -> {
             Seq<String> strings = new Seq<>(generate());
             String value = strings.get(randInt(0, strings.size - 1));
             if(!strings.contains(value)) return false;
