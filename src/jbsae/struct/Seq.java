@@ -21,16 +21,29 @@ public class Seq<T> implements Iterable<T>{
         for(Object t : values) add((T)t);
     }
 
+    public Object[] list(){
+        Object[] values = create(size);
+        for(int i = 0;i < size;i++) values[i] = get(i);
+        return values;
+    }
+
     public void add(T value){
         T[] items = this.items;
         if(size == items.length) items = resize(max(8, (int)(size * 1.75f)));
         items[size++] = value;
     }
 
+    public void add(T value, int index){
+        T[] items = this.items;
+        if(size == items.length) items = resize(max(8, (int)(size * 1.75f)));
+        for(int i = (size++) - 1;i >= index;i--) items[i + 1] = items[i];
+        items[index] = value;
+    }
+
     public void remove(int index){
         T[] items = this.items;
         for(int i = index;i < size - 1;i++) items[i] = items[i + 1];
-        items[size--] = null;
+        if(size-- != items.length) items[size + 1] = null;
     }
 
     public void remove(T value){
