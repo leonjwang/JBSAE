@@ -1,4 +1,127 @@
 package jbsae.struct;
 
-public class Queue{
+import java.util.*;
+
+import static jbsae.util.Mathf.*;
+import static jbsae.util.Structf.*;
+
+public class Queue<T> implements Iterable<T>{
+    public QueueIterator i1, i2;
+    public T[] items;
+    public int head, tail, size;
+
+    public Queue(){
+        items = (T[])new Object[4];
+        i1 = new QueueIterator();
+        i2 = new QueueIterator();
+    }
+
+    public Queue(Object... values){
+        this();
+        for(Object value : values) addLast((T)value);
+    }
+
+    public Object[] list(){
+        int i = 0;
+        Object[] values = create(size);
+        for(T value : this) values[i++] = value;
+        return values;
+    }
+
+    public void addFirst(T value){
+        T[] items = this.items;
+        if(size == items.length) items = resize(max(8, size * 2));
+        head = mod(head - 1, items.length);
+        items[head] = value;
+        size++;
+    }
+
+    public void addLast(T value){
+        T[] items = this.items;
+        if(size == items.length) items = resize(max(8, size * 2));
+        items[tail] = value;
+        tail = mod(tail + 1, items.length);
+        size++;
+    }
+
+    public void removeFirst(){
+        T[] items = this.items;
+        items[head] = null;
+        head = mod(head + 1, items.length);
+        size--;
+    }
+
+    public void removeLast(){
+        T[] items = this.items;
+        tail = mod(tail - 1, items.length);
+        items[tail] = null;
+        size--;
+    }
+
+    public T first(){
+        return items[head];
+    }
+
+    public T last(){
+        return items[mod(tail - 1, items.length)];
+    }
+
+    public boolean contains(T value){
+        if(head < tail){
+            for(int i = head;i < tail;i++) if(eql(items[i], value)) return true;
+        }else if(size > 0){
+            for(int i = head;i < items.length;i++) if(eql(items[i], value)) return true;
+            for(int i = 0;i < tail;i++) if(eql(items[i], value)) return true;
+        }
+        return false;
+    }
+
+    public void trim(){
+        resize(size);
+    }
+
+    public T[] resize(int newSize){
+        T[] items = this.items;
+        T[] newItems = create(newSize, items);
+        if(head < tail){
+            for(int i = head;i < tail;i++) newItems[i - head] = items[i];
+        }else if(size > 0){
+            for(int i = head;i < items.length;i++) newItems[i - head] = items[i];
+            for(int i = 0;i < tail;i++) newItems[i + items.length - head] = items[i];
+        }
+        head = 0;
+        tail = size;
+        this.items = newItems;
+        return newItems;
+    }
+
+    @Override
+    public Iterator<T> iterator(){
+        if(i1.index >= size){
+            i1.index = 0;
+            return i1;
+        }
+        if(i2.index >= size){
+            i2.index = 0;
+            return i2;
+        }
+        return new QueueIterator();
+    }
+
+    private class QueueIterator implements Iterator<T>{
+        public int index;
+
+        public QueueIterator(){
+        }
+
+        @Override
+        public boolean hasNext(){
+            return index < size;
+        }
+
+        @Override
+        public T next(){
+            return items[(head + index++) % items.length];
+        }
+    }
 }

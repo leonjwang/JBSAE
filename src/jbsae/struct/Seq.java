@@ -11,7 +11,7 @@ public class Seq<T> implements Iterable<T>{
     public int size;
 
     public Seq(){
-        items = (T[])new Object[16];
+        items = (T[])new Object[4];
         i1 = new SeqIterator();
         i2 = new SeqIterator();
     }
@@ -22,22 +22,27 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Object[] list(){
+        int i = 0;
         Object[] values = create(size);
-        for(int i = 0;i < size;i++) values[i] = get(i);
+        for(T value : this) values[i++] = value;
         return values;
     }
 
     public void add(T value){
         T[] items = this.items;
-        if(size == items.length) items = resize(max(8, (int)(size * 1.75f)));
+        if(size >= items.length) items = resize(max(8, size * 2));
         items[size++] = value;
     }
 
     public void add(T value, int index){
         T[] items = this.items;
-        if(size == items.length) items = resize(max(8, (int)(size * 1.75f)));
+        if(size >= items.length) items = resize(max(8, size * 2));
         for(int i = (size++) - 1;i >= index;i--) items[i + 1] = items[i];
         items[index] = value;
+    }
+
+    public void addAll(T... values){
+        for(T value : values) add(value);
     }
 
     public void remove(int index){
@@ -74,9 +79,7 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public boolean contains(T value){
-        for(int i = 0;i < size;i++){
-            if(eql(items[i], value)) return true;
-        }
+        for(int i = 0;i < size;i++) if(eql(items[i], value)) return true;
         return false;
     }
 
@@ -87,7 +90,7 @@ public class Seq<T> implements Iterable<T>{
     public T[] resize(int newSize){
         T[] items = this.items;
         T[] newItems = create(newSize, items);
-        for(int i = 0;i < Math.min(size, newItems.length);i++) newItems[i] = items[i];
+        for(int i = 0;i < min(size, newItems.length);i++) newItems[i] = items[i];
         this.items = newItems;
         return newItems;
     }
@@ -106,7 +109,7 @@ public class Seq<T> implements Iterable<T>{
     }
 
     private class SeqIterator implements Iterator<T>{
-        public int index = 0;
+        public int index;
 
         public SeqIterator(){
         }
@@ -119,11 +122,6 @@ public class Seq<T> implements Iterable<T>{
         @Override
         public T next(){
             return items[index++];
-        }
-
-        @Override
-        public void remove(){
-            removeAll(--index);
         }
     }
 }

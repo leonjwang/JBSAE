@@ -1,10 +1,7 @@
 package jbsae.struct;
 
-import jbsae.struct.Seq.*;
-
 import java.util.*;
 
-import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
 public class Set<T> implements Iterable<T>{
@@ -13,7 +10,7 @@ public class Set<T> implements Iterable<T>{
     public int size = 0;
 
     public Set(){
-        table = (T[])new Object[64];
+        table = (T[])new Object[16];
         i1 = new SetIterator();
         i2 = new SetIterator();
     }
@@ -24,8 +21,8 @@ public class Set<T> implements Iterable<T>{
     }
 
     public Object[] list(){
-        Object[] values = create(size);
         int i = 0;
+        Object[] values = create(size);
         for(T value : this) values[i++] = value;
         return values;
     }
@@ -34,8 +31,8 @@ public class Set<T> implements Iterable<T>{
         T[] table = this.table;
         int h = value.hashCode();
         int[] checks = hashes(h, table.length);
-        for(int i = 0;i < 3;i++) if(eql(table[checks[i]], value)) return;
-        for(int i = 0;i < 3;i++){
+        for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return;
+        for(int i = 0;i < checks.length;i++){
             if(table[checks[i]] == null){
                 table[checks[i]] = value;
                 size++;
@@ -46,11 +43,15 @@ public class Set<T> implements Iterable<T>{
         add(value);
     }
 
+    public void addAll(T... values){
+        for(T value : values) add(value);
+    }
+
     public void remove(T value){
         T[] table = this.table;
         int h = value.hashCode();
         int[] checks = hashes(h, table.length);
-        for(int i = 0;i < 3;i++){
+        for(int i = 0;i < checks.length;i++){
             if(eql(table[checks[i]], value)){
                 table[checks[i]] = null;
                 size--;
@@ -67,16 +68,17 @@ public class Set<T> implements Iterable<T>{
         T[] table = this.table;
         int h = value.hashCode();
         int[] checks = hashes(h, table.length);
-        for(int i = 0;i < 3;i++) if(eql(table[checks[i]], value)) return true;
+        for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return true;
         return false;
     }
 
     public void resize(int newSize){
+        T[] table = this.table;
         T[] values = create(size, table);
         int index = 0;
         for(int i = 0;i < table.length;i++) if(table[i] != null) values[index++] = table[i];
         size = 0;
-        this.table = create(newSize);
+        this.table = create(newSize, table);
         for(int i = 0;i < values.length;i++) add(values[i]);
     }
 
@@ -112,11 +114,6 @@ public class Set<T> implements Iterable<T>{
         @Override
         public T next(){
             return table[nextIndex];
-        }
-
-        @Override
-        public void remove(){
-            removeAll(table[nextIndex]);
         }
     }
 }

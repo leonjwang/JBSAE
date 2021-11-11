@@ -22,7 +22,7 @@ public class Test{
         for(int i = 0;i < times;i++) result = result & test.get();
         print("[" + name + "] Result: " + result);
         long end = System.currentTimeMillis();
-        print("[" + name + "] Runtime: " + (end - start) + "ms + (" + ((end - start) / 1000f) + "s)");
+        print("[" + name + "] Runtime: " + (end - start) + "ms " + "(" + ((end - start) / 1000f) + "s)");
         return result;
     }
 }
