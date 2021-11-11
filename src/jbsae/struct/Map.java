@@ -95,17 +95,16 @@ public class Map<K, V> implements Iterable<K>{
         V[] values = this.values;
         K[] keyValues = create(size, keys);
         V[] valueValues = create(size, values);
-        int index = 0;
-        for(int i = 0;i < keys.length;i++){
-            if(keys[i] != null){
-                keyValues[index] = keys[i];
-                valueValues[index++] = values[i];
+        int i = (size = 0);
+        for(int j = 0;j < keys.length;j++){
+            if(keys[j] != null){
+                keyValues[i] = keys[j];
+                valueValues[i++] = values[j];
             }
         }
-        size = 0;
         this.keys = create(newSize, keys);
         this.values = create(newSize, values);
-        for(int i = 0;i < keyValues.length;i++) add(keyValues[i], valueValues[i]);
+        for(int j = 0;j < keyValues.length;j++) add(keyValues[j], valueValues[j]);
     }
 
     @Override

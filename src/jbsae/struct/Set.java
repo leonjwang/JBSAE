@@ -65,7 +65,6 @@ public class Set<T> implements Iterable<T>{
     }
 
     public boolean contains(T value){
-        T[] table = this.table;
         int h = value.hashCode();
         int[] checks = hashes(h, table.length);
         for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return true;
@@ -75,11 +74,10 @@ public class Set<T> implements Iterable<T>{
     public void resize(int newSize){
         T[] table = this.table;
         T[] values = create(size, table);
-        int index = 0;
-        for(int i = 0;i < table.length;i++) if(table[i] != null) values[index++] = table[i];
-        size = 0;
+        int i = (size = 0);
+        for(int j = 0;j < table.length;j++) if(table[j] != null) values[i++] = table[j];
         this.table = create(newSize, table);
-        for(int i = 0;i < values.length;i++) add(values[i]);
+        for(int j = 0;j < values.length;j++) add(values[j]);
     }
 
     @Override

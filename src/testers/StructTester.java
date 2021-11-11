@@ -37,6 +37,15 @@ public class StructTester{
             }
             for(int i = 0;i < arrList.size();i++) if(!eql(arrList.get(i), seq.get(i))) return false;
 
+            //Insert Test
+            for(int i = 0;i < randInt(2, 5);i++){
+                String value = single();
+                int index = randInt(0, arrList.size() - 1);
+                arrList.add(index, value);
+                seq.add(value, index);
+            }
+            for(int i = 0;i < arrList.size();i++) if(!eql(arrList.get(i), seq.get(i))) return false;
+
             //Remove Index Test
             int removeIndex = randInt(0, arrList.size() - 1);
             arrList.remove(removeIndex);

@@ -1,6 +1,10 @@
 package jbsae.util;
 
 public class Mathf{
+    public static final float threshhold = 0.001f;
+
+
+    /** Random functions. */
     public static float random(){
         return (float)Math.random();
     }
@@ -17,6 +21,8 @@ public class Mathf{
         return random() < c;
     }
 
+
+    /** Ported Math functions. */
     public static float abs(float a){
         return Math.abs(a);
     }
@@ -25,12 +31,8 @@ public class Mathf{
         return (int)abs((float)a);
     }
 
-    public static float min(float a, float b){
-        return Math.min(a, b);
-    }
-
-    public static int min(int a, int b){
-        return (int)min((float)a, (float)b);
+    public static boolean eqlf(float a, float b){
+        return abs(a - b) < threshhold;
     }
 
     public static float max(float a, float b){
@@ -39,6 +41,14 @@ public class Mathf{
 
     public static int max(int a, int b){
         return (int)max((float)a, (float)b);
+    }
+
+    public static float min(float a, float b){
+        return Math.min(a, b);
+    }
+
+    public static int min(int a, int b){
+        return (int)min((float)a, (float)b);
     }
 
     public static float mod(float n, float m){
@@ -50,7 +60,12 @@ public class Mathf{
     }
 
 
+    /** Ported class functions. */
     public static int trailZeros(int i){
         return Integer.numberOfTrailingZeros(i);
+    }
+
+    public static int intBits(float f){
+        return Float.floatToIntBits(f);
     }
 }

@@ -61,7 +61,7 @@ public class Seq<T> implements Iterable<T>{
         }
     }
 
-    public void removeAll(int... indexes){
+    public void remove(int... indexes){
         for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
     }
 
@@ -90,7 +90,7 @@ public class Seq<T> implements Iterable<T>{
     public T[] resize(int newSize){
         T[] items = this.items;
         T[] newItems = create(newSize, items);
-        for(int i = 0;i < min(size, newItems.length);i++) newItems[i] = items[i];
+        for(int i = 0;i < min(size, newSize);i++) newItems[i] = items[i];
         this.items = newItems;
         return newItems;
     }
