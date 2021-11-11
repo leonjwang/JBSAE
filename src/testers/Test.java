@@ -1,4 +1,4 @@
-package jbsae.testers;
+package testers;
 
 import jbsae.func.prim.*;
 
@@ -15,14 +15,14 @@ public class Test{
         this.times = 1000;
     }
 
-    public void run(){
+    public boolean run(){
         print("Running test: [" + name + "]");
         long start = System.currentTimeMillis();
         boolean result = true;
         for(int i = 0;i < times;i++) result = result & test.get();
-        print("Result: " + result);
+        print("[" + name + "] Result: " + result);
         long end = System.currentTimeMillis();
-        print("Runtime: " + (end - start) + "ms + (" + ((end - start) / 1000f) + "s)");
-        print("");
+        print("[" + name + "] Runtime: " + (end - start) + "ms + (" + ((end - start) / 1000f) + "s)");
+        return result;
     }
 }
