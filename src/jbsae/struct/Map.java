@@ -1,7 +1,5 @@
 package jbsae.struct;
 
-import jbsae.struct.Set.*;
-
 import java.util.*;
 
 import static jbsae.util.Structf.*;
@@ -13,8 +11,8 @@ public class Map<K, V> implements Iterable<K>{
     public int size = 0;
 
     public Map(){
-        keys = (K[])new Object[16*16*4];
-        values = (V[])new Object[16*16*4];
+        keys = (K[])new Object[16 * 16 * 4];
+        values = (V[])new Object[16 * 16 * 4];
         i1 = new MapIterator();
         i2 = new MapIterator();
     }
@@ -74,7 +72,7 @@ public class Map<K, V> implements Iterable<K>{
         }
     }
 
-    public void removaAll(K... keys){
+    public void removeAll(K... keys){
         for(K key : keys) remove(key);
     }
 
