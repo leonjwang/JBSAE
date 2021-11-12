@@ -1,5 +1,7 @@
 package jbsae.struct;
 
+import jbsae.func.prim.*;
+
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
@@ -37,7 +39,7 @@ public class Seq<T> implements Iterable<T>{
     public void add(T value, int index){
         T[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
-        for(int i = (size++) - 1;i >= index;i--) items[i + 1] = items[i];
+        shift(items, index, size++, 1);
         items[index] = value;
     }
 
@@ -47,8 +49,8 @@ public class Seq<T> implements Iterable<T>{
 
     public void remove(int index){
         T[] items = this.items;
-        for(int i = index;i < size - 1;i++) items[i] = items[i + 1];
-        if(size-- != items.length) items[size + 1] = null;
+        shift(items, index + 1, size--, -1);
+        items[size] = null;
     }
 
     public void remove(T value){
@@ -83,6 +85,16 @@ public class Seq<T> implements Iterable<T>{
         return false;
     }
 
+    public void sort(){
+        trim();
+        sortArr(items);
+    }
+
+    public void sort(Floatf<T> value){
+        trim();
+        sortArr(items, value);
+    }
+
     public void trim(){
         resize(size);
     }
@@ -90,7 +102,7 @@ public class Seq<T> implements Iterable<T>{
     public T[] resize(int newSize){
         T[] items = this.items;
         T[] newItems = create(newSize, items);
-        for(int i = 0;i < min(size, newSize);i++) newItems[i] = items[i];
+        copy(items, newItems, size);
         this.items = newItems;
         return newItems;
     }

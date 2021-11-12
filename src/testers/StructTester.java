@@ -1,5 +1,6 @@
 package testers;
 
+import jbsae.math.*;
 import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
@@ -8,18 +9,14 @@ import static jbsae.util.Structf.*;
 public class StructTester{
     public static String single(){
         String value = "";
-        for(int j = 0;j < randInt(1, 10);j++) value += (char)randInt(32, 126);
+        for(int j = 0;j < randInt(1, 10);j++) value += (char)randInt('A', 'Z');
         return value;
     }
 
     public static String[] generate(){
         int size = randInt(10, 100);
         String[] arr = new String[size];
-        for(int i = 0;i < size;i++){
-            String value = "";
-            for(int j = 0;j < randInt(1, 10);j++) value += (char)randInt(32, 126);
-            arr[i] = value;
-        }
+        for(int i = 0;i < size;i++) arr[i] = single();
         return arr;
     }
 
@@ -161,8 +158,8 @@ public class StructTester{
             for(String str : queue) if(!eql(linkedList.get(j++), str)) return false;
 
             //Get Test
-            if(linkedList.get(0) != queue.first()) return false;
-            if(linkedList.get(linkedList.size() - 1) != queue.last()) return false;
+            if(!eql(linkedList.get(0), queue.first())) return false;
+            if(!eql(linkedList.get(linkedList.size() - 1), queue.last())) return false;
 
             //Contains test
             String value = arr[randInt(0, arr.length - 1)];

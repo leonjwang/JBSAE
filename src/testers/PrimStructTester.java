@@ -203,8 +203,155 @@ public class PrimStructTester{
         }).run();
     }
 
+    public static void testQueues(){
+        new Test("Float Queue Test", () -> {
+            //Setup
+            java.util.LinkedList<Float> linkedList = new java.util.LinkedList<>();
+            FloatQueue queue = new FloatQueue();
+
+            //Add Last Test
+            for(int i = 0;i < randInt(10, 100);i++){
+                float value = random(0, 10000);
+                linkedList.addLast(value);
+                queue.addLast(value);
+            }
+            int j = 0;
+            for(Float value : linkedList) if(!eqlf(queue.get(j++), value)) return false;
+
+            //Add First Test
+            for(int i = 0;i < randInt(10, 100);i++){
+                float value = random(0, 10000);
+                linkedList.addFirst(value);
+                queue.addFirst(value);
+            }
+            j = 0;
+            for(Float value : linkedList) if(!eqlf(queue.get(j++), value)) return false;
+
+            //Remove Last Test
+            for(int i = 0;i < randInt(0, 5);i++){
+                linkedList.removeLast();
+                queue.removeLast();
+            }
+            j = 0;
+            for(Float value : linkedList) if(!eqlf(queue.get(j++), value)) return false;
+
+            //Remove First Test
+            for(int i = 0;i < randInt(0, 5);i++){
+                linkedList.removeFirst();
+                queue.removeFirst();
+            }
+            j = 0;
+            for(Float value : linkedList) if(!eqlf(queue.get(j++), value)) return false;
+
+            //Get Test
+            if(!eqlf(linkedList.get(0), queue.first())) return false;
+            if(!eqlf(linkedList.get(linkedList.size() - 1), queue.last())) return false;
+
+            //Contains test
+            float value = chance(0.1f) ? 0 : linkedList.get(randInt(0, linkedList.size() - 1));
+            if(linkedList.contains(value) != queue.contains(value)) return false;
+
+            return true;
+        }).run();
+        new Test("Boolean Queue Test", () -> {
+            //Setup
+            java.util.LinkedList<Boolean> linkedList = new java.util.LinkedList<>();
+            BoolQueue queue = new BoolQueue();
+
+            //Add Last Test
+            for(int i = 0;i < randInt(10, 100);i++){
+                boolean value = chance(0.5f);
+                linkedList.addLast(value);
+                queue.addLast(value);
+            }
+            int j = 0;
+            for(Boolean value : linkedList) if(queue.get(j++) != value) return false;
+
+            //Add First Test
+            for(int i = 0;i < randInt(10, 100);i++){
+                boolean value = chance(0.5f);
+                linkedList.addFirst(value);
+                queue.addFirst(value);
+            }
+            j = 0;
+            for(Boolean value : linkedList) if(queue.get(j++) != value) return false;
+
+            //Remove Last Test
+            for(int i = 0;i < randInt(0, 5);i++){
+                linkedList.removeLast();
+                queue.removeLast();
+            }
+            j = 0;
+            for(Boolean value : linkedList) if(queue.get(j++) != value) return false;
+
+            //Remove First Test
+            for(int i = 0;i < randInt(0, 5);i++){
+                linkedList.removeFirst();
+                queue.removeFirst();
+            }
+            j = 0;
+            for(Boolean value : linkedList) if(queue.get(j++) != value) return false;
+
+            //Get Test
+            if(linkedList.get(0) != queue.first()) return false;
+            if(linkedList.get(linkedList.size() - 1) != queue.last()) return false;
+
+            return true;
+        }).run();
+        new Test("Int Queue Test", () -> {
+            //Setup
+            java.util.LinkedList<Integer> linkedList = new java.util.LinkedList<>();
+            IntQueue queue = new IntQueue();
+
+            //Add Last Test
+            for(int i = 0;i < randInt(10, 100);i++){
+                int value = randInt(0, 10000);
+                linkedList.addLast(value);
+                queue.addLast(value);
+            }
+            int j = 0;
+            for(Integer value : linkedList) if(queue.get(j++) != value) return false;
+
+            //Add First Test
+            for(int i = 0;i < randInt(10, 100);i++){
+                int value = randInt(0, 10000);
+                linkedList.addFirst(value);
+                queue.addFirst(value);
+            }
+            j = 0;
+            for(Integer value : linkedList) if(queue.get(j++) != value) return false;
+
+            //Remove Last Test
+            for(int i = 0;i < randInt(0, 5);i++){
+                linkedList.removeLast();
+                queue.removeLast();
+            }
+            j = 0;
+            for(Integer value : linkedList) if(queue.get(j++) != value) return false;
+
+            //Remove First Test
+            for(int i = 0;i < randInt(0, 5);i++){
+                linkedList.removeFirst();
+                queue.removeFirst();
+            }
+            j = 0;
+            for(Integer value : linkedList) if(queue.get(j++) != value) return false;
+
+            //Get Test
+            if(linkedList.get(0) != queue.first()) return false;
+            if(linkedList.get(linkedList.size() - 1) != queue.last()) return false;
+
+            //Contains Test
+            int value = chance(0.1f) ? 0 : linkedList.get(randInt(0, linkedList.size() - 1));
+            if(linkedList.contains(value) != queue.contains(value)) return false;
+
+            return true;
+        }).run();
+    }
+
     public static void main(String[] args){
         testSeqs();
         testSets();
+        testQueues();
     }
 }

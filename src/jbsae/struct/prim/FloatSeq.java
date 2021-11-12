@@ -1,6 +1,7 @@
 package jbsae.struct.prim;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Structf.*;
 
 public class FloatSeq{
     public float[] items;
@@ -17,7 +18,7 @@ public class FloatSeq{
 
     public float[] list(){
         float[] values = new float[size];
-        for(int i = 0;i < items.length;i++) values[i] = items[i];
+        copy(items, values, size);
         return values;
     }
 
@@ -30,7 +31,7 @@ public class FloatSeq{
     public void add(float value, int index){
         float[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
-        for(int i = (size++) - 1;i >= index;i--) items[i + 1] = items[i];
+        shift(items, index, size++, 1);
         items[index] = value;
     }
 
@@ -40,8 +41,8 @@ public class FloatSeq{
 
     public void remove(int index){
         float[] items = this.items;
-        for(int i = index;i < size - 1;i++) items[i] = items[i + 1];
-        if(size-- != items.length) items[size + 1] = 0f;
+        shift(items, index + 1, size--, -1);
+        items[size] = 0;
     }
 
     public void removeValue(float value){
@@ -76,6 +77,11 @@ public class FloatSeq{
         return false;
     }
 
+    public void sort(){
+        trim();
+        sortArr(items);
+    }
+
     public void trim(){
         resize(size);
     }
@@ -83,7 +89,7 @@ public class FloatSeq{
     public float[] resize(int newSize){
         float[] items = this.items;
         float[] newItems = new float[newSize];
-        for(int i = 0;i < min(size, newSize);i++) newItems[i] = items[i];
+        copy(items, newItems, size);
         this.items = newItems;
         return newItems;
     }

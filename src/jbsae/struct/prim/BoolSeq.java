@@ -1,6 +1,9 @@
 package jbsae.struct.prim;
 
+import jbsae.func.prim.*;
+
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Structf.*;
 
 public class BoolSeq{
     public boolean[] items;
@@ -17,7 +20,7 @@ public class BoolSeq{
 
     public boolean[] list(){
         boolean[] values = new boolean[size];
-        for(int i = 0;i < items.length;i++) values[i] = items[i];
+        copy(items, values, size);
         return values;
     }
 
@@ -30,7 +33,7 @@ public class BoolSeq{
     public void add(boolean value, int index){
         boolean[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
-        for(int i = (size++) - 1;i >= index;i--) items[i + 1] = items[i];
+        shift(items, index, size++, 1);
         items[index] = value;
     }
 
@@ -40,16 +43,40 @@ public class BoolSeq{
 
     public void remove(int index){
         boolean[] items = this.items;
-        for(int i = index;i < size - 1;i++) items[i] = items[i + 1];
-        if(size-- != items.length) items[size + 1] = false;
+        shift(items, index + 1, size--, -1);
+        items[size] = false;
+    }
+
+    public void removeValue(boolean value){
+        boolean[] items = this.items;
+        for(int i = 0;i < size;i++){
+            if(items[i] == value){
+                remove(i);
+                break;
+            }
+        }
     }
 
     public void remove(int... indexes){
         for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
     }
 
+    public void removeAll(boolean... values){
+        boolean[] items = this.items;
+        for(int i = 0;i < values.length;i++){
+            for(int j = 0;j < size;j++){
+                if(items[j] == values[i]) remove(j--);
+            }
+        }
+    }
+
     public boolean get(int index){
         return items[index];
+    }
+
+    public boolean contains(boolean value){
+        for(int i = 0;i < size;i++) if(items[i] == value) return true;
+        return false;
     }
 
     public void trim(){
@@ -59,7 +86,7 @@ public class BoolSeq{
     public boolean[] resize(int newSize){
         boolean[] items = this.items;
         boolean[] newItems = new boolean[newSize];
-        for(int i = 0;i < min(size, newSize);i++) newItems[i] = items[i];
+        copy(items, newItems, size);
         this.items = newItems;
         return newItems;
     }

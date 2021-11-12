@@ -58,21 +58,20 @@ public class Queue<T> implements Iterable<T>{
         size--;
     }
 
+    public T get(int index){
+        return items[mod((head + index), items.length)];
+    }
+
     public T first(){
-        return items[head];
+        return get(0);
     }
 
     public T last(){
-        return items[mod(tail - 1, items.length)];
+        return get(size - 1);
     }
 
     public boolean contains(T value){
-        if(head < tail){
-            for(int i = head;i < tail;i++) if(eql(items[i], value)) return true;
-        }else if(size > 0){
-            for(int i = head;i < items.length;i++) if(eql(items[i], value)) return true;
-            for(int i = 0;i < tail;i++) if(eql(items[i], value)) return true;
-        }
+        for(int i = 0;i < size;i++) if(eql(get(i), value)) return true;
         return false;
     }
 
@@ -83,15 +82,10 @@ public class Queue<T> implements Iterable<T>{
     public T[] resize(int newSize){
         T[] items = this.items;
         T[] newItems = create(newSize, items);
-        if(head < tail){
-            for(int i = head;i < tail;i++) newItems[i - head] = items[i];
-        }else if(size > 0){
-            for(int i = head;i < items.length;i++) newItems[i - head] = items[i];
-            for(int i = 0;i < tail;i++) newItems[i + items.length - head] = items[i];
-        }
+        for(int i = 0;i < size;i++) newItems[i] = get(i);
+        this.items = newItems;
         head = 0;
         tail = size;
-        this.items = newItems;
         return newItems;
     }
 
@@ -121,7 +115,7 @@ public class Queue<T> implements Iterable<T>{
 
         @Override
         public T next(){
-            return items[(head + index++) % items.length];
+            return get(index++);
         }
     }
 }
