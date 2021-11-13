@@ -40,7 +40,7 @@ public class GameLoop{
             if(frameTimer >= (1000 / fps)){
                 frameTimer %= (1000 / fps);
                 time.frames++;
-                tempDraw();
+                //tempDraw();
                 window.swapBuffers();
             }
             if(loopTimer >= 1000){

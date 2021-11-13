@@ -1,3 +1,5 @@
+#version 150 core
+
 in vec3 vertexColor;
 
 out vec4 fragColor;

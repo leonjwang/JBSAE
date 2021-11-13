@@ -1,7 +1,9 @@
 package jbsae.graphics.gl;
 
+import jbsae.math.*;
 import org.lwjgl.system.*;
 
+import java.io.*;
 import java.nio.*;
 
 import static org.lwjgl.opengl.GL30.*;
@@ -26,18 +28,40 @@ public class Renderer{
         glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
         MemoryStack.stackPop();
 
-        //TODO: Can't just plop in path like this, need a file reader class :(
-        int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, "assets/shaders/shader.vert");
-        glCompileShader(vertexShader);
+        Shader vertexShader = new Shader("assets/shaders/shader.vert", GL_VERTEX_SHADER);
+        Shader fragShader = new Shader("assets/shaders/shader.frag", GL_FRAGMENT_SHADER);
 
-//        int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-//        glShaderSource(fragmentShader, "assets/shaders/shader.frag");
-//        glCompileShader(fragmentShader);
-
-        int status = glGetShaderi(vertexShader, GL_COMPILE_STATUS);
+        int status = glGetShaderi(vertexShader.id, GL_COMPILE_STATUS);
         if (status != GL_TRUE) {
-            throw new RuntimeException(glGetShaderInfoLog(vertexShader));
+            throw new RuntimeException(glGetShaderInfoLog(vertexShader.id));
         }
+
+        status = glGetShaderi(fragShader.id, GL_COMPILE_STATUS);
+        if (status != GL_TRUE) {
+            throw new RuntimeException(glGetShaderInfoLog(fragShader.id));
+        }
+
+        int floatSize = 4;
+
+        int posAttrib = glGetAttribLocation(vertexShader.id, "position");
+        glEnableVertexAttribArray(posAttrib);
+        glVertexAttribPointer(posAttrib, 3, GL_FLOAT, false, 6 * floatSize, 0);
+
+        int colAttrib = glGetAttribLocation(vertexShader.id, "color");
+        glEnableVertexAttribArray(colAttrib);
+        glVertexAttribPointer(colAttrib, 3, GL_FLOAT, false, 6 * floatSize, 3 * floatSize);
+
+        int uniModel = glGetUniformLocation(vertexShader.id, "model");
+        Matrix4f model = new Matrix4f();
+        glUniformMatrix4fv(uniModel, false, model.getBuffer());
+
+        int uniView = glGetUniformLocation(vertexShader.id, "view");
+        Matrix4f view = new Matrix4f();
+        glUniformMatrix4fv(uniView, false, view.getBuffer());
+
+        int uniProjection = glGetUniformLocation(vertexShader.id, "projection");
+        float ratio = 640f / 480f;
+        Matrix4f projection = Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
+        glUniformMatrix4fv(uniProjection, false, projection.getBuffer());
     }
 }
