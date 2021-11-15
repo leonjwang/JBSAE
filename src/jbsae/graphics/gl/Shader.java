@@ -23,6 +23,7 @@ public class Shader{
         }catch(Exception e){
             printDebug("Failed to load shader: " + path);
         }
+        String done = builder.toString();
         glShaderSource(id, builder.toString());
         glCompileShader(id);
         glUseProgram(id);

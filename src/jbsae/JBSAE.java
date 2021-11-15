@@ -37,6 +37,7 @@ public class JBSAE{
     public static void dispose(){
         input.dispose();
         window.dispose();
+        renderer.dispose();
         glfwTerminate();
     }
 

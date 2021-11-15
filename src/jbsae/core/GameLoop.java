@@ -1,7 +1,11 @@
 package jbsae.core;
 
+import jbsae.graphics.*;
+import jbsae.graphics.gl.*;
+import jbsae.util.*;
 import org.lwjgl.system.*;
 
+import java.lang.reflect.*;
 import java.nio.*;
 
 import static jbsae.JBSAE.*;
@@ -12,12 +16,13 @@ import static org.lwjgl.opengl.GL11.*;
 public class GameLoop{
     public int rotation = 0;
     public Screen screen;
+    public Texture texture1;
 
     public GameLoop(){
     }
 
     public void init(){
-
+        texture1 = Texture.loadTexture("assets/sprites/effects/square.png");
     }
 
     public void start(){
@@ -40,7 +45,21 @@ public class GameLoop{
             if(frameTimer >= (1000 / fps)){
                 frameTimer %= (1000 / fps);
                 time.frames++;
-                //tempDraw();
+                texture1.bind();
+                Colorf c = new Colorf();
+                Field[] fields = c.getClass().getFields();
+                int cnt1 = 0, cnt2 = 0, cnt3 = 0;
+                for(int i = 4;i < fields.length;i++){
+                    try{
+                        Color r = (Color)fields[i].get(c);
+                        String name = fields[i].getName();
+                        if(name.length() > 5 && name.substring(0, 5).equals("light")) renderer.drawTexture(texture1, 10, (cnt1++) * 40, r);
+                        else if(name.length() > 5 && fields[i].getName().substring(0, 5).equals("dark")) renderer.drawTexture(texture1, 90, (cnt2++) * 40, r);
+                        else renderer.drawTexture(texture1, 50, (cnt3++) * 40, r);
+                    }catch(Exception e){
+                    }
+                }
+                renderer.flush();
                 window.swapBuffers();
             }
             if(loopTimer >= 1000){
@@ -51,31 +70,5 @@ public class GameLoop{
             }
             window.pollEvents();
         }
-    }
-
-    public void tempDraw(){
-        float ratio;
-
-        ratio = curWidth / (float)curHeight;
-
-        /* Set ortographic projection */
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-ratio, ratio, -1f, 1f, 1f, -1f);
-        glMatrixMode(GL_MODELVIEW);
-
-        /* Rotate matrix */
-        glLoadIdentity();
-        glRotatef(rotation, 0f, 0f, 1f);
-
-        /* Render triangle */
-        glBegin(GL_TRIANGLES);
-        glColor3f(1f, 0f, 0f);
-        glVertex3f(-0.6f, -0.4f, 0f);
-        glColor3f(0f, 1f, 0f);
-        glVertex3f(0.6f, -0.4f, 0f);
-        glColor3f(0f, 0f, 1f);
-        glVertex3f(0f, 0.6f, 0f);
-        glEnd();
     }
 }

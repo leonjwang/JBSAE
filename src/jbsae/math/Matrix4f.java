@@ -308,6 +308,54 @@ public class Matrix4f{
     }
 
     /**
+     * Creates a rotation matrix. Similar to
+     * <code>glRotate(angle, x, y, z)</code>.
+     * @param angle Angle of rotation in degrees
+     * @param x x coordinate of the rotation vector
+     * @param y y coordinate of the rotation vector
+     * @param z z coordinate of the rotation vector
+     * @return Rotation matrix
+     */
+    public static Matrix4f rotate(float angle, float x, float y, float z){
+        Matrix4f rotation = new Matrix4f();
+
+        float c = (float)Math.cos(Math.toRadians(angle));
+        float s = (float)Math.sin(Math.toRadians(angle));
+        Vec3 vec = new Vec3(x, y, z);
+        if(vec.len() != 1f){
+            vec = vec.nor();
+            x = vec.x;
+            y = vec.y;
+            z = vec.z;
+        }
+
+        rotation.m00 = x * x * (1f - c) + c;
+        rotation.m10 = y * x * (1f - c) + z * s;
+        rotation.m20 = x * z * (1f - c) - y * s;
+        rotation.m01 = x * y * (1f - c) - z * s;
+        rotation.m11 = y * y * (1f - c) + c;
+        rotation.m21 = y * z * (1f - c) + x * s;
+        rotation.m02 = x * z * (1f - c) + y * s;
+        rotation.m12 = y * z * (1f - c) - x * s;
+        rotation.m22 = z * z * (1f - c) + c;
+
+        return rotation;
+    }
+
+    /**
+     * Multiplies this matrix to a vector.
+     * @param vector The vector
+     * @return Vector product of this * other
+     */
+    public Vec4 multiply(Vec4 vector){
+        float x = this.m00 * vector.x + this.m01 * vector.y + this.m02 * vector.z + this.m03 * vector.w;
+        float y = this.m10 * vector.x + this.m11 * vector.y + this.m12 * vector.z + this.m13 * vector.w;
+        float z = this.m20 * vector.x + this.m21 * vector.y + this.m22 * vector.z + this.m23 * vector.w;
+        float w = this.m30 * vector.x + this.m31 * vector.y + this.m32 * vector.z + this.m33 * vector.w;
+        return new Vec4(x, y, z, w);
+    }
+
+    /**
      * Creates a scaling matrix. Similar to <code>glScale(x, y, z)</code>.
      * @param x Scale factor along the x coordinate
      * @param y Scale factor along the y coordinate

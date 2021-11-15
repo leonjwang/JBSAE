@@ -1,67 +1,96 @@
 package jbsae.graphics.gl;
 
+import jbsae.graphics.*;
 import jbsae.math.*;
+import org.lwjgl.glfw.*;
 import org.lwjgl.system.*;
 
-import java.io.*;
 import java.nio.*;
 
+import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class Renderer{
+    public VertexArrayObject vertexArray;
+    public VertexBufferObject vertexBuffer;
+    public ShaderProgram program;
+
+    public FloatBuffer vertices;
+    public int verticesNum;
+
     public Renderer(){
     }
-
+    
     public void init(){
-        int vao = glGenVertexArrays();
-        glBindVertexArray(vao);
+        vertexArray = new VertexArrayObject();
+        vertexArray.bind();
+        vertexBuffer = new VertexBufferObject();
+        vertexBuffer.bind(GL_ARRAY_BUFFER);
 
-        MemoryStack stack = MemoryStack.stackPush();
-        FloatBuffer vertices = stack.mallocFloat(3 * 6);
-        vertices.put(-0.6f).put(-0.4f).put(0f).put(1f).put(0f).put(0f);
-        vertices.put(0.6f).put(-0.4f).put(0f).put(0f).put(1f).put(0f);
-        vertices.put(0f).put(0.6f).put(0f).put(0f).put(0f).put(1f);
-        vertices.flip();
-
-        int vbo = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-        MemoryStack.stackPop();
+        vertices = MemoryUtil.memAllocFloat(4096);
+        vertexBuffer.uploadData(GL_ARRAY_BUFFER, vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
+        verticesNum = 0;
 
         Shader vertexShader = new Shader("assets/shaders/shader.vert", GL_VERTEX_SHADER);
-        Shader fragShader = new Shader("assets/shaders/shader.frag", GL_FRAGMENT_SHADER);
+        Shader fragmentShader = new Shader("assets/shaders/shader.frag", GL_FRAGMENT_SHADER);
 
-        int status = glGetShaderi(vertexShader.id, GL_COMPILE_STATUS);
-        if (status != GL_TRUE) {
-            throw new RuntimeException(glGetShaderInfoLog(vertexShader.id));
+        program = new ShaderProgram(vertexShader, fragmentShader);
+        program.bindFragmentDataLocation(0, "fragColor");
+        program.link();
+        program.use();
+
+        vertexShader.dispose();
+        fragmentShader.dispose();
+
+        program.setVertex("position", 2, 8 * Float.BYTES, 0);
+        program.setVertex("color", 4, 8 * Float.BYTES, 2 * Float.BYTES);
+        program.setVertex("texCoord", 2, 8 * Float.BYTES, 6 * Float.BYTES);
+        program.setUniform("texImage", 0);
+        program.setUniform("model", new Matrix4f());
+        program.setUniform("view", new Matrix4f());
+        program.setUniform("projection", Matrix4f.orthographic(0f, width * 2, 0f, height * 2, -1f, 1f));
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    public void flush(){
+        if(verticesNum > 0){
+            vertices.flip();
+
+            vertexArray.bind();
+            program.use();
+
+            vertexBuffer.bind(GL_ARRAY_BUFFER);
+            vertexBuffer.uploadSubData(GL_ARRAY_BUFFER, 0, vertices);
+
+            glDrawArrays(GL_TRIANGLES, 0, verticesNum);
+
+            vertices.clear();
+            verticesNum = 0;
         }
+    }
 
-        status = glGetShaderi(fragShader.id, GL_COMPILE_STATUS);
-        if (status != GL_TRUE) {
-            throw new RuntimeException(glGetShaderInfoLog(fragShader.id));
-        }
+    public void drawTexture(Texture texture, float x, float y, Color c) {
+        drawTextureRegion(x, y, x + texture.getWidth(), y + texture.getHeight(), 0.5f, 0.5f, 1f, 1f, c);
+    }
 
-        int floatSize = 4;
+    public void drawTextureRegion(float x1, float y1, float x2, float y2, float tx1, float ty1, float tx2, float ty2, Color c){
+        if(vertices.remaining() < 8 * 6) flush();
 
-        int posAttrib = glGetAttribLocation(vertexShader.id, "position");
-        glEnableVertexAttribArray(posAttrib);
-        glVertexAttribPointer(posAttrib, 3, GL_FLOAT, false, 6 * floatSize, 0);
+        vertices.put(x1).put(y1).put(c.r).put(c.g).put(c.b).put(c.a).put(tx1).put(ty1);
+        vertices.put(x1).put(y2).put(c.r).put(c.g).put(c.b).put(c.a).put(tx1).put(ty2);
+        vertices.put(x2).put(y2).put(c.r).put(c.g).put(c.b).put(c.a).put(tx2).put(ty2);
+        vertices.put(x1).put(y1).put(c.r).put(c.g).put(c.b).put(c.a).put(tx1).put(ty1);
+        vertices.put(x2).put(y2).put(c.r).put(c.g).put(c.b).put(c.a).put(tx2).put(ty2);
+        vertices.put(x2).put(y1).put(c.r).put(c.g).put(c.b).put(c.a).put(tx2).put(ty1);
 
-        int colAttrib = glGetAttribLocation(vertexShader.id, "color");
-        glEnableVertexAttribArray(colAttrib);
-        glVertexAttribPointer(colAttrib, 3, GL_FLOAT, false, 6 * floatSize, 3 * floatSize);
+        verticesNum += 6;
+    }
 
-        int uniModel = glGetUniformLocation(vertexShader.id, "model");
-        Matrix4f model = new Matrix4f();
-        glUniformMatrix4fv(uniModel, false, model.getBuffer());
-
-        int uniView = glGetUniformLocation(vertexShader.id, "view");
-        Matrix4f view = new Matrix4f();
-        glUniformMatrix4fv(uniView, false, view.getBuffer());
-
-        int uniProjection = glGetUniformLocation(vertexShader.id, "projection");
-        float ratio = 640f / 480f;
-        Matrix4f projection = Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
-        glUniformMatrix4fv(uniProjection, false, projection.getBuffer());
+    public void dispose(){
+        MemoryUtil.memFree(vertices);
+        vertexArray.delete();
+        vertexBuffer.delete();
+        glDeleteProgram(program.id);
     }
 }

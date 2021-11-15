@@ -59,6 +59,38 @@ public class Mathf{
         return (int)mod((float)n, (float)m);
     }
 
+    public static float pow(float n, float d){
+        return (float)Math.pow(n, d);
+    }
+
+    public static int pow(int n, int d){
+        return (int)pow((float)n, (float)d);
+    }
+
+    public static float rt(float n, float d){
+        if(n < 0) return (float)Double.NaN;
+        if(n == 0) return 0;
+
+        float a = n, b = n / d;
+        while(abs(a - b) > threshhold){
+            a = b;
+            b = (float)((d - 1) * b + n / pow(b, d - 1)) / d;
+        }
+        return b;
+    }
+
+    public static int rt(int n, int d){
+        return (int)rt((float)n, (float)d);
+    }
+
+    public static float rt2(float n){
+        return (float)Math.sqrt(n);
+    }
+
+    public static int rt2(int n){
+        return (int)Math.sqrt(n);
+    }
+
 
     /** Ported class functions. */
     public static int trailZeros(int i){
