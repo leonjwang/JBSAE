@@ -65,20 +65,28 @@ public class Renderer{
     }
 
     public void drawTexture(Texture texture, float x, float y, Color c){
-        drawTextureRegion(x, y, x + texture.getWidth(), y + texture.getHeight(), 0f, 0f, 1f, 1f, c);
+        drawTextureRegion(x, y, x + texture.width, y + texture.height, 0f, 0f, 1f, 1f, c);
+    }
+
+    public void drawTexture(float x, float y, float w, float h, Color c){
+        drawTextureRegion(x, y, x + w, y + h, 0f, 0f, 1f, 1f, c);
     }
 
     public void drawTextureRegion(float x1, float y1, float x2, float y2, float tx1, float ty1, float tx2, float ty2, Color c){
         if(vertices.remaining() < 8 * 6) flush();
 
-        vertices.put(x1).put(y1).put(c.r).put(c.g).put(c.b).put(c.a).put(tx1).put(ty1);
-        vertices.put(x1).put(y2).put(c.r).put(c.g).put(c.b).put(c.a).put(tx1).put(ty2);
-        vertices.put(x2).put(y2).put(c.r).put(c.g).put(c.b).put(c.a).put(tx2).put(ty2);
-        vertices.put(x1).put(y1).put(c.r).put(c.g).put(c.b).put(c.a).put(tx1).put(ty1);
-        vertices.put(x2).put(y2).put(c.r).put(c.g).put(c.b).put(c.a).put(tx2).put(ty2);
-        vertices.put(x2).put(y1).put(c.r).put(c.g).put(c.b).put(c.a).put(tx2).put(ty1);
+        vertex(x1, y1, c.r, c.g, c.b, c.a, tx1, ty1);
+        vertex(x1, y2, c.r, c.g, c.b, c.a, tx1, ty2);
+        vertex(x2, y2, c.r, c.g, c.b, c.a, tx2, ty2);
+        vertex(x1, y1, c.r, c.g, c.b, c.a, tx1, ty1);
+        vertex(x2, y2, c.r, c.g, c.b, c.a, tx2, ty2);
+        vertex(x2, y1, c.r, c.g, c.b, c.a, tx2, ty1);
 
         verticesNum += 6;
+    }
+
+    public void vertex(float... values){
+        for(int i = 0;i < values.length;i ++) vertices.put(values[i]);
     }
 
     public void dispose(){

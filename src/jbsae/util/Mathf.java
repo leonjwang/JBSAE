@@ -31,6 +31,14 @@ public class Mathf{
         return (int)abs((float)a);
     }
 
+    public static float clamp(float n, float min, float max){
+        return max(min(n, max), min);
+    }
+
+    public static int clamp(int n, int min, int max){
+        return (int)clamp((float)n, (float)min, (float)max);
+    }
+
     public static boolean eqlf(float a, float b){
         return abs(a - b) < threshhold;
     }

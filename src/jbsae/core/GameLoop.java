@@ -3,14 +3,12 @@ package jbsae.core;
 import jbsae.graphics.*;
 import jbsae.graphics.gl.*;
 import jbsae.util.*;
-import org.lwjgl.system.*;
 
 import java.lang.reflect.*;
-import java.nio.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Stringf.*;
-import static org.lwjgl.glfw.GLFW.*;
+import static jbsae.util.Colorf.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GameLoop{
@@ -22,7 +20,7 @@ public class GameLoop{
     }
 
     public void init(){
-        texture1 = Texture.loadTexture("assets/sprites/effects/square.png");
+        texture1 = new Texture("assets/sprites/effects/square.png");
     }
 
     public void start(){
@@ -45,20 +43,8 @@ public class GameLoop{
             if(frameTimer >= (1000 / fps)){
                 frameTimer %= (1000 / fps);
                 time.frames++;
-                texture1.bind();
-                Colorf c = new Colorf();
-                Field[] fields = c.getClass().getFields();
-                int cnt1 = 0, cnt2 = 0, cnt3 = 0;
-                for(int i = 4;i < fields.length;i++){
-                    try{
-                        Color r = (Color)fields[i].get(c);
-                        String name = fields[i].getName();
-                        if(name.length() > 5 && name.substring(0, 5).equals("light")) renderer.drawTexture(texture1, 10, (cnt1++) * 40, r);
-                        else if(name.length() > 5 && fields[i].getName().substring(0, 5).equals("dark")) renderer.drawTexture(texture1, 90, (cnt2++) * 40, r);
-                        else renderer.drawTexture(texture1, 50, (cnt3++) * 40, r);
-                    }catch(Exception e){
-                    }
-                }
+                glClear(GL_COLOR_BUFFER_BIT);
+                tempDraw();
                 renderer.flush();
                 window.swapBuffers();
             }
@@ -69,6 +55,34 @@ public class GameLoop{
                 lastUpdates = time.updates;
             }
             window.pollEvents();
+        }
+    }
+
+    public void tempDraw(){
+        texture1.bind();
+        Colorf c = new Colorf();
+        Field[] fields = c.getClass().getFields();
+        int cnt0 = 0, cnt1 = 0, cnt2 = 0, cnt3 = 0;
+        int w = 250, h = 75;
+        for(int i = 0;i < 4;i++){
+            try{
+                Color r = (Color)fields[i].get(c);
+                renderer.drawTexture(10, 10 + (cnt0++) * h, w, h, r);
+            }catch(Exception ignored){
+            }
+        }
+        for(int i = 4;i < fields.length;i++){
+            try{
+                Color r = (Color)fields[i].get(c);
+                String name = fields[i].getName();
+                if(name.length() > 5 && name.substring(0, 5).equals("light")) renderer.drawTexture(10 + w, 10 + (cnt1++) * h, w, h, r);
+                else if(name.length() > 4 && fields[i].getName().substring(0, 4).equals("dark")) renderer.drawTexture(10 + w * 3, 10 + (cnt2++) * h, w, h, r);
+                else renderer.drawTexture(10 + w * 2, 10 + (cnt3++) * h, w, h, r);
+            }catch(Exception ignored){
+            }
+        }
+        for(int i = 0;i < 360;i ++){
+            renderer.drawTexture(10 + w * 4, 10 + i, w, h, (new Color().hsv(i, 1f, 1f).a(1)));
         }
     }
 }
