@@ -2,7 +2,6 @@ package jbsae.graphics.gl;
 
 import jbsae.graphics.*;
 import jbsae.math.*;
-import org.lwjgl.glfw.*;
 import org.lwjgl.system.*;
 
 import java.nio.*;
@@ -11,8 +10,9 @@ import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class Renderer{
-    public VertexArrayObject vertexArray;
-    public VertexBufferObject vertexBuffer;
+    public Shader vertexShader, fragmentShader;
+    public VertexArray vertexArray;
+    public VertexBuffer vertexBuffer;
     public ShaderProgram program;
 
     public FloatBuffer vertices;
@@ -20,27 +20,22 @@ public class Renderer{
 
     public Renderer(){
     }
-    
-    public void init(){
-        vertexArray = new VertexArrayObject();
-        vertexArray.bind();
-        vertexBuffer = new VertexBufferObject();
-        vertexBuffer.bind(GL_ARRAY_BUFFER);
 
+    public void init(){
         vertices = MemoryUtil.memAllocFloat(4096);
-        vertexBuffer.uploadData(GL_ARRAY_BUFFER, vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
         verticesNum = 0;
 
-        Shader vertexShader = new Shader("assets/shaders/shader.vert", GL_VERTEX_SHADER);
-        Shader fragmentShader = new Shader("assets/shaders/shader.frag", GL_FRAGMENT_SHADER);
+        vertexArray = new VertexArray();
+        vertexBuffer = new VertexBuffer();
+        vertexBuffer.data(GL_ARRAY_BUFFER, vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
+
+        vertexShader = new Shader("assets/shaders/shader.vert", GL_VERTEX_SHADER);
+        fragmentShader = new Shader("assets/shaders/shader.frag", GL_FRAGMENT_SHADER);
 
         program = new ShaderProgram(vertexShader, fragmentShader);
-        program.bindFragmentDataLocation(0, "fragColor");
+        program.bindFragment("fragColor", 0);
         program.link();
         program.use();
-
-        vertexShader.dispose();
-        fragmentShader.dispose();
 
         program.setVertex("position", 2, 8 * Float.BYTES, 0);
         program.setVertex("color", 4, 8 * Float.BYTES, 2 * Float.BYTES);
@@ -49,29 +44,28 @@ public class Renderer{
         program.setUniform("model", new Matrix4f());
         program.setUniform("view", new Matrix4f());
         program.setUniform("projection", Matrix4f.orthographic(0f, width * 2, 0f, height * 2, -1f, 1f));
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public void flush(){
-        if(verticesNum > 0){
-            vertices.flip();
+        if(verticesNum <= 0) return;
 
-            vertexArray.bind();
-            program.use();
+        vertices.flip();
+        vertexArray.bind();
+        program.use();
 
-            vertexBuffer.bind(GL_ARRAY_BUFFER);
-            vertexBuffer.uploadSubData(GL_ARRAY_BUFFER, 0, vertices);
+        vertexBuffer.bind(GL_ARRAY_BUFFER);
+        vertexBuffer.subData(GL_ARRAY_BUFFER, 0, vertices);
+        glDrawArrays(GL_TRIANGLES, 0, verticesNum);
 
-            glDrawArrays(GL_TRIANGLES, 0, verticesNum);
-
-            vertices.clear();
-            verticesNum = 0;
-        }
+        vertices.clear();
+        verticesNum = 0;
     }
 
-    public void drawTexture(Texture texture, float x, float y, Color c) {
-        drawTextureRegion(x, y, x + texture.getWidth(), y + texture.getHeight(), 0.5f, 0.5f, 1f, 1f, c);
+    public void drawTexture(Texture texture, float x, float y, Color c){
+        drawTextureRegion(x, y, x + texture.getWidth(), y + texture.getHeight(), 0f, 0f, 1f, 1f, c);
     }
 
     public void drawTextureRegion(float x1, float y1, float x2, float y2, float tx1, float ty1, float tx2, float ty2, Color c){
@@ -89,8 +83,10 @@ public class Renderer{
 
     public void dispose(){
         MemoryUtil.memFree(vertices);
-        vertexArray.delete();
-        vertexBuffer.delete();
-        glDeleteProgram(program.id);
+        vertexArray.dispose();
+        vertexBuffer.dispose();
+        vertexShader.dispose();
+        fragmentShader.dispose();
+        program.dispose();
     }
 }
