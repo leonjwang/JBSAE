@@ -16,39 +16,47 @@ public class Colorf{
     green = new Color(0, 1, 0),
     cyan = new Color(0, 1, 1),
     navy = new Color(0, 0, 1),
-    violet = new Color(1, 0, 1),
+    purple = new Color(1, 0, 1),
     magenta = new Color(1, 0, 0.5f),
     orange = new Color(1, 0.5f, 0),
     lime = new Color(0.5f, 1, 0),
     turquoise = new Color(0, 1, 0.5f),
     blue = new Color(0, 0.5f, 1),
-    purple = new Color(0.5f, 0, 1),
+    violet = new Color(0.5f, 0, 1),
 
-    lightRed = new Color(1, 0.5f, 0.5f),
-    lightYellow = new Color(1, 1, 0.5f),
-    lightGreen = new Color(0.5f, 1, 0.5f),
-    lightCyan = new Color(0.5f, 1, 1),
-    lightNavy = new Color(0.5f, 0.5f, 1),
-    lightViolet = new Color(1, 0.5f, 1),
-    lightMagenta = new Color(1, 0.5f, 0.75f),
-    lightOrange = new Color(1, 0.75f, 0.5f),
-    lightLime = new Color(0.75f, 1, 0.5f),
-    lightTurquoise = new Color(0.5f, 1, 0.75f),
-    lightBlue = new Color(0.5f, 0.75f, 1),
-    lightPurple = new Color(0.75f, 0.5f, 1),
+    lightRed = lighten(red.cpy()),
+    lightYellow = lighten(yellow.cpy()),
+    lightGreen = lighten(green.cpy()),
+    lightCyan = lighten(cyan.cpy()),
+    lightNavy = lighten(navy.cpy()),
+    lightPurple = lighten(purple.cpy()),
+    lightMagenta = lighten(magenta.cpy()),
+    lightOrange = lighten(orange.cpy()),
+    lightLime = lighten(lime.cpy()),
+    lightTurquoise = lighten(turquoise.cpy()),
+    lightBlue = lighten(blue.cpy()),
+    lightViolet = lighten(violet.cpy()),
 
-    darkRed = new Color(0.5f, 0, 0),
-    darkYellow = new Color(0.5f, 0.5f, 0),
-    darkGreen = new Color(0, 0.5f, 0),
-    darkCyan = new Color(0, 0.5f, 0.5f),
-    darkNavy = new Color(0, 0, 0.5f),
-    darkViolet = new Color(0.5f, 0, 0.5f),
-    darkMagenta = new Color(0.5f, 0, 0.25f),
-    darkOrange = new Color(0.5f, 0.25f, 0),
-    darkLime = new Color(0.25f, 0.5f, 0),
-    darkTurquoise = new Color(0, 0.5f, 0.25f),
-    darkBlue = new Color(0, 0.25f, 0.5f),
-    darkPurple = new Color(0.25f, 0, 0.5f);
+    darkRed = darken(red.cpy()),
+    darkYellow = darken(yellow.cpy()),
+    darkGreen = darken(green.cpy()),
+    darkCyan = darken(cyan.cpy()),
+    darkNavy = darken(navy.cpy()),
+    darkPurple = darken(purple.cpy()),
+    darkMagenta = darken(magenta.cpy()),
+    darkOrange = darken(orange.cpy()),
+    darkLime = darken(lime.cpy()),
+    darkTurquoise = darken(turquoise.cpy()),
+    darkBlue = darken(blue.cpy()),
+    darkViolet = darken(violet.cpy());
+
+    public static Color lighten(Color c){
+        return c.inv().scl(0.5f).inv();
+    }
+
+    public static Color darken(Color c){
+        return c.scl(0.5f);
+    }
 
     public static Color createRandom(){
         return new Color(random(), random(), random());

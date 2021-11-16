@@ -72,12 +72,12 @@ public class Color{
         if(i == 3) set(p, q, v);
         if(i == 4) set(t, p, v);
         if(i == 5) set(v, p, q);
-        return nor();
+        return clip();
     }
 
     public float[] hsv(){
-        float max = max(max(r, g), b);
-        float min = min(min(r, g), b);
+        float max = max(r, g, b);
+        float min = min(r, g, b);
         float range = max - min;
         float[] hsv = new float[3];
         if(range == 0) hsv[0] = 0;
@@ -90,11 +90,11 @@ public class Color{
         return hsv;
     }
 
-    public Color rgba8888(int value){
-        r = ((value & 0xff000000) >>> 24) / 255f;
-        g = ((value & 0x00ff0000) >>> 16) / 255f;
-        b = ((value & 0x0000ff00) >>> 8) / 255f;
-        a = ((value & 0x000000ff)) / 255f;
+    public Color rgba8888(int v){
+        r = ((v & 0xff000000) >>> 24) / 255f;
+        g = ((v & 0x00ff0000) >>> 16) / 255f;
+        b = ((v & 0x0000ff00) >>> 8) / 255f;
+        a = ((v & 0x000000ff)) / 255f;
         return this;
     }
 
@@ -102,7 +102,30 @@ public class Color{
         return ((int)(r * 255) << 24) | ((int)(g * 255) << 16) | ((int)(b * 255) << 8) | (int)(a * 255);
     }
 
+    public Color add(float v){
+        r += v;
+        g += v;
+        b += v;
+        return this;
+    }
+
+    public Color scl(float v){
+        r *= v;
+        g *= v;
+        b *= v;
+        return this;
+    }
+
     public Color nor(){
+        float max = max(r, g, b);
+        return scl(1f / max);
+    }
+
+    public Color inv(){
+        return scl(-1).add(1);
+    }
+
+    public Color clip(){
         r = clamp(r, 0, 1);
         g = clamp(g, 0, 1);
         b = clamp(b, 0, 1);

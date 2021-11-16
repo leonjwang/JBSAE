@@ -1,9 +1,6 @@
 package jbsae.graphics.gl;
 
 import jbsae.math.*;
-import org.lwjgl.system.*;
-
-import java.nio.*;
 
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -28,9 +25,9 @@ public class ShaderProgram{
         glUniform1i(uniform, value);
     }
 
-    public void setUniform(String name, Matrix4f value){
+    public void setUniform(String name, Mat4 value){
         int uniform = glGetUniformLocation(id, name);
-        glUniformMatrix4fv(uniform, false, value.getBuffer());
+        glUniformMatrix4fv(uniform, false, value.buffer());
     }
 
     public void bindFragment(String name, int number){

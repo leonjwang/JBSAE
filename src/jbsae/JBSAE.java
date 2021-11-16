@@ -1,8 +1,10 @@
 package jbsae;
 
 import jbsae.core.*;
+import jbsae.graphics.*;
 import jbsae.graphics.gl.*;
 import jbsae.input.*;
+import jbsae.util.*;
 import org.lwjgl.glfw.*;
 
 import static org.lwjgl.glfw.GLFW.*;

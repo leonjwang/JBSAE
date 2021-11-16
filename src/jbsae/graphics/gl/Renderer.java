@@ -41,9 +41,9 @@ public class Renderer{
         program.setVertex("color", 4, 8 * Float.BYTES, 2 * Float.BYTES);
         program.setVertex("texCoord", 2, 8 * Float.BYTES, 6 * Float.BYTES);
         program.setUniform("texImage", 0);
-        program.setUniform("model", new Matrix4f());
-        program.setUniform("view", new Matrix4f());
-        program.setUniform("projection", Matrix4f.orthographic(0f, width * 2, 0f, height * 2, -1f, 1f));
+        program.setUniform("model", new Mat4());
+        program.setUniform("view", new Mat4());
+        program.setUniform("projection", Mat4.orthographic(0f, width * 2, 0f, height * 2, -1f, 1f));
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

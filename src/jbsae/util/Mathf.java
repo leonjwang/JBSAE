@@ -3,6 +3,14 @@ package jbsae.util;
 public class Mathf{
     public static final float threshhold = 0.001f;
 
+    public static final float pi = (float)Math.PI;
+    public static final float degToRad = pi / 180;
+    public static final float radToDeg = 180 /pi;
+
+    public static final int[] d4x = new int[] {0, 1, 0, -1};
+    public static final int[] d4y = new int[] {1, 0, -1, 0};
+    public static final int[] d8x = new int[] {0, 1, 1, 1, 0, -1, -1, -1};
+    public static final int[] d8y = new int[] {1, 1, 0, -1, -1, -1, 0, 1};
 
     /** Random functions. */
     public static float random(){
@@ -19,6 +27,23 @@ public class Mathf{
 
     public static boolean chance(float c){
         return random() < c;
+    }
+
+    /** Directional adders. */
+    public static int d4x(int rot){
+        return d4x[mod(rot, 4)];
+    }
+
+    public static int d4y(int rot){
+        return d4y[mod(rot, 4)];
+    }
+
+    public static int d8x(int rot){
+        return d8x[mod(rot, 8)];
+    }
+
+    public static int d8y(int rot){
+        return d8y[mod(rot, 8)];
     }
 
 
@@ -39,24 +64,28 @@ public class Mathf{
         return (int)clamp((float)n, (float)min, (float)max);
     }
 
-    public static boolean eqlf(float a, float b){
-        return abs(a - b) < threshhold;
+    public static float max(float... v){
+        float max = v[0];
+        for(int i = 1;i < v.length;i++) max = Math.max(max, v[i]);
+        return max;
     }
 
-    public static float max(float a, float b){
-        return Math.max(a, b);
+    public static int max(int... v){
+        int max = v[0];
+        for(int i = 1;i < v.length;i++) max = Math.max(max, v[i]);
+        return max;
     }
 
-    public static int max(int a, int b){
-        return (int)max((float)a, (float)b);
+    public static float min(float... v){
+        float min = v[0];
+        for(int i = 1;i < v.length;i++) min = Math.min(min, v[i]);
+        return min;
     }
 
-    public static float min(float a, float b){
-        return Math.min(a, b);
-    }
-
-    public static int min(int a, int b){
-        return (int)min((float)a, (float)b);
+    public static int min(int... v){
+        int min = v[0];
+        for(int i = 1;i < v.length;i++) min = Math.min(min, v[i]);
+        return min;
     }
 
     public static float mod(float n, float m){
@@ -99,6 +128,37 @@ public class Mathf{
         return (int)Math.sqrt(n);
     }
 
+
+    /** Comparisons */
+    public static boolean eqlf(float a, float b){
+        return abs(a - b) < threshhold;
+    }
+
+
+    /** Trigonometry functions. */
+    public static float sin(float a){
+        return sinr((float)(a * degToRad));
+    }
+
+    public static float sinr(float a){
+        return (float)Math.sin(a);
+    }
+
+    public static float cos(float a){
+        return cosr((float)(a * degToRad));
+    }
+
+    public static float cosr(float a){
+        return (float)Math.cos(a);
+    }
+
+    public static float tan(float a){
+        return tanr((float)(a * degToRad));
+    }
+
+    public static float tanr(float a){
+        return (float)Math.tan(a);
+    }
 
     /** Ported class functions. */
     public static int trailZeros(int i){
