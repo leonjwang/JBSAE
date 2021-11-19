@@ -26,6 +26,10 @@ public class Vec2{
         return set(v.x, v.y);
     }
 
+    public Vec2 setr(float a, float l){
+        return set(cos(a) * l, sin(a) * l);
+    }
+
     public Vec2 add(float x, float y){
         this.x += x;
         this.y += y;
@@ -51,12 +55,15 @@ public class Vec2{
     }
 
     public Vec2 rot(float a){
-        //TODO: rot
-        return null;
+        return setr(ang() + a, len());
     }
 
     public Vec2 nor(){
         return scl(1 / len());
+    }
+
+    public float ang(){
+        return mod((x > 0 ? 0 : 180) + atan(y / x), 360);
     }
 
     public float len(){

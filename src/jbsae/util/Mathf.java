@@ -137,7 +137,7 @@ public class Mathf{
 
     /** Trigonometry functions. */
     public static float sin(float a){
-        return sinr((float)(a * degToRad));
+        return sinr(a * degToRad);
     }
 
     public static float sinr(float a){
@@ -145,7 +145,7 @@ public class Mathf{
     }
 
     public static float cos(float a){
-        return cosr((float)(a * degToRad));
+        return cosr(a * degToRad);
     }
 
     public static float cosr(float a){
@@ -153,11 +153,35 @@ public class Mathf{
     }
 
     public static float tan(float a){
-        return tanr((float)(a * degToRad));
+        return tanr(a * degToRad);
     }
 
     public static float tanr(float a){
         return (float)Math.tan(a);
+    }
+
+    public static float asin(float v){
+        return asinr(v) * radToDeg;
+    }
+
+    public static float asinr(float v){
+        return (float)Math.asin(v);
+    }
+
+    public static float acos(float v){
+        return acosr(v) * radToDeg;
+    }
+
+    public static float acosr(float v){
+        return (float)Math.acos(v);
+    }
+
+    public static float atan(float v){
+        return atanr(v) * radToDeg;
+    }
+
+    public static float atanr(float v){
+        return (float)Math.atan(v);
     }
 
     /** Ported class functions. */

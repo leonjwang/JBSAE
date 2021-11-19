@@ -2,6 +2,7 @@ package jbsae.core;
 
 import jbsae.graphics.*;
 import jbsae.graphics.gl.*;
+import jbsae.math.*;
 import jbsae.util.*;
 
 import java.lang.reflect.*;
@@ -64,6 +65,7 @@ public class GameLoop{
         Field[] fields = c.getClass().getFields();
         int cnt0 = 0, cnt1 = 0, cnt2 = 0, cnt3 = 0;
         int w = 250, h = 75;
+
         for(int i = 0;i < 4;i++){
             try{
                 Color r = (Color)fields[i].get(c);
