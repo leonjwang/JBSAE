@@ -2,6 +2,7 @@ package jbsae.math.interp;
 
 import static jbsae.util.Mathf.*;
 
+/** @author Nathan Sweet */
 public class Elastic implements Interp{
     final float value, power, scale, bounces;
     

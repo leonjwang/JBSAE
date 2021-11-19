@@ -5,6 +5,7 @@ import java.util.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
+/** @author Anuken */
 public class Queue<T> implements Iterable<T>{
     public QueueIterator i1, i2;
     public T[] items;

@@ -2,6 +2,7 @@ package jbsae.graphics.gl;
 
 import static org.lwjgl.opengl.ARBVertexArrayObject.*;
 
+/** @author Heiko Brumme */
 public class VertexArray{
     public int id;
 

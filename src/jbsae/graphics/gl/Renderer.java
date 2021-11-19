@@ -9,6 +9,7 @@ import java.nio.*;
 import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL30.*;
 
+/** @author Heiko Brumme */
 public class Renderer{
     public Shader vertexShader, fragmentShader;
     public VertexArray vertexArray;

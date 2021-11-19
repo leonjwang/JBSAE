@@ -7,6 +7,7 @@ import java.util.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
+/** @author Nathan Sweet */
 public class Seq<T> implements Iterable<T>{
     public SeqIterator i1, i2;
     public T[] items;

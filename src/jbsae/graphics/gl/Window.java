@@ -11,6 +11,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+/** @author Heiko Brumme */
 public class Window{
     public long id;
     public IntBuffer widthBuffer, heightBuffer;

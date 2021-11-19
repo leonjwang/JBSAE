@@ -7,6 +7,7 @@ import java.nio.*;
 import static jbsae.util.Mathf.*;
 
 //TODO: cleanup
+/** @author Heiko Brumme */
 public class Mat4{
     public float[][] m = new float[4][4];
 

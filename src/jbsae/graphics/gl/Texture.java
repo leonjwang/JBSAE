@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.stb.STBImage.*;
 
+/** @author Heiko Brumme */
 public class Texture{
     public int id;
     public int width, height;

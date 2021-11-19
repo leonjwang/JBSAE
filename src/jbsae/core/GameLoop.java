@@ -12,6 +12,7 @@ import static jbsae.util.Stringf.*;
 import static jbsae.util.Colorf.*;
 import static org.lwjgl.opengl.GL11.*;
 
+/** @author Heiko Brumme */
 public class GameLoop{
     public int rotation = 0;
     public Screen screen;

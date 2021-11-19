@@ -4,6 +4,7 @@ import java.util.*;
 
 import static jbsae.util.Structf.*;
 
+/** @author Nathan Sweet */
 public class Map<K, V> implements Iterable<K>{
     public MapIterator i1, i2;
     public K[] keys;

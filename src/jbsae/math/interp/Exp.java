@@ -1,5 +1,6 @@
 package jbsae.math.interp;
 
+/** @author Nathan Sweet */
 public class Exp implements Interp{
     final float value, power, min, scale;
     

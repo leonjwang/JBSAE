@@ -2,6 +2,7 @@ package jbsae.graphics;
 
 import static jbsae.util.Mathf.*;
 
+/** @author mzechner */
 public class Color{
     public float r, g, b, a;
 

@@ -4,6 +4,7 @@ import java.nio.*;
 
 import static org.lwjgl.opengl.GL15.*;
 
+/** @author Heiko Brumme */
 public class VertexBuffer{
     public int id;
 

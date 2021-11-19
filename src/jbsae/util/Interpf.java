@@ -4,6 +4,7 @@ import jbsae.math.interp.*;
 
 import static jbsae.util.Mathf.*;
 
+/** @author Nathan Sweet */
 public class Interpf{
     public static Interp
     lin = f -> f,
