@@ -75,7 +75,8 @@ public class Vec2{
     }
 
     @Override
-    public String toString(){
-        return "(" + x + ", " + y + ")";
+    public int hashCode(){
+        final int prime = 31;
+        return prime * (prime + intBits(x)) + intBits(y);
     }
 }

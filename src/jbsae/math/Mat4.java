@@ -8,14 +8,13 @@ import static jbsae.util.Mathf.*;
 
 //TODO: cleanup
 public class Mat4{
-    public float[][] m;
+    public float[][] m = new float[4][4];
 
     public Mat4(){
-        m = new float[4][4];
         id();
     }
 
-    public final void id(){
+    public void id(){
         for(int x = 0;x < 4;x++){
             for(int y = 0;y < 4;y++) m[x][y] = x == y ? 1 : 0;
         }
