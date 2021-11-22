@@ -5,24 +5,59 @@ import static jbsae.util.Mathf.*;
 public class Vec3{
     public float x, y, z;
 
+    public Vec3(){
+    }
+
     public Vec3(float x, float y, float z){
+        set(x, y, z);
+    }
+
+    public Vec3(Vec3 v){
+        set(v);
+    }
+
+    public Vec3 set(float x, float y, float z){
         this.x = x;
         this.y = y;
         this.z = z;
-    }
-
-    public Vec3 scl(float s){
-        x *= s;
-        y *= s;
-        z *= s;
         return this;
     }
 
+    public Vec3 set(Vec3 v){
+        return set(v.x, v.y, v.z);
+    }
+
+    public Vec3 add(float x, float y, float z){
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
+
+    public Vec3 add(Vec3 v){
+        return add(v.x, v.y, v.z);
+    }
+
+    public Vec3 scl(float x, float y, float z){
+        this.x *= x;
+        this.y *= y;
+        this.z *= z;
+        return this;
+    }
+
+    public Vec3 scl(float v){
+        return scl(v, v, v);
+    }
+
     public Vec3 nor(){
-        return scl(1f / len());
+        return scl(1 / len());
     }
 
     public float len(){
         return rt2(x * x + y * y + z * z);
+    }
+
+    public Vec3 cpy(){
+        return new Vec3(this);
     }
 }

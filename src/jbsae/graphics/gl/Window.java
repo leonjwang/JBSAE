@@ -38,6 +38,12 @@ public class Window{
 
         glfwMakeContextCurrent(id);
         GL.createCapabilities();
+
+        Texture icon = new Texture("assets/" + programName + ".png");
+        GLFWImage image = GLFWImage.malloc(); GLFWImage.Buffer imagebf = GLFWImage.malloc(1);
+        image.set(icon.width, icon.height, icon.image);
+        imagebf.put(0, image);
+        glfwSetWindowIcon(id, imagebf);
     }
 
     public void update(){

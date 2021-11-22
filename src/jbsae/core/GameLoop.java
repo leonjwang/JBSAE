@@ -22,7 +22,7 @@ public class GameLoop{
     }
 
     public void init(){
-        texture1 = new Texture("assets/sprites/effects/square.png");
+        texture1 = new Texture("assets/logo.png");
     }
 
     public void start(){

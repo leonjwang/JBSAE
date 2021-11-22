@@ -76,14 +76,22 @@ public class Renderer{
     public void drawTextureRegion(float x1, float y1, float x2, float y2, float tx1, float ty1, float tx2, float ty2, Color c){
         if(vertices.remaining() < 8 * 6) flush();
 
-        vertex(x1, y1, c.r, c.g, c.b, c.a, tx1, ty1);
-        vertex(x1, y2, c.r, c.g, c.b, c.a, tx1, ty2);
-        vertex(x2, y2, c.r, c.g, c.b, c.a, tx2, ty2);
-        vertex(x1, y1, c.r, c.g, c.b, c.a, tx1, ty1);
-        vertex(x2, y2, c.r, c.g, c.b, c.a, tx2, ty2);
-        vertex(x2, y1, c.r, c.g, c.b, c.a, tx2, ty1);
+        vertex(x1, y1, c.r, c.g, c.b, c.a, tx1, ty2);
+        vertex(x1, y2, c.r, c.g, c.b, c.a, tx1, ty1);
+        vertex(x2, y2, c.r, c.g, c.b, c.a, tx2, ty1);
+        vertex(x1, y1, c.r, c.g, c.b, c.a, tx1, ty2);
+        vertex(x2, y2, c.r, c.g, c.b, c.a, tx2, ty1);
+        vertex(x2, y1, c.r, c.g, c.b, c.a, tx2, ty2);
 
         verticesNum += 6;
+    }
+
+    public void drawTextureRegion(Shape2 d, Shape2 t, Color c){
+        if(vertices.remaining() < 8 * 6) flush();
+
+        //TODO: Oof
+        vertex(d.v[0].x, d.v[0].y, c.r, c.g, c.b, c.a, t.v[0].x, t.v[0].y);
+        vertex(d.v[0].x, d.v[1].y, c.r, c.g, c.b, c.a, t.v[0].x, t.v[0].y);
     }
 
     public void vertex(float... values){

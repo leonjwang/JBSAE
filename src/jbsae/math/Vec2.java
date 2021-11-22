@@ -73,10 +73,4 @@ public class Vec2{
     public Vec2 cpy(){
         return new Vec2(this);
     }
-
-    @Override
-    public int hashCode(){
-        final int prime = 31;
-        return prime * (prime + intBits(x)) + intBits(y);
-    }
 }

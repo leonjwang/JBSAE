@@ -13,6 +13,7 @@ import static org.lwjgl.stb.STBImage.*;
 public class Texture{
     public int id;
     public int width, height;
+    public ByteBuffer image;
 
     public Texture(String path){
         id = glGenTextures();
@@ -23,8 +24,7 @@ public class Texture{
         MemoryStack stack = MemoryStack.stackPush();
         IntBuffer w = stack.mallocInt(1);
         IntBuffer h = stack.mallocInt(1);
-        stbi_set_flip_vertically_on_load(true);
-        ByteBuffer image = stbi_load(path, w, h, stack.mallocInt(1), 4);
+        image = stbi_load(path, w, h, stack.mallocInt(1), 4);
         if(image == null) printDebug("Failed to load texture: " + path);
 
         width = w.get();
