@@ -50,6 +50,11 @@ public class Renderer{
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
+    public void bind(Texture t){
+        flush();
+        t.bind();
+    }
+
     public void flush(){
         if(verticesNum <= 0) return;
 
@@ -65,33 +70,22 @@ public class Renderer{
         verticesNum = 0;
     }
 
-    public void drawTexture(Texture texture, float x, float y, Color c){
-        drawTextureRegion(x, y, x + texture.width, y + texture.height, 0f, 0f, 1f, 1f, c);
-    }
-
-    public void drawTexture(float x, float y, float w, float h, Color c){
-        drawTextureRegion(x, y, x + w, y + h, 0f, 0f, 1f, 1f, c);
-    }
-
-    public void drawTextureRegion(float x1, float y1, float x2, float y2, float tx1, float ty1, float tx2, float ty2, Color c){
+    public void draw(Shape2 d, Shape2 t, Color c){
         if(vertices.remaining() < 8 * 6) flush();
 
-        vertex(x1, y1, c.r, c.g, c.b, c.a, tx1, ty2);
-        vertex(x1, y2, c.r, c.g, c.b, c.a, tx1, ty1);
-        vertex(x2, y2, c.r, c.g, c.b, c.a, tx2, ty1);
-        vertex(x1, y1, c.r, c.g, c.b, c.a, tx1, ty2);
-        vertex(x2, y2, c.r, c.g, c.b, c.a, tx2, ty1);
-        vertex(x2, y1, c.r, c.g, c.b, c.a, tx2, ty2);
+        t.scl(1, -1);
+        vertex(d.v[0], t.v[0], c);
+        vertex(d.v[1], t.v[1], c);
+        vertex(d.v[2], t.v[2], c);
+        vertex(d.v[0], t.v[0], c);
+        vertex(d.v[3], t.v[3], c);
+        vertex(d.v[2], t.v[2], c);
 
         verticesNum += 6;
     }
 
-    public void drawTextureRegion(Shape2 d, Shape2 t, Color c){
-        if(vertices.remaining() < 8 * 6) flush();
-
-        //TODO: Oof
-        vertex(d.v[0].x, d.v[0].y, c.r, c.g, c.b, c.a, t.v[0].x, t.v[0].y);
-        vertex(d.v[0].x, d.v[1].y, c.r, c.g, c.b, c.a, t.v[0].x, t.v[0].y);
+    public void vertex(Vec2 p, Vec2 t, Color c){
+        vertex(p.x, p.y, c.r, c.g, c.b, c.a, t.x, t.y);
     }
 
     public void vertex(float... values){

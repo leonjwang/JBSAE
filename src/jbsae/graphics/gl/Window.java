@@ -9,6 +9,7 @@ import java.nio.*;
 import static jbsae.JBSAE.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.stb.STBImage.stbi_load;
 import static org.lwjgl.system.MemoryUtil.*;
 
 /** @author Heiko Brumme */
@@ -40,10 +41,9 @@ public class Window{
         GL.createCapabilities();
 
         Texture icon = new Texture("assets/" + programName + ".png");
-        GLFWImage image = GLFWImage.malloc(); GLFWImage.Buffer imagebf = GLFWImage.malloc(1);
+        GLFWImage image = GLFWImage.malloc();
         image.set(icon.width, icon.height, icon.image);
-        imagebf.put(0, image);
-        glfwSetWindowIcon(id, imagebf);
+        glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));
     }
 
     public void update(){
