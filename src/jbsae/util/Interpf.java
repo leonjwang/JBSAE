@@ -40,5 +40,4 @@ public class Interpf{
     swing = new Swing(1.5f),
     swingt = f -> (swing.get(f / 2f + 0.5f) - 0.5f) * 2f,
     swingb = f -> swing.get(f / 2f) * 2f;
-
 }

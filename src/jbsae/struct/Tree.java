@@ -24,7 +24,6 @@ public class Tree<T> implements Iterable<T>{
 
     public void addBranch(Tree tree){
         if(tree == null) return;
-
         tree.parent = this;
         branches.add(tree);
     }
