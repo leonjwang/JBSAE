@@ -40,8 +40,7 @@ public class Texture{
 
     public void load(String path){
         MemoryStack stack = MemoryStack.stackPush();
-        IntBuffer w = stack.mallocInt(1);
-        IntBuffer h = stack.mallocInt(1);
+        IntBuffer w = stack.mallocInt(1), h = stack.mallocInt(1);
         image = stbi_load(path, w, h, stack.mallocInt(1), 4);
         if(image == null) printDebug("Failed to load texture: " + path);
 

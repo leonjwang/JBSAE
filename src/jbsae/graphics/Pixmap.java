@@ -24,19 +24,17 @@ public class Pixmap{
     }
 
     public Texture create(){
-        MemoryStack stack = MemoryStack.stackPush();
-        ByteBuffer b = stack.malloc(map.length * map[0].length * 4);
+        byte[] b = new byte[map.length * map[0].length * 4];
+        int i = 0;
         for(int y = 0;y < map[0].length;y++){
             for(int x = 0;x < map.length;x++){
-                b.put((int)(map[x][y].r * 255) >= 255 ? -1 : (byte)(map[x][y].r * 255));
-                b.put((int)(map[x][y].g * 255) >= 255 ? -1 : (byte)(map[x][y].g * 255));
-                b.put((int)(map[x][y].b * 255) >= 255 ? -1 : (byte)(map[x][y].b * 255));
-                b.put((int)(map[x][y].a * 255) >= 255 ? -1 : (byte)(map[x][y].a * 255));
+                b[i++] = (int)(map[x][y].r * 255) >= 255 ? -1 : (byte)(map[x][y].r * 255);
+                b[i++] = (int)(map[x][y].g * 255) >= 255 ? -1 : (byte)(map[x][y].g * 255);
+                b[i++] = (int)(map[x][y].b * 255) >= 255 ? -1 : (byte)(map[x][y].b * 255);
+                b[i++] = (int)(map[x][y].a * 255) >= 255 ? -1 : (byte)(map[x][y].a * 255);
             }
         }
-        byte[] a = new byte[b.capacity()];
-        b.position(0);
-        b.get(a);
-        return new Texture(map.length, map[0].length, b);
+        MemoryStack stack = MemoryStack.stackPush();
+        return new Texture(map.length, map[0].length, stack.bytes(b));
     }
 }

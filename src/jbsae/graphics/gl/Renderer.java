@@ -44,7 +44,7 @@ public class Renderer{
         program.setUniform("texImage", 0);
         program.setUniform("model", new Mat4());
         program.setUniform("view", new Mat4());
-        program.setUniform("projection", Mat4.orthographic(0f, width * 2, 0f, height * 2, -1f, 1f));
+        program.setUniform("projection", new Mat4().ortho(0f, width * 2, 0f, height * 2, -1f, 1f));
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

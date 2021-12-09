@@ -5,6 +5,12 @@ import jbsae.struct.prim.*;
 import static jbsae.util.Mathf.*;
 
 public class PrimStructTester{
+    public static String single(){
+        String value = "";
+        for(int j = 0;j < randInt(1, 10);j++) value += (char)randInt('A', 'Z');
+        return value;
+    }
+
     public static void testSeqs(){
         new Test("Float Seq Test", () -> {
             //Setup
@@ -133,6 +139,38 @@ public class PrimStructTester{
             //Contains Test
             int value = arrList.get(randInt(0, arrList.size() - 1));
             if(!seq.contains(value)) return false;
+
+            return true;
+        }).run();
+        new Test("Char Seq Test", () -> {
+            //Setup
+            String temp;
+            String str = single();
+            CharSeq seq = new CharSeq(str);
+
+            //Add Test
+            temp = single();
+            str += temp;
+            seq.add(temp);
+            for(int i = 0;i < seq.size;i++) if(str.charAt(i) != seq.charAt(i)) return false;
+
+            //Insert Test
+            temp = single();
+            int index = randInt(0, str.length() - 1);
+            str = str.substring(0, index) + temp + str.substring(index);
+            seq.add(temp, index);
+            for(int i = 0;i < seq.size;i++) if(str.charAt(i) != seq.charAt(i)) return false;
+
+            //Substring Test
+            temp = str.substring(index, index + temp.length());
+            String compare = seq.substring(index, index + temp.length());
+            for(int i = 0;i < compare.length();i++) if(temp.charAt(i) != compare.charAt(i)) return false;
+
+            //Replace Test
+            compare = single();
+            str = str.replace(temp, compare);
+            seq.replace(temp, compare);
+            for(int i = 0;i < seq.size;i++) if(str.charAt(i) != seq.charAt(i)) return false;
 
             return true;
         }).run();
@@ -351,7 +389,7 @@ public class PrimStructTester{
 
     public static void main(String[] args){
         testSeqs();
-        testSets();
-        testQueues();
+//        testSets();
+//        testQueues();
     }
 }

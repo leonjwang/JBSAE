@@ -53,7 +53,6 @@ public class Tree<T> implements Iterable<T>{
 
     @Override
     public Iterator<T> iterator(){
-        //TODO: Save memory
         return new TreeIterator();
     }
 

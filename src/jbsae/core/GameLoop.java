@@ -22,9 +22,7 @@ public class GameLoop{
     }
 
     public void init(){
-        texture1 = new Texture("assets/Untitled.png");
-        Pixmap p = new Pixmap(texture1);
-        texture1 = p.create();
+        texture1 = new Texture("assets/logo.png");
     }
 
     public void start(){
