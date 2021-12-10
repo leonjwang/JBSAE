@@ -82,6 +82,11 @@ public class IntSeq{
         sortArr(items);
     }
 
+    public void clear(){
+        items = new int[4];
+        size = 0;
+    }
+
     public void trim(){
         resize(size);
     }

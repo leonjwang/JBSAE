@@ -4,7 +4,6 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-//TODO: finish
 public class CharSeq extends IntSeq{
     public CharSeq(){
         super();
@@ -22,8 +21,7 @@ public class CharSeq extends IntSeq{
 
     public CharSeq add(String str, int index){
         int[] items = this.items;
-        //TODO: This doesn't work
-        if(size + str.length() >= items.length) items = resize(max(8, size * 2, size + str.length() + 1));
+        if(size + str.length() >= items.length) items = resize(max(8, (size + str.length()) * 2));
         shift(items, index, (size += str.length()), str.length());
         for(int i = 0;i < str.length();i++) items[i + index] = str.charAt(i);
         return this;
@@ -59,29 +57,45 @@ public class CharSeq extends IntSeq{
     }
 
     public CharSeq replace(String from, String to){
-        for(int i = 0;i < size - from.length();i++){
+        CharSeq newSeq = new CharSeq();
+        for(int i = 0;i <= size - from.length();i++){
             if(matches(i, from)){
-                remove(i, from.length());
-                add(to, i);
-            }
+                newSeq.add(to);
+                i += from.length() - 1;
+            }else newSeq.add(items[i]);
         }
+        items = newSeq.items;
+        size = newSeq.size;
         return this;
+    }
+
+    public CharSeq strip(){
+        int start, end;
+        for(start = 0;start < size;start++) if(items[start] > ' ') break;
+        for(end = size - 1;end >= 0;end--) if(items[end] > ' ') break;
+        if(end >= start){
+            shift(items, start, start + (size = end - start + 1), -start);
+            trim();
+        }else clear();
+        return this;
+    }
+
+    public CharSeq substring(int start, int end){
+        CharSeq substring = new CharSeq();
+        for(int i = 0;i < end - start;i++) substring.add((char)items[i + start]);
+        return substring;
     }
 
     public char charAt(int index){
         return (char)get(index);
     }
 
-    public String substring(int start, int end){
-        char[] chars = new char[end - start];
-        for(int i = 0;i < chars.length;i ++) chars[i] = (char)items[i + start];
-        return arrToString(chars);
+    public boolean equals(String str){
+        return matches(0, str);
     }
 
     public boolean matches(int index, String str){
-        for(int i = 0;i < str.length();i++){
-            if(str.charAt(i) != items[i + index]) return false;
-        }
+        for(int i = 0;i < str.length();i++) if(str.charAt(i) != items[i + index]) return false;
         return true;
     }
 

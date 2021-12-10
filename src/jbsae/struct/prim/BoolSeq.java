@@ -79,6 +79,11 @@ public class BoolSeq{
         return false;
     }
 
+    public void clear(){
+        items = new boolean[4];
+        size = 0;
+    }
+
     public void trim(){
         resize(size);
     }

@@ -82,6 +82,11 @@ public class FloatSeq{
         sortArr(items);
     }
 
+    public void clear(){
+        items = new float[4];
+        size = 0;
+    }
+
     public void trim(){
         resize(size);
     }

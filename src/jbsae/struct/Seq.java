@@ -96,6 +96,11 @@ public class Seq<T> implements Iterable<T>{
         sortArr(items, value);
     }
 
+    public void clear(){
+        items = create(4, items);
+        size = 0;
+    }
+
     public void trim(){
         resize(size);
     }

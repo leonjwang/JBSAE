@@ -163,13 +163,24 @@ public class PrimStructTester{
 
             //Substring Test
             temp = str.substring(index, index + temp.length());
-            String compare = seq.substring(index, index + temp.length());
+            String compare = seq.substring(index, index + temp.length()).toString();
             for(int i = 0;i < compare.length();i++) if(temp.charAt(i) != compare.charAt(i)) return false;
 
             //Replace Test
             compare = single();
             str = str.replace(temp, compare);
             seq.replace(temp, compare);
+            for(int i = 0;i < seq.size;i++) if(str.charAt(i) != seq.charAt(i)) return false;
+
+            String whitespace = "";
+            for(int i = 0;i < randInt(0, 10);i++) whitespace += " ";
+            str = (whitespace + str + whitespace).trim();
+            seq.add(whitespace, 0).add(whitespace).strip();
+            for(int i = 0;i < seq.size;i++) if(str.charAt(i) != seq.charAt(i)) return false;
+
+            str = (whitespace + "A" + whitespace).trim();
+            seq.clear();
+            seq.add(whitespace + "A" + whitespace).strip();
             for(int i = 0;i < seq.size;i++) if(str.charAt(i) != seq.charAt(i)) return false;
 
             return true;
