@@ -400,7 +400,7 @@ public class PrimStructTester{
 
     public static void main(String[] args){
         testSeqs();
-//        testSets();
-//        testQueues();
+        testSets();
+        testQueues();
     }
 }
