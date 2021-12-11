@@ -69,17 +69,6 @@ public class CharSeq extends IntSeq{
         return this;
     }
 
-    public CharSeq strip(){
-        int start, end;
-        for(start = 0;start < size;start++) if(items[start] > ' ') break;
-        for(end = size - 1;end >= 0;end--) if(items[end] > ' ') break;
-        if(end >= start){
-            shift(items, start, start + (size = end - start + 1), -start);
-            trim();
-        }else clear();
-        return this;
-    }
-
     public CharSeq substring(int start, int end){
         CharSeq substring = new CharSeq();
         for(int i = 0;i < end - start;i++) substring.add((char)items[i + start]);
@@ -106,6 +95,23 @@ public class CharSeq extends IntSeq{
     public int indexOf(String str){
         for(int i = 0;i < size - str.length();i++) if(matches(i, str)) return i;
         return -1;
+    }
+
+    @Override
+    public CharSeq clear(){
+        return (CharSeq)super.clear();
+    }
+
+    @Override
+    public CharSeq trim(){
+        int start, end;
+        for(start = 0;start < size;start++) if(items[start] > ' ') break;
+        for(end = size - 1;end >= 0;end--) if(items[end] > ' ') break;
+        if(end >= start){
+            shift(items, start, start + (size = end - start + 1), -start);
+            super.trim();
+        }else clear();
+        return this;
     }
 
     @Override

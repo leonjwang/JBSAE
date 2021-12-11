@@ -211,35 +211,28 @@ public class StructTester{
 
             return true;
         }).run();
-        new Test("Seq Comparison Test", 1, () -> {
+        new Test("QuadTree Test", 10, () -> {
             //Setup
-            Seq<Vec2> tree = new Seq<>();
-            for(int i = 0;i < 100000;i ++) tree.add(new Vec2(random(0, 10000), random(0, 10000)));
-
-            Range2 range = new Range2(0, 0, 200, 200);
-            for(int i = 0;i < 10000;i ++){
-                Seq<Vec2> inside = new Seq<>();
-                for(Vec2 v : tree) if(range.contains(v)) inside.add(v);
-                int hasd = 0;
-            }
-
-            return true;
-        }).run();
-        new Test("QuadTree Test", 1, () -> {
-            //Setup
-            Set<Vec2> original = new Set<>();
-            QuadTree tree = new QuadTree(10000, 10000);
-            for(int i = 0;i < 100000;i ++){
+            Seq<Vec2> original = new Seq<>();
+            QuadTree tree = new QuadTree(10000, 10000).valueLimit(8);
+            for(int i = 0;i < 10000;i++){
                 Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
                 tree.add(v);
                 original.add(v);
             }
 
-            Range2 range = new Range2(0, 0, 200, 200);
-            for(int i = 0;i < 10000;i ++){
-                Seq<Pos2> inside = tree.findAll(range);
-                for(Pos2 p : inside) if(!original.contains((Vec2)p)) return false;
+            Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
+            for(int i = 0;i < 10000;i++) tree.findAll(range);
+
+            Seq<Pos2> inside = tree.findAll(range);
+            Seq<Pos2> trueInside = new Seq<>();
+            for(Vec2 v : original){
+                if(range.contains(v)){
+                    trueInside.add(v);
+                    if(!inside.contains(v)) return false;
+                }
             }
+            if(inside.size > trueInside.size * 2 + 100) return false;
 
             return true;
         }).run();
@@ -299,10 +292,10 @@ public class StructTester{
     }
 
     public static void main(String[] args){
-        testSeq();
-        testSet();
-        testQueue();
+//        testSeq();
+//        testSet();
+//        testQueue();
         testTree();
-        testMap();
+//        testMap();
     }
 }

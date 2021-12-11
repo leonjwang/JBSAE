@@ -21,34 +21,38 @@ public class BoolQueue{
         return values;
     }
 
-    public void addFirst(boolean value){
+    public BoolQueue addFirst(boolean value){
         boolean[] items = this.items;
         if(size == items.length) items = resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
         size++;
+        return this;
     }
 
-    public void addLast(boolean value){
+    public BoolQueue addLast(boolean value){
         boolean[] items = this.items;
         if(size == items.length) items = resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
         size++;
+        return this;
     }
 
-    public void removeFirst(){
+    public BoolQueue removeFirst(){
         boolean[] items = this.items;
         items[head] = false;
         head = mod(head + 1, items.length);
         size--;
+        return this;
     }
 
-    public void removeLast(){
+    public BoolQueue removeLast(){
         boolean[] items = this.items;
         tail = mod(tail - 1, items.length);
         items[tail] = false;
         size--;
+        return this;
     }
 
     public boolean get(int index){
@@ -63,8 +67,9 @@ public class BoolQueue{
         return get(size - 1);
     }
 
-    public void trim(){
+    public BoolQueue trim(){
         resize(size);
+        return this;
     }
 
     public boolean[] resize(int newSize){

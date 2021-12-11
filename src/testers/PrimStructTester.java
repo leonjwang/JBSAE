@@ -175,12 +175,12 @@ public class PrimStructTester{
             String whitespace = "";
             for(int i = 0;i < randInt(0, 10);i++) whitespace += " ";
             str = (whitespace + str + whitespace).trim();
-            seq.add(whitespace, 0).add(whitespace).strip();
+            seq.add(whitespace, 0).add(whitespace).trim();
             for(int i = 0;i < seq.size;i++) if(str.charAt(i) != seq.charAt(i)) return false;
 
             str = (whitespace + "A" + whitespace).trim();
             seq.clear();
-            seq.add(whitespace + "A" + whitespace).strip();
+            seq.add(whitespace + "A" + whitespace).trim();
             for(int i = 0;i < seq.size;i++) if(str.charAt(i) != seq.charAt(i)) return false;
 
             return true;

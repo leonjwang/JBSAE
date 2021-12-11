@@ -31,6 +31,12 @@ public class Seq<T> implements Iterable<T>{
         return values;
     }
 
+    public Seq<T> set(Seq<T> values){
+        items = values.items;
+        size = values.size;
+        return this;
+    }
+
     public Seq<T> add(T value){
         T[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));

@@ -22,30 +22,40 @@ public class FloatSeq{
         return values;
     }
 
-    public void add(float value){
+    public FloatSeq set(FloatSeq values){
+        items = values.items;
+        size = values.size;
+        return this;
+    }
+
+    public FloatSeq add(float value){
         float[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
         items[size++] = value;
+        return this;
     }
 
-    public void add(float value, int index){
+    public FloatSeq add(float value, int index){
         float[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
+        return this;
     }
 
-    public void addAll(float... values){
+    public FloatSeq addAll(float... values){
         for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
-    public void remove(int index){
+    public FloatSeq remove(int index){
         float[] items = this.items;
         shift(items, index + 1, size--, -1);
         items[size] = 0;
+        return this;
     }
 
-    public void removeValue(float value){
+    public FloatSeq removeValue(float value){
         float[] items = this.items;
         for(int i = 0;i < size;i++){
             if(items[i] == value){
@@ -53,19 +63,20 @@ public class FloatSeq{
                 break;
             }
         }
+        return this;
     }
 
-    public void remove(int... indexes){
+    public FloatSeq remove(int... indexes){
         for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
+        return this;
     }
 
-    public void removeAll(float... values){
+    public FloatSeq removeAll(float... values){
         float[] items = this.items;
         for(int i = 0;i < values.length;i++){
-            for(int j = 0;j < size;j++){
-                if(items[j] == values[i]) remove(j--);
-            }
+            for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
         }
+        return this;
     }
 
     public float get(int index){
@@ -77,18 +88,21 @@ public class FloatSeq{
         return false;
     }
 
-    public void sort(){
+    public FloatSeq sort(){
         trim();
         sortArr(items);
+        return this;
     }
 
-    public void clear(){
+    public FloatSeq clear(){
         items = new float[4];
         size = 0;
+        return this;
     }
 
-    public void trim(){
+    public FloatSeq trim(){
         resize(size);
+        return this;
     }
 
     public float[] resize(int newSize){

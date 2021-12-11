@@ -24,6 +24,11 @@ public class Tree<T> implements Iterable<T>{
         return this;
     }
 
+    public Tree<T> addAll(Seq<T> arr){
+        for(T value : arr) add(value);
+        return this;
+    }
+
     public Tree<T> addBranch(Tree tree){
         if(tree == null) return this;
         tree.parent = this;

@@ -16,12 +16,13 @@ public class BinTree<T> extends Tree<T>{
         limit = 16;
     }
 
-    public BinTree limit(int limit){
+    public BinTree<T> limit(int limit){
         this.limit = limit;
         return this;
     }
 
-    public void add(T value){
+    @Override
+    public BinTree<T> add(T value){
         float mid = (min + max) / 2f;
         if(branch1 != null){
             if(comparator.get(value) < mid) branch1.add(value);
@@ -32,22 +33,29 @@ public class BinTree<T> extends Tree<T>{
             addBranches(branch1, branch2);
             addAll(values.get(0), value);
         }else values.add(value);
+        return this;
     }
 
-    public void addAll(T... values){
+    @Override
+    public BinTree<T> addAll(T... values){
         for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
-    public void remove(T value){
+    @Override
+    public BinTree<T> remove(T value){
         float mid = (min + max) / 2f;
         if(branches.size > 0){
             if(comparator.get(value) < mid) branch1.remove(value);
             else branch2.remove(value);
         }else values.remove(value);
+        return this;
     }
 
-    public void removeAll(T... values){
+    @Override
+    public BinTree<T> removeAll(T... values){
         for(int i = 0;i < values.length;i++) remove(values[i]);
+        return this;
     }
 
     public T find(Boolf<T> conditions){

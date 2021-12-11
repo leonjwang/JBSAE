@@ -25,35 +25,37 @@ public class FloatSet{
         return values;
     }
 
-    public void add(float value){
+    public FloatSet add(float value){
         if(eqlf(value, 0)){
             zero = true;
             size++;
-            return;
+            return this;
         }
         int h = intBits(value);
         int[] checks = hashes(h, table.length);
-        for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return;
+        for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
         for(int i = 0;i < checks.length;i++){
             if(table[checks[i]] == 0){
                 table[checks[i]] = value;
                 size++;
-                return;
+                return this;
             }
         }
         resize(table.length << 1);
         add(value);
+        return this;
     }
 
-    public void addAll(float... values){
+    public FloatSet addAll(float... values){
         for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
-    public void remove(float value){
+    public FloatSet remove(float value){
         if(eqlf(value, 0)){
             zero = false;
             size--;
-            return;
+            return this;
         }
         int h = intBits(value);
         int[] checks = hashes(h, table.length);
@@ -61,13 +63,15 @@ public class FloatSet{
             if(eqlf(table[checks[i]], value)){
                 table[checks[i]] = 0;
                 size--;
-                return;
+                return this;
             }
         }
+        return this;
     }
 
-    public void removeAll(float... values){
+    public FloatSet removeAll(float... values){
         for(int i = 0;i < values.length;i++) remove(values[i]);
+        return this;
     }
 
     public boolean contains(float value){
@@ -78,12 +82,13 @@ public class FloatSet{
         return false;
     }
 
-    public void resize(int newSize){
+    public FloatSet resize(int newSize){
         float[] table = this.table;
         float[] values = new float[size];
         int i = (size = 0);
         for(int j = 0;j < table.length;j++) if(table[j] != 0) values[i++] = table[j];
         this.table = new float[newSize];
         for(int j = 0;j < values.length;j++) add(values[j]);
+        return this;
     }
 }

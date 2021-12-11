@@ -21,34 +21,38 @@ public class FloatQueue{
         return values;
     }
 
-    public void addFirst(float value){
+    public FloatQueue addFirst(float value){
         float[] items = this.items;
         if(size == items.length) items = resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
         size++;
+        return this;
     }
 
-    public void addLast(float value){
+    public FloatQueue addLast(float value){
         float[] items = this.items;
         if(size == items.length) items = resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
         size++;
+        return this;
     }
 
-    public void removeFirst(){
+    public FloatQueue removeFirst(){
         float[] items = this.items;
         items[head] = 0;
         head = mod(head + 1, items.length);
         size--;
+        return this;
     }
 
-    public void removeLast(){
+    public FloatQueue removeLast(){
         float[] items = this.items;
         tail = mod(tail - 1, items.length);
         items[tail] = 0;
         size--;
+        return this;
     }
 
     public float get(int index){
@@ -68,8 +72,9 @@ public class FloatQueue{
         return false;
     }
 
-    public void trim(){
+    public FloatQueue trim(){
         resize(size);
+        return this;
     }
 
     public float[] resize(int newSize){

@@ -21,34 +21,38 @@ public class IntQueue{
         return values;
     }
 
-    public void addFirst(int value){
+    public IntQueue addFirst(int value){
         int[] items = this.items;
         if(size == items.length) items = resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
         size++;
+        return this;
     }
 
-    public void addLast(int value){
+    public IntQueue addLast(int value){
         int[] items = this.items;
         if(size == items.length) items = resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
         size++;
+        return this;
     }
 
-    public void removeFirst(){
+    public IntQueue removeFirst(){
         int[] items = this.items;
         items[head] = 0;
         head = mod(head + 1, items.length);
         size--;
+        return this;
     }
 
-    public void removeLast(){
+    public IntQueue removeLast(){
         int[] items = this.items;
         tail = mod(tail - 1, items.length);
         items[tail] = 0;
         size--;
+        return this;
     }
 
     public int get(int index){
@@ -68,8 +72,9 @@ public class IntQueue{
         return false;
     }
 
-    public void trim(){
+    public IntQueue trim(){
         resize(size);
+        return this;
     }
 
     public int[] resize(int newSize){

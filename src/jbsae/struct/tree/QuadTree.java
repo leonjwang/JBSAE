@@ -8,9 +8,8 @@ import jbsae.struct.*;
 import static jbsae.util.Mathf.*;
 
 public class QuadTree<T extends Pos2> extends Tree<T>{
-    public int depthLimit = 8;
+    public int depthLimit, valueLimit = 4;
     public Range2 range;
-    public QuadTree branch1, branch2, branch3, branch4;
 
     public QuadTree(float w, float h){
         this(0, 0, w, h);
@@ -27,52 +26,54 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
         this.range = range;
     }
 
-    public QuadTree limit(int depthLimit){
+    public QuadTree<T> valueLimit(int valueLimit){
+        this.valueLimit = valueLimit;
+        return this;
+    }
+
+    public QuadTree<T> depthLimit(int depthLimit){
         this.depthLimit = depthLimit;
         return this;
     }
 
-    public QuadTree find(Pos2 value){
+    public QuadTree<T> find(Pos2 value){
         if(branches.size <= 0) return this;
-        if(branch1.range.contains(value)) return branch1.find(value);
-        else if(branch2.range.contains(value)) return branch2.find(value);
-        else if(branch3.range.contains(value)) return branch3.find(value);
-        else return branch4.find(value);
+        for(Tree<T> branch : branches) if(((QuadTree<T>)branch).range.contains(value)) return ((QuadTree<T>)branch).find(value);
+        return this;
     }
 
     public Seq<T> findAll(Range2 range){
         if(branches.size <= 0) return values;
-        Seq<T> arr = new Seq<>(values.list());
-        if(branch1.range.overlaps(range)){
-            arr.addAll(branch1.findAll(range));
+        Seq<T> arr = new Seq<>();
+        for(Tree<T> branch : branches){
+            QuadTree<T> b = (QuadTree<T>)branch;
+            if(b.range.overlaps(range)) arr = (arr.size == 0) ? arr.set(b.findAll(range)) : arr.addAll(b.findAll(range));
         }
-        if(branch2.range.overlaps(range)) arr.addAll(branch2.findAll(range));
-        if(branch3.range.overlaps(range)) arr.addAll(branch3.findAll(range));
-        if(branch4.range.overlaps(range)) arr.addAll(branch4.findAll(range));
-        arr = arr == null ? branch1.findAll(range) : branch1.findAll(range);
-
         return arr;
     }
 
     @Override
-    public void add(T value){
-        if((values.size > 0 || branches.size > 0) && depthLimit > 0){
+    public QuadTree<T> add(T value){
+        if((values.size >= valueLimit || branches.size > 0) && depthLimit > 0){
             if(branches.size <= 0){
-                branch1 = new QuadTree(range.cpy().splt(2, 0)).limit(depthLimit - 1);
-                branch2 = new QuadTree(range.cpy().splt(2, 1)).limit(depthLimit - 1);
-                branch3 = new QuadTree(range.cpy().splt(2, 2)).limit(depthLimit - 1);
-                branch4 = new QuadTree(range.cpy().splt(2, 3)).limit(depthLimit - 1);
-                addBranches(branch1, branch2, branch3, branch4);
-                addAll(values.get(0), value);
-                values.remove(0);
+                addBranches(
+                new QuadTree<T>(range.cpy().splt(2, 0)).depthLimit(depthLimit - 1).valueLimit(valueLimit),
+                new QuadTree<T>(range.cpy().splt(2, 1)).depthLimit(depthLimit - 1).valueLimit(valueLimit),
+                new QuadTree<T>(range.cpy().splt(2, 2)).depthLimit(depthLimit - 1).valueLimit(valueLimit),
+                new QuadTree<T>(range.cpy().splt(2, 3)).depthLimit(depthLimit - 1).valueLimit(valueLimit)
+                );
+                addAll(values).add(value);
+                values.clear();
             }else find(value).add(value);
         }else values.add(value);
+        return this;
     }
 
     @Override
-    public void remove(T value){
+    public QuadTree<T> remove(T value){
         if(branches.size > 0) find(value).remove(value);
         else values.remove(value);
+        return this;
     }
 
     @Override

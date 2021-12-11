@@ -1,6 +1,7 @@
 package jbsae.struct.prim;
 
 import jbsae.func.prim.*;
+import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -24,30 +25,40 @@ public class BoolSeq{
         return values;
     }
 
-    public void add(boolean value){
+    public BoolSeq set(BoolSeq values){
+        items = values.items;
+        size = values.size;
+        return this;
+    }
+
+    public BoolSeq add(boolean value){
         boolean[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
         items[size++] = value;
+        return this;
     }
 
-    public void add(boolean value, int index){
+    public BoolSeq add(boolean value, int index){
         boolean[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
+        return this;
     }
 
-    public void addAll(boolean... values){
+    public BoolSeq addAll(boolean... values){
         for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
-    public void remove(int index){
+    public BoolSeq remove(int index){
         boolean[] items = this.items;
         shift(items, index + 1, size--, -1);
         items[size] = false;
+        return this;
     }
 
-    public void removeValue(boolean value){
+    public BoolSeq removeValue(boolean value){
         boolean[] items = this.items;
         for(int i = 0;i < size;i++){
             if(items[i] == value){
@@ -55,19 +66,20 @@ public class BoolSeq{
                 break;
             }
         }
+        return this;
     }
 
-    public void remove(int... indexes){
+    public BoolSeq remove(int... indexes){
         for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
+        return this;
     }
 
-    public void removeAll(boolean... values){
+    public BoolSeq removeAll(boolean... values){
         boolean[] items = this.items;
         for(int i = 0;i < values.length;i++){
-            for(int j = 0;j < size;j++){
-                if(items[j] == values[i]) remove(j--);
-            }
+            for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
         }
+        return this;
     }
 
     public boolean get(int index){
@@ -79,13 +91,15 @@ public class BoolSeq{
         return false;
     }
 
-    public void clear(){
+    public BoolSeq clear(){
         items = new boolean[4];
         size = 0;
+        return this;
     }
 
-    public void trim(){
+    public BoolSeq trim(){
         resize(size);
+        return this;
     }
 
     public boolean[] resize(int newSize){

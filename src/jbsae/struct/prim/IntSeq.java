@@ -22,30 +22,40 @@ public class IntSeq{
         return values;
     }
 
-    public void add(int value){
+    public IntSeq set(IntSeq values){
+        items = values.items;
+        size = values.size;
+        return this;
+    }
+
+    public IntSeq add(int value){
         int[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
         items[size++] = value;
+        return this;
     }
 
-    public void add(int value, int index){
+    public IntSeq add(int value, int index){
         int[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
+        return this;
     }
 
-    public void addAll(int... values){
+    public IntSeq addAll(int... values){
         for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
-    public void remove(int index){
+    public IntSeq remove(int index){
         int[] items = this.items;
         shift(items, index + 1, size--, -1);
         items[size] = 0;
+        return this;
     }
 
-    public void removeValue(int value){
+    public IntSeq removeValue(int value){
         int[] items = this.items;
         for(int i = 0;i < size;i++){
             if(items[i] == value){
@@ -53,19 +63,20 @@ public class IntSeq{
                 break;
             }
         }
+        return this;
     }
 
-    public void remove(int... indexes){
+    public IntSeq remove(int... indexes){
         for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
+        return this;
     }
 
-    public void removeAll(int... values){
+    public IntSeq removeAll(int... values){
         int[] items = this.items;
         for(int i = 0;i < values.length;i++){
-            for(int j = 0;j < size;j++){
-                if(items[j] == values[i]) remove(j--);
-            }
+            for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
         }
+        return this;
     }
 
     public int get(int index){
@@ -77,18 +88,21 @@ public class IntSeq{
         return false;
     }
 
-    public void sort(){
+    public IntSeq sort(){
         trim();
         sortArr(items);
+        return this;
     }
 
-    public void clear(){
+    public IntSeq clear(){
         items = new int[4];
         size = 0;
+        return this;
     }
 
-    public void trim(){
+    public IntSeq trim(){
         resize(size);
+        return this;
     }
 
     public int[] resize(int newSize){

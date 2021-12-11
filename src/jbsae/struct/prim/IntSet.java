@@ -25,47 +25,51 @@ public class IntSet{
         return values;
     }
 
-    public void add(int value){
+    public IntSet add(int value){
         if(value == 0){
             zero = true;
             size++;
-            return;
+            return this;
         }
         int[] checks = hashes(value, table.length);
-        for(int i = 0;i < checks.length;i++) if(table[checks[i]] == value) return;
+        for(int i = 0;i < checks.length;i++) if(table[checks[i]] == value) return this;
         for(int i = 0;i < checks.length;i++){
             if(table[checks[i]] == 0){
                 table[checks[i]] = value;
                 size++;
-                return;
+                return this;
             }
         }
         resize(table.length << 1);
         add(value);
+        return this;
     }
 
-    public void addAll(int... values){
+    public IntSet addAll(int... values){
         for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
-    public void remove(int value){
+    public IntSet remove(int value){
         if(value == 0){
             zero = false;
             size--;
-            return;
+            return this;
         }
         int[] checks = hashes(value, table.length);
         for(int i = 0;i < checks.length;i++){
             if(table[checks[i]] == value){
                 table[checks[i]] = 0;
                 size--;
-                return;
+                return this;
             }
         }
+        return this;
     }
 
-    public void removeAll(int... values){
+    public IntSet removeAll(int... values){
         for(int i = 0;i < values.length;i++) remove(values[i]);
+        return this;
     }
 
     public boolean contains(int value){
@@ -75,12 +79,13 @@ public class IntSet{
         return false;
     }
 
-    public void resize(int newSize){
+    public IntSet resize(int newSize){
         int[] table = this.table;
         int[] values = new int[size];
         int i = (size = 0);
         for(int j = 0;j < table.length;j++) if(table[j] != 0) values[i++] = table[j];
         this.table = new int[newSize];
         for(int j = 0;j < values.length;j++) add(values[j]);
+        return this;
     }
 }
