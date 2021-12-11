@@ -14,30 +14,36 @@ public class Tree<T> implements Iterable<T>{
         values = new Seq<>();
     }
 
-    public void add(T value){
+    public Tree<T> add(T value){
         values.add(value);
+        return this;
     }
 
-    public void addAll(T... arr){
+    public Tree<T> addAll(T... arr){
         for(T value : arr) add(value);
+        return this;
     }
 
-    public void addBranch(Tree tree){
-        if(tree == null) return;
+    public Tree<T> addBranch(Tree tree){
+        if(tree == null) return this;
         tree.parent = this;
         branches.add(tree);
+        return this;
     }
 
-    public void addBranches(Tree... trees){
+    public Tree<T> addBranches(Tree... trees){
         for(Tree t : trees) addBranch(t);
+        return this;
     }
 
-    public void remove(T value){
+    public Tree<T> remove(T value){
         values.remove(value);
+        return this;
     }
 
-    public void removeAll(T... values){
+    public Tree<T> removeAll(T... values){
         this.values.removeAll(values);
+        return this;
     }
 
     public boolean contains(T value){

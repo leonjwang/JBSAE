@@ -2,7 +2,7 @@ package jbsae.math;
 
 import static jbsae.util.Mathf.*;
 
-public class Vec3{
+public class Vec3 implements Pos3{
     public float x, y, z;
 
     public Vec3(){
@@ -59,5 +59,20 @@ public class Vec3{
 
     public Vec3 cpy(){
         return new Vec3(this);
+    }
+
+    @Override
+    public float x(){
+        return x;
+    }
+
+    @Override
+    public float y(){
+        return y;
+    }
+
+    @Override
+    public float z(){
+        return z;
     }
 }

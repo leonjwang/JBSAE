@@ -2,7 +2,7 @@ package jbsae.math;
 
 import static jbsae.util.Mathf.*;
 
-public class Vec2{
+public class Vec2 implements Pos2{
     public float x, y;
 
     public Vec2(){
@@ -72,5 +72,15 @@ public class Vec2{
 
     public Vec2 cpy(){
         return new Vec2(this);
+    }
+
+    @Override
+    public float x(){
+        return x;
+    }
+
+    @Override
+    public float y(){
+        return y;
     }
 }

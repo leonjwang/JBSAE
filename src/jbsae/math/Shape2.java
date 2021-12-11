@@ -16,8 +16,8 @@ public class Shape2{
         for(int i = 0;i < coords.length;i += 2) v[i / 2] = new Vec2(coords[i], coords[i + 1]);
     }
 
-    public Shape2(Vec2... pos){
-        for(int i = 0;i < v.length;i++) v[i] = new Vec2(pos[i]);
+    public Shape2(Pos2... pos){
+        for(int i = 0;i < v.length;i++) v[i] = new Vec2(pos[i].x(), pos[i].y());
     }
 
     public Shape2 set(float... coords){

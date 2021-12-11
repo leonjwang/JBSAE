@@ -29,34 +29,38 @@ public class Queue<T> implements Iterable<T>{
         return values;
     }
 
-    public void addFirst(T value){
+    public Queue<T> addFirst(T value){
         T[] items = this.items;
         if(size == items.length) items = resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
         size++;
+        return this;
     }
 
-    public void addLast(T value){
+    public Queue<T> addLast(T value){
         T[] items = this.items;
         if(size == items.length) items = resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
         size++;
+        return this;
     }
 
-    public void removeFirst(){
+    public Queue<T> removeFirst(){
         T[] items = this.items;
         items[head] = null;
         head = mod(head + 1, items.length);
         size--;
+        return this;
     }
 
-    public void removeLast(){
+    public Queue<T> removeLast(){
         T[] items = this.items;
         tail = mod(tail - 1, items.length);
         items[tail] = null;
         size--;
+        return this;
     }
 
     public T get(int index){
@@ -76,8 +80,9 @@ public class Queue<T> implements Iterable<T>{
         return false;
     }
 
-    public void trim(){
+    public Queue<T> trim(){
         resize(size);
+        return this;
     }
 
     public T[] resize(int newSize){

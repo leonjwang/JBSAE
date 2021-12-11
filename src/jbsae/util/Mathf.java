@@ -1,16 +1,20 @@
 package jbsae.util;
 
+import jbsae.math.*;
+
 public class Mathf{
     public static final float threshhold = 0.001f;
 
     public static final float pi = (float)Math.PI;
     public static final float degToRad = pi / 180;
-    public static final float radToDeg = 180 /pi;
+    public static final float radToDeg = 180 / pi;
 
-    public static final int[] d4x = new int[] {0, 1, 0, -1};
-    public static final int[] d4y = new int[] {1, 0, -1, 0};
-    public static final int[] d8x = new int[] {0, 1, 1, 1, 0, -1, -1, -1};
-    public static final int[] d8y = new int[] {1, 1, 0, -1, -1, -1, 0, 1};
+    public static final int[] qx = new int[]{1, 0, 0, 1};
+    public static final int[] qy = new int[]{1, 1, 0, 0};
+    public static final int[] d4x = new int[]{0, 1, 0, -1};
+    public static final int[] d4y = new int[]{1, 0, -1, 0};
+    public static final int[] d8x = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
+    public static final int[] d8y = new int[]{1, 1, 0, -1, -1, -1, 0, 1};
 
     /** Random functions. */
     public static float random(){
@@ -125,9 +129,37 @@ public class Mathf{
     }
 
     public static int rt2(int n){
-        return (int)Math.sqrt(n);
+        return (int)rt2((float)n);
     }
 
+    public static float log(float n, float d){
+        return (float)(Math.log10(n) / Math.log10(d));
+    }
+
+    public static int log(int n, int d){
+        return (int)log((float)n, (float)d);
+    }
+
+    /** Distance */
+    public static float dst(float... param){
+        float total = 0;
+        for(int i = 0;i < param.length / 2;i++) total += pow(param[i] - param[i + param.length / 2], 2);
+        return rt2(total);
+    }
+
+    public static int dst(int... param){
+        int total = 0;
+        for(int i = 0;i < param.length / 2;i++) total += pow(param[i] - param[i + param.length / 2], 2);
+        return rt2(total);
+    }
+
+    public static float dst(Pos2 a, Pos2 b){
+        return dst(a.x(), a.y(), b.x(), b.y());
+    }
+
+    public static float dst(Pos3 a, Pos3 b){
+        return dst(a.x(), a.y(), a.z(), b.x(), b.y(), a.z());
+    }
 
     /** Comparisons */
     public static boolean eqlf(float a, float b){

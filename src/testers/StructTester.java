@@ -2,6 +2,7 @@ package testers;
 
 import jbsae.math.*;
 import jbsae.struct.*;
+import jbsae.struct.tree.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -199,6 +200,47 @@ public class StructTester{
                 values.remove(str);
             }
             if(values.size() > 0) return false;
+
+            return true;
+        }).run();
+        new Test("BinTree Test", () -> {
+            //Setup
+            float max = random(10, 10000);
+            BinTree<Vec2> tree = new BinTree(0, max, v -> ((Vec2)v).x);
+            for(int i = 0;i < randInt(2, 3);i++) tree.add(new Vec2(random(0, max), 0));
+
+            return true;
+        }).run();
+        new Test("Seq Comparison Test", 1, () -> {
+            //Setup
+            Seq<Vec2> tree = new Seq<>();
+            for(int i = 0;i < 100000;i ++) tree.add(new Vec2(random(0, 10000), random(0, 10000)));
+
+            Range2 range = new Range2(0, 0, 200, 200);
+            for(int i = 0;i < 10000;i ++){
+                Seq<Vec2> inside = new Seq<>();
+                for(Vec2 v : tree) if(range.contains(v)) inside.add(v);
+                int hasd = 0;
+            }
+
+            return true;
+        }).run();
+        new Test("QuadTree Test", 1, () -> {
+            //Setup
+            Set<Vec2> original = new Set<>();
+            QuadTree tree = new QuadTree(10000, 10000);
+            for(int i = 0;i < 100000;i ++){
+                Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
+                tree.add(v);
+                original.add(v);
+            }
+
+            Range2 range = new Range2(0, 0, 200, 200);
+            for(int i = 0;i < 10000;i ++){
+                Seq<Pos2> inside = tree.findAll(range);
+                for(Pos2 p : inside) if(!original.contains((Vec2)p)) return false;
+            }
+
             return true;
         }).run();
     }

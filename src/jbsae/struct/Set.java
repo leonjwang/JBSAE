@@ -27,27 +27,29 @@ public class Set<T> implements Iterable<T>{
         return values;
     }
 
-    public void add(T value){
+    public Set<T> add(T value){
         T[] table = this.table;
         int h = value.hashCode();
         int[] checks = hashes(h, table.length);
-        for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return;
+        for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
         for(int i = 0;i < checks.length;i++){
             if(table[checks[i]] == null){
                 table[checks[i]] = value;
                 size++;
-                return;
+                return this;
             }
         }
         resize(table.length << 1);
         add(value);
+        return this;
     }
 
-    public void addAll(T... values){
+    public Set<T> addAll(T... values){
         for(T value : values) add(value);
+        return this;
     }
 
-    public void remove(T value){
+    public Set<T> remove(T value){
         T[] table = this.table;
         int h = value.hashCode();
         int[] checks = hashes(h, table.length);
@@ -55,13 +57,15 @@ public class Set<T> implements Iterable<T>{
             if(eql(table[checks[i]], value)){
                 table[checks[i]] = null;
                 size--;
-                return;
+                return this;
             }
         }
+        return this;
     }
 
-    public void removeAll(T... values){
+    public Set<T> removeAll(T... values){
         for(T value : values) remove(value);
+        return this;
     }
 
     public boolean contains(T value){
@@ -71,13 +75,14 @@ public class Set<T> implements Iterable<T>{
         return false;
     }
 
-    public void resize(int newSize){
+    public Set<T> resize(int newSize){
         T[] table = this.table;
         T[] values = create(size, table);
         int i = (size = 0);
         for(int j = 0;j < table.length;j++) if(table[j] != null) values[i++] = table[j];
         this.table = create(newSize, table);
         for(int j = 0;j < values.length;j++) add(values[j]);
+        return this;
     }
 
     @Override

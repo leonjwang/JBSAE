@@ -14,10 +14,11 @@ public class Mat4{
         id();
     }
 
-    public void id(){
+    public Mat4 id(){
         for(int x = 0;x < 4;x++){
             for(int y = 0;y < 4;y++) m[x][y] = x == y ? 1 : 0;
         }
+        return this;
     }
 
     public Mat4 ortho(float l, float r, float b, float t, float n, float f){

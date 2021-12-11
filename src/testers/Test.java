@@ -10,9 +10,13 @@ public class Test{
     public int times;
 
     public Test(String name, Boolp test){
+        this(name, 1000, test);
+    }
+
+    public Test(String name, int times, Boolp test){
         this.name = name;
         this.test = test;
-        this.times = 1000;
+        this.times = times;
     }
 
     public boolean run(){

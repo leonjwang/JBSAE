@@ -31,30 +31,39 @@ public class Seq<T> implements Iterable<T>{
         return values;
     }
 
-    public void add(T value){
+    public Seq<T> add(T value){
         T[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
         items[size++] = value;
+        return this;
     }
 
-    public void add(T value, int index){
+    public Seq<T> add(T value, int index){
         T[] items = this.items;
         if(size >= items.length) items = resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
+        return this;
     }
 
-    public void addAll(T... values){
+    public Seq<T> addAll(T... values){
         for(T value : values) add(value);
+        return this;
     }
 
-    public void remove(int index){
+    public Seq<T> addAll(Seq<T> values){
+        for(T value : values) add(value);
+        return this;
+    }
+
+    public Seq<T> remove(int index){
         T[] items = this.items;
         shift(items, index + 1, size--, -1);
         items[size] = null;
+        return this;
     }
 
-    public void remove(T value){
+    public Seq<T> remove(T value){
         T[] items = this.items;
         for(int i = 0;i < size;i++){
             if(eql(items[i], value)){
@@ -62,19 +71,20 @@ public class Seq<T> implements Iterable<T>{
                 break;
             }
         }
+        return this;
     }
 
-    public void remove(int... indexes){
+    public Seq<T> remove(int... indexes){
         for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
+        return this;
     }
 
-    public void removeAll(T... values){
+    public Seq<T> removeAll(T... values){
         T[] items = this.items;
         for(T value : values){
-            for(int i = 0;i < size;i++){
-                if(eql(items[i], value)) remove(i--);
-            }
+            for(int i = 0;i < size;i++) if(eql(items[i], value)) remove(i--);
         }
+        return this;
     }
 
     public T get(int index){
@@ -86,23 +96,27 @@ public class Seq<T> implements Iterable<T>{
         return false;
     }
 
-    public void sort(){
+    public Seq<T> sort(){
         trim();
         sortArr(items);
+        return this;
     }
 
-    public void sort(Floatf<T> value){
+    public Seq<T> sort(Floatf<T> value){
         trim();
         sortArr(items, value);
+        return this;
     }
 
-    public void clear(){
+    public Seq<T> clear(){
         items = create(4, items);
         size = 0;
+        return this;
     }
 
-    public void trim(){
+    public Seq<T> trim(){
         resize(size);
+        return this;
     }
 
     public T[] resize(int newSize){
