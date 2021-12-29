@@ -2,6 +2,8 @@ package jbsae.util;
 
 import jbsae.math.*;
 
+import static jbsae.JBSAE.time;
+
 public class Mathf{
     public static final float threshhold = 0.001f;
 
@@ -16,6 +18,7 @@ public class Mathf{
     public static final int[] d8x = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
     public static final int[] d8y = new int[]{1, 1, 0, -1, -1, -1, 0, 1};
 
+
     /** Random functions. */
     public static float random(){
         return (float)Math.random();
@@ -29,9 +32,11 @@ public class Mathf{
         return (int)random(min, max + 0.99f);
     }
 
+
     public static boolean chance(float c){
         return random() < c;
     }
+
 
     /** Directional adders. */
     public static int d4x(int rot){
@@ -41,6 +46,7 @@ public class Mathf{
     public static int d4y(int rot){
         return d4y[mod(rot, 4)];
     }
+
 
     public static int d8x(int rot){
         return d8x[mod(rot, 8)];
@@ -60,6 +66,7 @@ public class Mathf{
         return (int)abs((float)a);
     }
 
+
     public static float clamp(float n, float min, float max){
         return max(min(n, max), min);
     }
@@ -67,6 +74,7 @@ public class Mathf{
     public static int clamp(int n, int min, int max){
         return (int)clamp((float)n, (float)min, (float)max);
     }
+
 
     public static float max(float... v){
         float max = v[0];
@@ -80,6 +88,7 @@ public class Mathf{
         return max;
     }
 
+
     public static float min(float... v){
         float min = v[0];
         for(int i = 1;i < v.length;i++) min = Math.min(min, v[i]);
@@ -92,6 +101,7 @@ public class Mathf{
         return min;
     }
 
+
     public static float mod(float n, float m){
         return (n + (int)(abs(n / m) + 1) * m) % m;
     }
@@ -100,6 +110,7 @@ public class Mathf{
         return (int)mod((float)n, (float)m);
     }
 
+
     public static float pow(float n, float d){
         return (float)Math.pow(n, d);
     }
@@ -107,6 +118,15 @@ public class Mathf{
     public static int pow(int n, int d){
         return (int)pow((float)n, (float)d);
     }
+
+    public static float pow2(float n){
+        return (float)Math.pow(n, 2);
+    }
+
+    public static int pow2(int n){
+        return (int)pow2((float)n);
+    }
+
 
     public static float rt(float n, float d){
         if(n < 0) return (float)Double.NaN;
@@ -132,6 +152,7 @@ public class Mathf{
         return (int)rt2((float)n);
     }
 
+
     public static float log(float n, float d){
         return (float)(Math.log10(n) / Math.log10(d));
     }
@@ -140,7 +161,8 @@ public class Mathf{
         return (int)log((float)n, (float)d);
     }
 
-    /** Distance */
+
+    /** Distance functions. */
     public static float dst(float... param){
         float total = 0;
         for(int i = 0;i < param.length / 2;i++) total += pow(param[i] - param[i + param.length / 2], 2);
@@ -161,7 +183,8 @@ public class Mathf{
         return dst(a.x(), a.y(), a.z(), b.x(), b.y(), a.z());
     }
 
-    /** Comparisons */
+
+    /** Comparison functions. */
     public static boolean eqlf(float a, float b){
         return abs(a - b) < threshhold;
     }
@@ -176,6 +199,7 @@ public class Mathf{
         return (float)Math.sin(a);
     }
 
+
     public static float cos(float a){
         return cosr(a * degToRad);
     }
@@ -183,6 +207,7 @@ public class Mathf{
     public static float cosr(float a){
         return (float)Math.cos(a);
     }
+
 
     public static float tan(float a){
         return tanr(a * degToRad);
@@ -192,6 +217,7 @@ public class Mathf{
         return (float)Math.tan(a);
     }
 
+
     public static float asin(float v){
         return asinr(v) * radToDeg;
     }
@@ -199,6 +225,7 @@ public class Mathf{
     public static float asinr(float v){
         return (float)Math.asin(v);
     }
+
 
     public static float acos(float v){
         return acosr(v) * radToDeg;
@@ -208,6 +235,7 @@ public class Mathf{
         return (float)Math.acos(v);
     }
 
+
     public static float atan(float v){
         return atanr(v) * radToDeg;
     }
@@ -215,6 +243,61 @@ public class Mathf{
     public static float atanr(float v){
         return (float)Math.atan(v);
     }
+
+
+    /** Trig values between 0 and 1. */
+    public static float absin(float a){
+        return (sin(a) + 1) / 2f;
+    }
+
+    public static float absinr(float a){
+        return (sinr(a) + 1) / 2f;
+    }
+
+
+    public static float abcos(float a){
+        return (cos(a) + 1) / 2f;
+    }
+
+    public static float abcosr(float a){
+        return (cosr(a) + 1) / 2f;
+    }
+
+
+    /** Oscillation functions. */
+    public static float sint(){
+        return sint(1000);
+    }
+
+    public static float sint(float i){
+        return sin((float)time.millis() / i * 360f);
+    }
+
+    public static float absint(){
+        return absint(1000);
+    }
+
+    public static float absint(float i){
+        return absin((float)time.millis() / i * 360f);
+    }
+
+
+    public static float cost(){
+        return cost(1000);
+    }
+
+    public static float cost(float i){
+        return cos((float)time.millis() / i * 360f);
+    }
+
+    public static float abcost(){
+        return abcost(1000);
+    }
+
+    public static float abcost(float i){
+        return abcos((float)time.millis() / i * 360f);
+    }
+
 
     /** Ported class functions. */
     public static int trailZeros(int i){

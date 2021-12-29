@@ -73,7 +73,8 @@ public class Renderer{
     public void draw(Shape2 d, Shape2 t, Color c){
         if(vertices.remaining() < 8 * 6) flush();
 
-        t.scl(1, -1);
+        t.sclc(1, -1);
+        d.scl(2);
         vertex(d.v[0], t.v[0], c);
         vertex(d.v[1], t.v[1], c);
         vertex(d.v[2], t.v[2], c);

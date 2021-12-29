@@ -12,14 +12,14 @@ public class Time{
     }
 
     public void init(){
-        time = time();
+        time = millis();
     }
 
     public void update(){
-        time = time();
+        time = millis();
     }
 
-    public long time(){
+    public long millis(){
         return (long)(glfwGetTime() * 1000);
     }
 }

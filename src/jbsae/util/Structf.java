@@ -191,15 +191,78 @@ public class Structf{
         Arrays.sort(arr);
     }
 
-    /** Object comparison. */
+    /** Comparison functions. */
     public static <T> boolean eql(T a, T b){
         return (a != null && a.equals(b)) || a == b;
+    }
+
+    public static <T> boolean eql(T[] a, T[] b){
+        if(a.length != b.length) return false;
+        for(int i = 0;i < a.length;i++) if(!eql(a[i], b[i])) return false;
+        return true;
+    }
+
+    public static <T> boolean eql(T[][] a, T[][] b){
+        if(a.length != b.length) return false;
+        for(int i = 0;i < a.length;i++){
+            if(a[i].length != b[i].length) return false;
+            for(int j = 0;j < a[i].length;j++) if(!eql(a[i][j], b[i][j])) return false;
+        }
+        return true;
+    }
+
+
+    public static boolean eql(float[] a, float[] b){
+        if(a.length != b.length) return false;
+        for(int i = 0;i < a.length;i++) if(!eqlf(a[i], b[i])) return false;
+        return true;
+    }
+
+    public static boolean eql(float[][] a, float[][] b){
+        if(a.length != b.length) return false;
+        for(int i = 0;i < a.length;i++){
+            if(a[i].length != b[i].length) return false;
+            for(int j = 0;j < a[i].length;j++) if(!eqlf(a[i][j], b[i][j])) return false;
+        }
+        return true;
+    }
+
+
+    public static boolean eql(boolean[] a, boolean[] b){
+        if(a.length != b.length) return false;
+        for(int i = 0;i < a.length;i++) if(a[i] != b[i]) return false;
+        return true;
+    }
+
+    public static boolean eql(boolean[][] a, boolean[][] b){
+        if(a.length != b.length) return false;
+        for(int i = 0;i < a.length;i++){
+            if(a[i].length != b[i].length) return false;
+            for(int j = 0;j < a[i].length;j++) if(a[i][j] != b[i][j]) return false;
+        }
+        return true;
+    }
+
+
+    public static boolean eql(int[] a, int[] b){
+        if(a.length != b.length) return false;
+        for(int i = 0;i < a.length;i++) if(a[i] != b[i]) return false;
+        return true;
+    }
+
+    public static boolean eql(int[][] a, int[][] b){
+        if(a.length != b.length) return false;
+        for(int i = 0;i < a.length;i++){
+            if(a[i].length != b[i].length) return false;
+            for(int j = 0;j < a[i].length;j++) if(a[i][j] != b[i][j]) return false;
+        }
+        return true;
     }
 
 
     /** Hashing integers. */
     public static int[] hashes(int h, int l){
-        return new int[] {hash(h, prime1, l), hash(h, prime2, l), hash(h, prime3, l)};
+        return new int[]{hash(h, prime1, l), hash(h, prime2, l), hash(h, prime3, l)};
     }
 
     public static int hash(int h, int prime, int l){

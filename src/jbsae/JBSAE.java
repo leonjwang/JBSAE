@@ -43,6 +43,10 @@ public class JBSAE{
         glfwTerminate();
     }
 
+    public static void screen(Screen s){
+        loop.screen = s;
+    }
+
     public static void main(String[] args){
         init();
         start();

@@ -1,7 +1,5 @@
 package jbsae.struct.tree;
 
-//TODO: test
-
 import jbsae.math.*;
 import jbsae.struct.*;
 

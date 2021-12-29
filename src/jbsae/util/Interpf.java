@@ -6,7 +6,7 @@ import static jbsae.util.Mathf.*;
 
 /** @author Nathan Sweet */
 public class Interpf{
-    public static Interp
+    public static final Interp
     lin = f -> f,
     pow2 = f -> pow(f, 2),
     pow3 = f -> pow(f, 3),
@@ -17,8 +17,10 @@ public class Interpf{
     sin = f -> sin(f * 180 - 90) / 2 + 0.5f,
     sint = f -> sin(f * 90),
     sinb = f -> sin(f * 90 - 90) + 1,
-    smooth = f -> f * f * (3 - 2 * f),
+    smooth = f -> pow(f, 2) * (3 - f * 2),
     smoother = f -> pow(f, 3) * (f * (f * 6 - 15) + 10),
+    pow3m = f -> pow((f - 0.5f) * 2, 3) / 2 + 0.5f,
+    pow5m = f -> pow((f - 0.5f) * 2, 5) / 2 + 0.5f,
     spow2 = new Pow(2),
     spow3 = new Pow(3),
     spow5 = new Pow(5),

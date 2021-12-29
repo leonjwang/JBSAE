@@ -25,6 +25,15 @@ public class Shape2{
         return this;
     }
 
+    public Shape2 add(Vec2 v){
+        return add(v.x, v.y);
+    }
+
+    public Shape2 add(float x, float y){
+        for(int i = 0;i < v.length;i++) v[i].add(x, y);
+        return this;
+    }
+
     public Shape2 rot(float r){
         Vec2 c = center();
         for(int i = 0;i < v.length;i++) v[i].add(-c.x, -c.y).rot(r).add(c);
@@ -32,6 +41,23 @@ public class Shape2{
     }
 
     public Shape2 scl(float x, float y){
+        for(int i = 0;i < v.length;i++) v[i].scl(x, y);
+        return this;
+    }
+    
+    public Shape2 scl(int s){
+        return scl(s, s);
+    }
+
+    public Shape2 scl(Vec2 v){
+        return scl(v.x, v.y);
+    }
+
+    public Shape2 sclc(Vec2 v){
+        return sclc(v.x, v.y);
+    }
+
+    public Shape2 sclc(float x, float y){
         Vec2 c = center();
         for(int i = 0;i < v.length;i++) v[i].add(-c.x, -c.y).scl(x, y).add(c);
         return this;

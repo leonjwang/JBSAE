@@ -15,8 +15,13 @@ public class Stringf{
         return String.copyValueOf(chars);
     }
 
+
     public static void print(Object o){
         System.out.println(o.toString());
+    }
+
+    public static void print(Object... o){
+        for(int i = 0;i < o.length;i ++) print(o[i]);
     }
 
     public static void printDebug(Object o){

@@ -48,8 +48,12 @@ public class Color{
         return this;
     }
 
+    public Color set(Color c){
+        return set(c.r, c.g, c.b, c.a);
+    }
+
     public Color set(float r, float g, float b){
-        return set(r, g, b, a);
+        return set(r, g, b, 1f);
     }
 
     public Color set(float r, float g, float b, float a){

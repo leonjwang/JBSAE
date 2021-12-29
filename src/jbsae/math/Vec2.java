@@ -63,7 +63,7 @@ public class Vec2 implements Pos2{
     }
 
     public float ang(){
-        return mod((x > 0 ? 0 : 180) + atan(y / x), 360);
+        return eqlf(x, 0) ? (y > 0 ? 90 : 270) : mod((x > 0 ? 0 : 180) + atan(y / x), 360);
     }
 
     public float len(){
