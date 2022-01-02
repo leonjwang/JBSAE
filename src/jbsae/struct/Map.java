@@ -11,6 +11,7 @@ public class Map<K, V> implements Iterable<K>{
     public V[] values;
     public int size = 0;
 
+
     public Map(){
         keys = (K[])new Object[16 * 16 * 4];
         values = (V[])new Object[16 * 16 * 4];
@@ -22,6 +23,7 @@ public class Map<K, V> implements Iterable<K>{
         this();
         for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (V)entries[i + 1]);
     }
+
 
     public Object[] keys(){
         int i = 0;
@@ -36,6 +38,7 @@ public class Map<K, V> implements Iterable<K>{
         for(K key : this) values[i++] = get(key);
         return values;
     }
+
 
     public Map<K, V> add(K key, V value){
         K[] keys = this.keys;
@@ -81,12 +84,14 @@ public class Map<K, V> implements Iterable<K>{
         return this;
     }
 
+
     public V get(K key){
         int h = key.hashCode();
         int[] checks = hashes(h, keys.length);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
         return null;
     }
+
 
     public boolean contains(K key){
         int h = key.hashCode();
@@ -112,6 +117,7 @@ public class Map<K, V> implements Iterable<K>{
         for(int j = 0;j < keyValues.length;j++) add(keyValues[j], valueValues[j]);
         return this;
     }
+
 
     @Override
     public Iterator<K> iterator(){

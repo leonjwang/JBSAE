@@ -25,6 +25,43 @@ public class Structf{
     }
 
 
+    /** Array filling. */
+    public static <T> void fill(T[] arr, T value){
+        fill(arr, value, 0, arr.length);
+    }
+
+    public static <T> void fill(T[] arr, T value, int start, int end){
+        for(int i = start;i < end;i++) arr[i] = value;
+    }
+
+
+    public static void fill(float[] arr, float value){
+        fill(arr, value, 0, arr.length);
+    }
+
+    public static void fill(float[] arr, float value, int start, int end){
+        for(int i = start;i < end;i++) arr[i] = value;
+    }
+
+
+    public static void fill(int[] arr, int value){
+        fill(arr, value, 0, arr.length);
+    }
+
+    public static void fill(int[] arr, int value, int start, int end){
+        for(int i = start;i < end;i++) arr[i] = value;
+    }
+
+
+    public static void fill(boolean[] arr, boolean value){
+        fill(arr, value, 0, arr.length);
+    }
+
+    public static void fill(boolean[] arr, boolean value, int start, int end){
+        for(int i = start;i < end;i++) arr[i] = value;
+    }
+
+
     /** Array copying. */
     public static <T> T[] copy(T[] arr){
         T[] newArr = create(arr.length);
@@ -133,6 +170,7 @@ public class Structf{
         }
     }
 
+
     /** Array shifting. */
     public static <T> void shift(T[] arr, int amount){
         shift(arr, 0, arr.length, amount);
@@ -190,6 +228,7 @@ public class Structf{
     public static void sortArr(int[] arr){
         Arrays.sort(arr);
     }
+
 
     /** Comparison functions. */
     public static <T> boolean eql(T a, T b){

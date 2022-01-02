@@ -9,6 +9,7 @@ public class Set<T> implements Iterable<T>{
     public T[] table;
     public int size = 0;
 
+
     public Set(){
         table = (T[])new Object[16];
         i1 = new SetIterator();
@@ -20,12 +21,14 @@ public class Set<T> implements Iterable<T>{
         for(Object value : values) add((T)value);
     }
 
+
     public Object[] list(){
         int i = 0;
         Object[] values = create(size);
         for(T value : this) values[i++] = value;
         return values;
     }
+
 
     public Set<T> add(T value){
         T[] table = this.table;
@@ -68,6 +71,7 @@ public class Set<T> implements Iterable<T>{
         return this;
     }
 
+
     public boolean contains(T value){
         int h = value.hashCode();
         int[] checks = hashes(h, table.length);
@@ -84,6 +88,7 @@ public class Set<T> implements Iterable<T>{
         for(int j = 0;j < values.length;j++) add(values[j]);
         return this;
     }
+
 
     @Override
     public Iterator<T> iterator(){

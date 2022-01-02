@@ -98,8 +98,8 @@ public class InterpDisplay extends Screen{
             if(tmp2.contains(input.mouse)){
                 push();
                 float rx = clamp(input.mouse.x, displaySize / 2f, width - displaySize / 2f);
-                sscale(1);
-                stranslate(rx, input.mouse.y + displaySize / 10f);
+                scalet(1);
+                translatet(rx, input.mouse.y + displaySize / 10f);
                 fill(boxColor);
                 rectc(0, 0, displaySize, displaySize / 5f);
                 fill(black);

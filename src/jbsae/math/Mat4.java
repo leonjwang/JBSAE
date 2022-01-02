@@ -14,6 +14,7 @@ public class Mat4{
         id();
     }
 
+
     public Mat4 id(){
         for(int x = 0;x < 4;x++){
             for(int y = 0;y < 4;y++) m[x][y] = x == y ? 1 : 0;
@@ -60,6 +61,7 @@ public class Mat4{
         m = r;
         return this;
     }
+
 
     public FloatBuffer buffer(){
         MemoryStack stack = MemoryStack.stackPush();

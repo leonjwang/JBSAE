@@ -11,6 +11,7 @@ public class Queue<T> implements Iterable<T>{
     public T[] items;
     public int head, tail, size;
 
+
     public Queue(){
         items = (T[])new Object[4];
         i1 = new QueueIterator();
@@ -22,12 +23,14 @@ public class Queue<T> implements Iterable<T>{
         for(Object value : values) addLast((T)value);
     }
 
+
     public Object[] list(){
         int i = 0;
         Object[] values = create(size);
         for(T value : this) values[i++] = value;
         return values;
     }
+
 
     public Queue<T> addFirst(T value){
         T[] items = this.items;
@@ -63,6 +66,7 @@ public class Queue<T> implements Iterable<T>{
         return this;
     }
 
+
     public T get(int index){
         return items[mod((head + index), items.length)];
     }
@@ -74,6 +78,7 @@ public class Queue<T> implements Iterable<T>{
     public T last(){
         return get(size - 1);
     }
+
 
     public boolean contains(T value){
         for(int i = 0;i < size;i++) if(eql(get(i), value)) return true;
@@ -94,6 +99,7 @@ public class Queue<T> implements Iterable<T>{
         tail = size;
         return newItems;
     }
+
 
     @Override
     public Iterator<T> iterator(){

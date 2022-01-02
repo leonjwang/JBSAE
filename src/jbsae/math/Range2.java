@@ -5,12 +5,14 @@ import static jbsae.util.Mathf.*;
 public class Range2{
     public float x, y, w, h;
 
+
     public Range2(){
     }
 
     public Range2(float x, float y, float w, float h){
         set(x, y, w, h);
     }
+
 
     public Range2 set(float x, float y, float w, float h){
         this.x = x;
@@ -32,9 +34,11 @@ public class Range2{
         return splt(parts, parts, qx[i], qy[i]);
     }
 
+
     public Vec2 center(){
         return new Vec2(x + w, y + h).scl(0.5f);
     }
+
 
     public Shape2 toShape(Shape2 s){
         s.set(x, y, x + w, y, x + w, y + h, x, y + h);
@@ -45,6 +49,7 @@ public class Range2{
         return toShape(new Shape2(4));
     }
 
+
     public boolean contains(Pos2 value){
         return value.x() >= x && value.x() <= x + w && value.y() >= y && value.y() <= y + h;
     }
@@ -52,6 +57,7 @@ public class Range2{
     public boolean overlaps(Range2 o){
         return o.x + o.w >= x && o.x <= x + w && o.y + o.h >= y && o.y <= y + h;
     }
+
 
     public Range2 cpy(){
         return new Range2(x, y, w, h);

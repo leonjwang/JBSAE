@@ -13,6 +13,7 @@ public class Seq<T> implements Iterable<T>{
     public T[] items;
     public int size;
 
+
     public Seq(){
         items = (T[])new Object[4];
         i1 = new SeqIterator();
@@ -24,12 +25,14 @@ public class Seq<T> implements Iterable<T>{
         for(Object value : values) add((T)value);
     }
 
+
     public Object[] list(){
         int i = 0;
         Object[] values = create(size);
         for(T value : this) values[i++] = value;
         return values;
     }
+
 
     public Seq<T> set(Seq<T> values){
         items = values.items;
@@ -93,9 +96,11 @@ public class Seq<T> implements Iterable<T>{
         return this;
     }
 
+
     public T get(int index){
         return items[index];
     }
+
 
     public boolean contains(T value){
         for(int i = 0;i < size;i++) if(eql(items[i], value)) return true;

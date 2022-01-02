@@ -206,8 +206,8 @@ public class StructTester{
         new Test("BinTree Test", () -> {
             //Setup
             float max = random(10, 10000);
-            BinTree<Vec2> tree = new BinTree(0, max, v -> ((Vec2)v).x);
-            for(int i = 0;i < randInt(2, 3);i++) tree.add(new Vec2(random(0, max), 0));
+//            BinTree<Vec2> tree = new BinTree(0, max, v -> ((Vec2)v).x);
+//            for(int i = 0;i < randInt(2, 3);i++) tree.add(new Vec2(random(0, max), 0));
 
             return true;
         }).run();

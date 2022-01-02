@@ -50,14 +50,26 @@ public class Colorf{
     darkBlue = darken(blue.cpy()),
     darkViolet = darken(violet.cpy());
 
+    /** Color manipulation. */
     public static Color lighten(Color c){
-        return c.inv().scl(0.5f).inv();
+        return lighten(c, 0.5f);
     }
+
+    public static Color lighten(Color c, float p){
+        return c.inv().scl(p).inv();
+    }
+
 
     public static Color darken(Color c){
-        return c.scl(0.5f);
+        return darken(c, 0.5f);
     }
 
+    public static Color darken(Color c, float p){
+        return c.scl(p);
+    }
+
+
+    /** Random creation. */
     public static Color createRandom(){
         return new Color(random(), random(), random());
     }

@@ -46,15 +46,20 @@ public class Drawf{
 
 
     /** Translation functions. */
+    public static void rotatet(float r){
+        current().rotation = r;
+    }
+
     public static void rotate(float r){
         current().rotation += r;
     }
 
-    public static void sscale(float s){
-        sscale(s, s);
+
+    public static void scalet(float s){
+        scalet(s, s);
     }
 
-    public static void sscale(float x, float y){
+    public static void scalet(float x, float y){
         current().scale.set(x, y);
     }
 
@@ -66,7 +71,8 @@ public class Drawf{
         current().scale.scl(x, y);
     }
 
-    public static void stranslate(float x, float y){
+
+    public static void translatet(float x, float y){
         current().translate.set(x, y);
     }
 
@@ -83,6 +89,7 @@ public class Drawf{
     public static void pop(){
         settingQueue.removeLast();
     }
+
 
     public static DrawSetting current(){
         return settingQueue.last();

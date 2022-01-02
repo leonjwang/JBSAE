@@ -9,6 +9,7 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
     public int depthLimit, valueLimit = 4;
     public Range2 range;
 
+
     public QuadTree(float w, float h){
         this(0, 0, w, h);
     }
@@ -24,6 +25,7 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
         this.range = range;
     }
 
+
     public QuadTree<T> valueLimit(int valueLimit){
         this.valueLimit = valueLimit;
         return this;
@@ -33,6 +35,7 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
         this.depthLimit = depthLimit;
         return this;
     }
+
 
     public QuadTree<T> find(Pos2 value){
         if(branches.size <= 0) return this;
@@ -49,6 +52,7 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
         }
         return arr;
     }
+
 
     @Override
     public QuadTree<T> add(T value){

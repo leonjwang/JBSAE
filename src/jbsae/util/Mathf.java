@@ -32,7 +32,6 @@ public class Mathf{
         return (int)random(min, max + 0.99f);
     }
 
-
     public static boolean chance(float c){
         return random() < c;
     }

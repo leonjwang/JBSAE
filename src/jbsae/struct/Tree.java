@@ -9,10 +9,12 @@ public class Tree<T> implements Iterable<T>{
     public Tree parent;
     public Seq<Tree> branches;
 
+
     public Tree(){
         branches = new Seq<>();
         values = new Seq<>();
     }
+
 
     public Tree<T> add(T value){
         values.add(value);
@@ -51,6 +53,7 @@ public class Tree<T> implements Iterable<T>{
         return this;
     }
 
+
     public boolean contains(T value){
         for(T t : this) if(eql(t, value)) return true;
         return false;
@@ -61,6 +64,7 @@ public class Tree<T> implements Iterable<T>{
         for(Tree t : branches) res += t.size();
         return res;
     }
+
 
     @Override
     public Iterator<T> iterator(){
