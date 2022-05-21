@@ -237,6 +237,7 @@ public class Mathf{
     /** Comparison functions. */
     public static boolean zero(float v){
         return abs(v) < threshhold;
+    }
 
     public static boolean eqlf(float a, float b){
         return abs(a - b) < threshhold;
