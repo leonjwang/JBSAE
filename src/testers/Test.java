@@ -2,8 +2,6 @@ package testers;
 
 import jbsae.func.prim.*;
 
-import static jbsae.util.Stringf.*;
-
 public class Test{
     public String name;
     public Boolp test;

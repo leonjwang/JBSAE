@@ -3,9 +3,7 @@ package jbsae.graphics;
 import jbsae.graphics.gl.*;
 import org.lwjgl.system.*;
 
-import java.nio.*;
-
-import static jbsae.util.Mathf.mod;
+import static jbsae.util.Mathf.*;
 
 public class Pixmap{
     public Color[][] map;

@@ -1,4 +1,7 @@
 /bin/
+/classes/
+/out/
 /.idea/
 *.iml
 *.xml
+*.DS_Store

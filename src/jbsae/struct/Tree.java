@@ -65,6 +65,14 @@ public class Tree<T> implements Iterable<T>{
         return res;
     }
 
+    public Tree<T> clear(){
+        parent = null;
+        values.clear();
+        for(Tree<T> branch : branches) branch.clear();
+        branches.clear();
+        return this;
+    }
+
 
     @Override
     public Iterator<T> iterator(){

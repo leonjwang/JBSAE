@@ -1,5 +1,5 @@
 package jbsae.func.prim;
 
 public interface Floatc{
-    public void get(float b);
+    public void get(float f);
 }

@@ -1,5 +1,7 @@
 package jbsae.struct;
 
+import jbsae.func.*;
+
 import java.util.*;
 
 import static jbsae.util.Structf.*;
@@ -77,6 +79,17 @@ public class Set<T> implements Iterable<T>{
         int[] checks = hashes(h, table.length);
         for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return true;
         return false;
+    }
+
+    public Set<T> each(Cons<T> cons){
+        for(T t : this) cons.get(t);
+        return this;
+    }
+
+    public Set<T> clear(){
+        table = create(16, table);
+        size = 0;
+        return this;
     }
 
     public Set<T> resize(int newSize){

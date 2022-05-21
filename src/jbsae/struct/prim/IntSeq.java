@@ -1,5 +1,7 @@
 package jbsae.struct.prim;
 
+import jbsae.func.prim.*;
+
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
@@ -86,6 +88,16 @@ public class IntSeq{
     public boolean contains(int value){
         for(int i = 0;i < size;i++) if(items[i] == value) return true;
         return false;
+    }
+
+    public boolean contains(Boolfi condition){
+        for(int i = 0;i < size;i++) if(condition.get(items[i])) return true;
+        return false;
+    }
+
+    public IntSeq each(Intc cons){
+        for(int i = 0;i < size;i++) cons.get(items[i]);
+        return this;
     }
 
     public IntSeq sort(){

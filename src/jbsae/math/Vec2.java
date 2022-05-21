@@ -42,6 +42,14 @@ public class Vec2 implements Pos2{
         return add(v.x, v.y);
     }
 
+    public Vec2 sub(float x, float y){
+        return add(-x, -y);
+    }
+
+    public Vec2 sub(Vec2 v){
+        return sub(v.x, v.y);
+    }
+
     public Vec2 scl(float x, float y){
         this.x *= x;
         this.y *= y;
@@ -54,6 +62,10 @@ public class Vec2 implements Pos2{
 
     public Vec2 scl(float v){
         return scl(v, v);
+    }
+
+    public Vec2 inv(){
+        return scl(-1);
     }
 
     public Vec2 rot(float a){

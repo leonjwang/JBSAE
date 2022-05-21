@@ -1,5 +1,7 @@
 package jbsae.struct.prim;
 
+import jbsae.func.prim.*;
+
 import static jbsae.util.Mathf.*;
 
 public class IntQueue{
@@ -70,6 +72,22 @@ public class IntQueue{
     public boolean contains(int value){
         for(int i = 0;i < size;i++) if(get(i) == value) return true;
         return false;
+    }
+
+    public boolean contains(Boolfi condition){
+        for(int i = 0;i < size;i++) if(condition.get(get(i))) return true;
+        return false;
+    }
+
+    public IntQueue each(Intc cons){
+        for(int i = 0;i < size;i++) cons.get(get(i));
+        return this;
+    }
+
+    public IntQueue clear(){
+        items = new int[4];
+        head = tail = size = 0;
+        return this;
     }
 
     public IntQueue trim(){

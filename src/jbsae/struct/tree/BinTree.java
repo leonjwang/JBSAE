@@ -3,8 +3,6 @@ package jbsae.struct.tree;
 import jbsae.func.prim.*;
 import jbsae.struct.*;
 
-import java.util.*;
-
 //TODO: Is this actually a useless class?
 public class BinTree<T> extends Tree<T>{
     public Floatf<T> comparator;
@@ -62,10 +60,5 @@ public class BinTree<T> extends Tree<T>{
     public T find(Boolf<T> conditions){
 
         return null;
-    }
-
-    public void clear(){
-        values = new Seq<>();
-        branches = new Seq<>();
     }
 }

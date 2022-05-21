@@ -1,5 +1,7 @@
 package jbsae.struct;
 
+import jbsae.func.*;
+
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
@@ -83,6 +85,17 @@ public class Queue<T> implements Iterable<T>{
     public boolean contains(T value){
         for(int i = 0;i < size;i++) if(eql(get(i), value)) return true;
         return false;
+    }
+
+    public Queue<T> each(Cons<T> cons){
+        for(int i = 0;i < size;i++) cons.get(get(i));
+        return this;
+    }
+
+    public Queue<T> clear(){
+        items = create(4, items);
+        head = tail = size = 0;
+        return this;
     }
 
     public Queue<T> trim(){

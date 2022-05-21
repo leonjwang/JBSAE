@@ -4,7 +4,6 @@ import org.lwjgl.system.*;
 
 import java.nio.*;
 
-import static jbsae.util.Stringf.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.stb.STBImage.*;

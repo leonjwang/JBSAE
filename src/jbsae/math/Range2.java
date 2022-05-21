@@ -13,6 +13,10 @@ public class Range2{
         set(x, y, w, h);
     }
 
+    public Range2(Range2 r){
+        set(r);
+    }
+
 
     public Range2 set(float x, float y, float w, float h){
         this.x = x;
@@ -20,6 +24,10 @@ public class Range2{
         this.w = w;
         this.h = h;
         return this;
+    }
+
+    public Range2 set(Range2 r){
+        return set(r.x, r.y, r.w, r.h);
     }
 
     public Range2 nor(){
@@ -34,9 +42,21 @@ public class Range2{
         return splt(parts, parts, qx[i], qy[i]);
     }
 
+    public Range2 expand(float amount){
+        x -= amount;
+        y -= amount;
+        w += amount * 2;
+        h += amount * 2;
+        return this;
+    }
+
 
     public Vec2 center(){
-        return new Vec2(x + w, y + h).scl(0.5f);
+        return new Vec2(x + w / 2, y + h / 2);
+    }
+
+    public Vec2 constrain(Vec2 pos){
+        return pos.set(clamp(pos.x, x, x + w), clamp(pos.y, y, y + h));
     }
 
 

@@ -1,6 +1,7 @@
 package jbsae.struct.prim;
 
-import static jbsae.util.Mathf.*;
+import jbsae.func.prim.*;
+
 import static jbsae.util.Structf.*;
 
 public class IntSet{
@@ -77,6 +78,19 @@ public class IntSet{
         int[] checks = hashes(value, table.length);
         for(int i = 0;i < checks.length;i++) if(table[checks[i]] == value) return true;
         return false;
+    }
+
+    public IntSet each(Intc cons){
+        if(zero) cons.get(0);
+        for(int j = 0;j < table.length;j++) if(table[j] != 0) cons.get(table[j]);
+        return this;
+    }
+
+    public IntSet clear(){
+        table = new int[16];
+        zero = false;
+        size = 0;
+        return this;
     }
 
     public IntSet resize(int newSize){

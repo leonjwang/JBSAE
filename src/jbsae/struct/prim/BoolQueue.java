@@ -1,5 +1,7 @@
 package jbsae.struct.prim;
 
+import jbsae.func.prim.*;
+
 import static jbsae.util.Mathf.*;
 
 public class BoolQueue{
@@ -65,6 +67,17 @@ public class BoolQueue{
 
     public boolean last(){
         return get(size - 1);
+    }
+
+    public BoolQueue each(Boolc cons){
+        for(int i = 0;i < size;i++) cons.get(get(i));
+        return this;
+    }
+
+    public BoolQueue clear(){
+        items = new boolean[4];
+        head = tail = size = 0;
+        return this;
     }
 
     public BoolQueue trim(){

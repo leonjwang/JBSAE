@@ -2,7 +2,7 @@ package jbsae.util;
 
 import jbsae.math.*;
 
-import static jbsae.JBSAE.time;
+import static jbsae.JBSAE.*;
 
 public class Mathf{
     public static final float threshhold = 0.001f;
@@ -17,6 +17,8 @@ public class Mathf{
     public static final int[] d4y = new int[]{1, 0, -1, 0};
     public static final int[] d8x = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
     public static final int[] d8y = new int[]{1, 1, 0, -1, -1, -1, 0, 1};
+
+    public static Vec2 tmp = new Vec2();
 
 
     /** Random functions. */
@@ -58,11 +60,11 @@ public class Mathf{
 
     /** Ported Math functions. */
     public static float abs(float a){
-        return Math.abs(a);
+        return a > 0 ? a : -a;
     }
 
     public static int abs(int a){
-        return (int)abs((float)a);
+        return a > 0 ? a : -a;
     }
 
 
@@ -71,14 +73,30 @@ public class Mathf{
     }
 
     public static int clamp(int n, int min, int max){
-        return (int)clamp((float)n, (float)min, (float)max);
+        return max(min(n, max), min);
     }
 
+
+    public static float max(float a, float b){
+        return a > b ? a : b;
+    }
+
+    public static float max(float a, float b, float c){
+        return max(max(a, b), c);
+    }
 
     public static float max(float... v){
         float max = v[0];
         for(int i = 1;i < v.length;i++) max = Math.max(max, v[i]);
         return max;
+    }
+
+    public static int max(int a, int b){
+        return a > b ? a : b;
+    }
+
+    public static int max(int a, int b, int c){
+        return max(max(a, b), c);
     }
 
     public static int max(int... v){
@@ -88,10 +106,26 @@ public class Mathf{
     }
 
 
+    public static float min(float a, float b){
+        return a < b ? a : b;
+    }
+
+    public static float min(float a, float b, float c){
+        return min(min(a, b), c);
+    }
+
     public static float min(float... v){
         float min = v[0];
         for(int i = 1;i < v.length;i++) min = Math.min(min, v[i]);
         return min;
+    }
+
+    public static int min(int a, int b){
+        return a < b ? a : b;
+    }
+
+    public static int min(int a, int b, int c){
+        return min(min(a, b), c);
     }
 
     public static int min(int... v){
@@ -102,11 +136,11 @@ public class Mathf{
 
 
     public static float mod(float n, float m){
-        return (n + (int)(abs(n / m) + 1) * m) % m;
+        return (n % m + m) % m;
     }
 
     public static int mod(int n, int m){
-        return (int)mod((float)n, (float)m);
+        return (n % m + m) % m;
     }
 
 
@@ -115,15 +149,15 @@ public class Mathf{
     }
 
     public static int pow(int n, int d){
-        return (int)pow((float)n, (float)d);
+        return (int)Math.pow(n, d);
     }
 
     public static float pow2(float n){
-        return (float)Math.pow(n, 2);
+        return n * n;
     }
 
     public static int pow2(int n){
-        return (int)pow2((float)n);
+        return n * n;
     }
 
 
@@ -148,7 +182,7 @@ public class Mathf{
     }
 
     public static int rt2(int n){
-        return (int)rt2((float)n);
+        return (int)Math.sqrt(n);
     }
 
 
@@ -157,15 +191,31 @@ public class Mathf{
     }
 
     public static int log(int n, int d){
-        return (int)log((float)n, (float)d);
+        return (int)(Math.log10(n) / Math.log10(d));
     }
 
 
     /** Distance functions. */
+    public static float dst(float x1, float y1, float z1, float x2, float y2, float z2){
+        return rt2(pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2));
+    }
+
+    public static float dst(float x1, float y1, float x2, float y2){
+        return dst(x1, y1, 0, x2, y2, 0);
+    }
+
     public static float dst(float... param){
         float total = 0;
         for(int i = 0;i < param.length / 2;i++) total += pow(param[i] - param[i + param.length / 2], 2);
         return rt2(total);
+    }
+
+    public static int dst(int x1, int y1, int z1, int x2, int y2, int z2){
+        return rt2(pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2));
+    }
+
+    public static int dst(int x1, int y1, int x2, int y2){
+        return dst(x1, y1, 0, x2, y2, 0);
     }
 
     public static int dst(int... param){
@@ -174,16 +224,20 @@ public class Mathf{
         return rt2(total);
     }
 
+
     public static float dst(Pos2 a, Pos2 b){
         return dst(a.x(), a.y(), b.x(), b.y());
     }
 
     public static float dst(Pos3 a, Pos3 b){
-        return dst(a.x(), a.y(), a.z(), b.x(), b.y(), a.z());
+        return dst(a.x(), a.y(), a.z(), b.x(), b.y(), b.z());
     }
 
 
     /** Comparison functions. */
+    public static boolean zero(float v){
+        return abs(v) < threshhold;
+
     public static boolean eqlf(float a, float b){
         return abs(a - b) < threshhold;
     }
@@ -280,7 +334,6 @@ public class Mathf{
         return absin((float)time.millis() / i * 360f);
     }
 
-
     public static float cost(){
         return cost(1000);
     }
@@ -305,5 +358,40 @@ public class Mathf{
 
     public static int intBits(float f){
         return Float.floatToIntBits(f);
+    }
+
+
+    /** Angle related functions. */
+    public static float dsta(float a, float b){
+        return min((a - b) < 0 ? a - b + 360 : a - b, (b - a) < 0 ? b - a + 360 : b - a);
+    }
+
+    public static float dstar(float a, float b){
+        return dsta(a * radToDeg, b * radToDeg) * degToRad;
+    }
+
+
+    public static boolean withina(float a, float b, float cone){
+        return dsta(a, b) < cone;
+    }
+
+    public static boolean withinar(float a, float b, float cone){
+        return dstar(a, b) < cone;
+    }
+
+
+    public static float turn(float a, float to, float speed){
+        if(abs(dsta(a, to)) < speed) return to;
+        a = mod(a, 360);
+        to = mod(to, 360);
+
+        if(a > to == 360 - abs(a - to) > abs(a - to)) a -= speed;
+        else a += speed;
+
+        return a;
+    }
+
+    public static float turnr(float a, float to, float speed){
+        return turn(a * radToDeg, to * radToDeg, speed * radToDeg) * degToRad;
     }
 }

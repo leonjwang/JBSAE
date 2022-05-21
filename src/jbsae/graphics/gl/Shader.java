@@ -2,7 +2,6 @@ package jbsae.graphics.gl;
 
 import java.io.*;
 
-import static jbsae.util.Stringf.*;
 import static org.lwjgl.opengl.GL20.*;
 
 /** @author Heiko Brumme */

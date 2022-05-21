@@ -90,7 +90,7 @@ public class Renderer{
     }
 
     public void vertex(float... values){
-        for(int i = 0;i < values.length;i ++) vertices.put(values[i]);
+        for(int i = 0;i < values.length;i++) vertices.put(values[i]);
     }
 
     public void dispose(){

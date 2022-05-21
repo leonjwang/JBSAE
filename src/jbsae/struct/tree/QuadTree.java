@@ -43,12 +43,11 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
         return this;
     }
 
-    public Seq<T> findAll(Range2 range){
-        if(branches.size <= 0) return values;
-        Seq<T> arr = new Seq<>();
-        for(Tree<T> branch : branches){
+    public Seq<T> findAll(Seq<T> arr, Range2 range){
+        if(branches.size <= 0) arr.addAll(values);
+        else for(Tree<T> branch : branches){
             QuadTree<T> b = (QuadTree<T>)branch;
-            if(b.range.overlaps(range)) arr = (arr.size == 0) ? arr.set(b.findAll(range)) : arr.addAll(b.findAll(range));
+            if(b.range.overlaps(range)) b.findAll(arr, range);
         }
         return arr;
     }
@@ -56,14 +55,10 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
 
     @Override
     public QuadTree<T> add(T value){
+        if(!range.contains(value)) return this;
         if((values.size >= valueLimit || branches.size > 0) && depthLimit > 0){
             if(branches.size <= 0){
-                addBranches(
-                new QuadTree<T>(range.cpy().splt(2, 0)).depthLimit(depthLimit - 1).valueLimit(valueLimit),
-                new QuadTree<T>(range.cpy().splt(2, 1)).depthLimit(depthLimit - 1).valueLimit(valueLimit),
-                new QuadTree<T>(range.cpy().splt(2, 2)).depthLimit(depthLimit - 1).valueLimit(valueLimit),
-                new QuadTree<T>(range.cpy().splt(2, 3)).depthLimit(depthLimit - 1).valueLimit(valueLimit)
-                );
+                for(int i = 0;i < 4;i++) addBranch(new QuadTree<T>(range.cpy().splt(2, i)).depthLimit(depthLimit - 1).valueLimit(valueLimit));
                 addAll(values).add(value);
                 values.clear();
             }else find(value).add(value);
@@ -73,6 +68,7 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
 
     @Override
     public QuadTree<T> remove(T value){
+        if(!range.contains(value)) return this;
         if(branches.size > 0) find(value).remove(value);
         else values.remove(value);
         return this;
@@ -82,6 +78,47 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
     public boolean contains(T value){
         if(branches.size > 0) return find(value).contains(value);
         else return values.contains(value);
+    }
+
+    public static void main(String[] args){
+//        Seq<Vec2> original = new Seq<>();
+//        QuadTree tree = new QuadTree(10000, 10000).valueLimit(8);
+//        for(int i = 0;i < 10000;i++){
+//            Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
+//            tree.add(v);
+//            original.add(v);
+//        }
+//
+//        Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
+//        Seq<Pos2> inside = new Seq<>();
+//        tree.findAll(inside, range);
+//        Seq<Pos2> trueInside = new Seq<>();
+//        for(Vec2 v : original){
+//            if(range.contains(v)){
+//                trueInside.add(v);
+//                if(!inside.contains(v)) System.out.println("No");
+//            }
+//        }
+//        if(inside.size > trueInside.size * 2 + 100) System.out.println("False");
+
+        Seq<Vec2> original = new Seq<>();
+        QuadTree tree = new QuadTree(10000, 10000).valueLimit(8);
+        for(int i = 0;i < 1000000;i++){
+            Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
+            tree.add(v);
+            original.add(v);
+        }
+        Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
+        Seq<Pos2> inside = new Seq<>();
+
+        long start = System.currentTimeMillis();
+        for(Vec2 v : original) if(range.contains(v)) inside.add(v);
+        System.out.println(System.currentTimeMillis() - start);
+
+        inside.clear();
+        start = System.currentTimeMillis();
+        tree.findAll(inside, range);
+        System.out.println(System.currentTimeMillis() - start);
     }
 }
 

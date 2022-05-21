@@ -6,6 +6,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class Time{
     public long time = 0;
     public int frames, updates;
+    public int fps, ups;
     public float delta;
 
     public Time(){

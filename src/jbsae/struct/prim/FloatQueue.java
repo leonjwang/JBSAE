@@ -1,5 +1,7 @@
 package jbsae.struct.prim;
 
+import jbsae.func.prim.*;
+
 import static jbsae.util.Mathf.*;
 
 public class FloatQueue{
@@ -70,6 +72,22 @@ public class FloatQueue{
     public boolean contains(float value){
         for(int i = 0;i < size;i++) if(eqlf(get(i), value)) return true;
         return false;
+    }
+
+    public boolean contains(Boolff condition){
+        for(int i = 0;i < size;i++) if(condition.get(get(i))) return true;
+        return false;
+    }
+
+    public FloatQueue each(Floatc cons){
+        for(int i = 0;i < size;i++) cons.get(get(i));
+        return this;
+    }
+
+    public FloatQueue clear(){
+        items = new float[4];
+        head = tail = size = 0;
+        return this;
     }
 
     public FloatQueue trim(){

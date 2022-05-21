@@ -13,8 +13,8 @@ public class Map<K, V> implements Iterable<K>{
 
 
     public Map(){
-        keys = (K[])new Object[16 * 16 * 4];
-        values = (V[])new Object[16 * 16 * 4];
+        keys = (K[])new Object[16];
+        values = (V[])new Object[16];
         i1 = new MapIterator();
         i2 = new MapIterator();
     }
@@ -98,6 +98,13 @@ public class Map<K, V> implements Iterable<K>{
         int[] checks = hashes(h, keys.length);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return true;
         return false;
+    }
+
+    public Map<K, V> clear(){
+        keys = create(16, keys);
+        values = create(16, values);
+        size = 0;
+        return this;
     }
 
     public Map<K, V> resize(int newSize){

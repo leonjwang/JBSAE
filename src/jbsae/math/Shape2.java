@@ -40,7 +40,7 @@ public class Shape2{
         for(int i = 0;i < v.length;i++) v[i].scl(x, y);
         return this;
     }
-    
+
     public Shape2 scl(int s){
         return scl(s, s);
     }

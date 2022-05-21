@@ -92,7 +92,7 @@ public class InterpDisplay extends Screen{
 
         for(int i = 0;i < interpSeq.size;i++){
             float tx = (i % max + 0.5f) * boxSpacing, ty = (i / max + 0.5f) * boxSpacing + input.scroll * -30;
-            boxColor.hsv(time.millis() / 10 +  tx / 20 + ty / 10, 1, 1);
+            boxColor.hsv(time.millis() / 10 + tx / 20 + ty / 10, 1, 1);
 
             tmp2.set(tx - boxSize / 2, ty - boxSize / 2, boxSize, boxSize);
             if(tmp2.contains(input.mouse)){

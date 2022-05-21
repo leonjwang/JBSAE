@@ -3,11 +3,11 @@ package jbsae.math.interp;
 /** @author Nathan Sweet */
 public class Pow implements Interp{
     final int power;
-    
+
     public Pow(int power){
         this.power = power;
     }
-    
+
     @Override
     public float get(float f){
         if(f <= 0.5f) return (float)Math.pow(f * 2, power) / 2;

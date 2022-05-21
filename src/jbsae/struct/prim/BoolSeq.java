@@ -1,7 +1,6 @@
 package jbsae.struct.prim;
 
 import jbsae.func.prim.*;
-import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -86,9 +85,9 @@ public class BoolSeq{
         return items[index];
     }
 
-    public boolean contains(boolean value){
-        for(int i = 0;i < size;i++) if(items[i] == value) return true;
-        return false;
+    public BoolSeq each(Boolc cons){
+        for(int i = 0;i < size;i++) cons.get(items[i]);
+        return this;
     }
 
     public BoolSeq clear(){

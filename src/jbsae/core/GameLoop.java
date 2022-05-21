@@ -1,16 +1,7 @@
 package jbsae.core;
 
-import jbsae.graphics.*;
-import jbsae.graphics.gl.*;
-import jbsae.math.*;
-import jbsae.util.*;
-
-import java.lang.reflect.*;
-
 import static jbsae.JBSAE.*;
 import static jbsae.util.Drawf.*;
-import static jbsae.util.Stringf.*;
-import static jbsae.util.Colorf.*;
 import static org.lwjgl.opengl.GL11.*;
 
 /** @author Heiko Brumme */
@@ -54,7 +45,8 @@ public class GameLoop{
             }
             if(loopTimer >= 1000){
                 loopTimer %= 1000;
-                printDebug("fps: " + (time.frames - lastFrames) + ", ups: " + (time.updates - lastUpdates));
+                fps = time.frames - lastFrames;
+                ups = time.updates - lastUpdates;
                 lastFrames = time.frames;
                 lastUpdates = time.updates;
             }

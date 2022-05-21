@@ -1,5 +1,6 @@
 package jbsae.struct;
 
+import jbsae.func.*;
 import jbsae.func.prim.*;
 
 import java.util.*;
@@ -105,6 +106,16 @@ public class Seq<T> implements Iterable<T>{
     public boolean contains(T value){
         for(int i = 0;i < size;i++) if(eql(items[i], value)) return true;
         return false;
+    }
+
+    public boolean contains(Boolf<T> condition){
+        for(int i = 0;i < size;i++) if(condition.get(items[i])) return true;
+        return false;
+    }
+
+    public Seq<T> each(Cons<T> cons){
+        for(int i = 0;i < size;i++) cons.get(items[i]);
+        return this;
     }
 
     public Seq<T> sort(){

@@ -1,5 +1,7 @@
 package jbsae.struct.prim;
 
+import jbsae.func.prim.*;
+
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
@@ -80,6 +82,19 @@ public class FloatSet{
         int[] checks = hashes(h, table.length);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return true;
         return false;
+    }
+
+    public FloatSet each(Floatc cons){
+        if(zero) cons.get(0);
+        for(int j = 0;j < table.length;j++) if(table[j] != 0) cons.get(table[j]);
+        return this;
+    }
+
+    public FloatSet clear(){
+        table = new float[16];
+        zero = false;
+        size = 0;
+        return this;
     }
 
     public FloatSet resize(int newSize){
