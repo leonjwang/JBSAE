@@ -1,5 +1,6 @@
 package jbsae.struct;
 
+import jbsae.*;
 import jbsae.func.*;
 
 import java.util.*;
@@ -35,7 +36,7 @@ public class Set<T> implements Iterable<T>{
     public Set<T> add(T value){
         T[] table = this.table;
         int h = value.hashCode();
-        int[] checks = hashes(h, table.length);
+        int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
         for(int i = 0;i < checks.length;i++){
             if(table[checks[i]] == null){
@@ -57,7 +58,7 @@ public class Set<T> implements Iterable<T>{
     public Set<T> remove(T value){
         T[] table = this.table;
         int h = value.hashCode();
-        int[] checks = hashes(h, table.length);
+        int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
             if(eql(table[checks[i]], value)){
                 table[checks[i]] = null;
@@ -76,7 +77,7 @@ public class Set<T> implements Iterable<T>{
 
     public boolean contains(T value){
         int h = value.hashCode();
-        int[] checks = hashes(h, table.length);
+        int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return true;
         return false;
     }

@@ -18,8 +18,6 @@ public class Mathf{
     public static final int[] d8x = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
     public static final int[] d8y = new int[]{1, 1, 0, -1, -1, -1, 0, 1};
 
-    public static Vec2 tmp = new Vec2();
-
 
     /** Random functions. */
     public static float random(){

@@ -98,19 +98,20 @@ public class InterpDisplay extends Screen{
             if(tmp2.contains(input.mouse)){
                 push();
                 float rx = clamp(input.mouse.x, displaySize / 2f, width - displaySize / 2f);
-                scalet(1);
                 translatet(rx, input.mouse.y + displaySize / 10f);
                 fill(boxColor);
                 rectc(0, 0, displaySize, displaySize / 5f);
                 fill(black);
                 rectc(0, 0, displaySize - boxOutline * 2, displaySize / 5f - boxOutline * 2);
                 scale(0.9f * displaySize);
+
                 fill(boxColor);
                 float curPos = interpSeq.get(i).get(time.millis() % exampleTime / exampleTime) - 0.5f;
                 if(lastExamplePos - curPos > 0.3f) lastExamplePos = -0.5f;
                 line(curPos, 0f, lastExamplePos, 0f, exampleSize / displaySize);
                 rectc(curPos, 0f, exampleSize / displaySize, exampleSize / displaySize);
                 lastExamplePos = interpSeq.get(i).get(time.millis() % exampleTime / exampleTime) - 0.5f;
+
                 pop();
             }
         }

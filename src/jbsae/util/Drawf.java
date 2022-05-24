@@ -1,5 +1,6 @@
 package jbsae.util;
 
+import jbsae.*;
 import jbsae.graphics.*;
 import jbsae.math.*;
 import jbsae.struct.*;
@@ -8,21 +9,28 @@ import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
 
 public class Drawf{
-    public static Queue<DrawSetting> settingQueue = new Queue<>();
-    public static Range2 tr = new Range2();
-    public static Shape2 ts1 = new Shape2(4), ts2 = new Shape2(4);
+    public static Queue<DrawSetting> settings = new Queue<>();
 
 
     /** Set fill color. */
-    public static void fill(Color c){
-        current().fill.set(c);
+    public static void fill(){
+        fill(white);
     }
 
-    public static void fill(float... c){
-        if(c.length == 1) current().fill.set(c[0], c[0], c[0], 1f);
-        else if(c.length == 3) current().fill.set(c[0], c[1], c[2], 1f);
-        else if(c.length == 4) current().fill.set(c[0], c[1], c[2], c[3]);
-        else current().fill.set(white);
+    public static void fill(float v){
+        current().fill.set(v, v, v, 1f);
+    }
+
+    public static void fill(float r, float g, float b){
+        fill(r, g, b, 1f);
+    }
+
+    public static void fill(float r, float g, float b, float a){
+        current().fill.set(r, g, b, a);
+    }
+
+    public static void fill(Color c){
+        current().fill.set(c);
     }
 
 
@@ -40,11 +48,11 @@ public class Drawf{
     }
 
     public static void rect(float x, float y, float w, float h, float r){
-        renderer.draw(apply(tr.set(x, y, w, h).toShape(ts1).rot(r)), tr.set(0, 0, 1, 1).toShape(ts2), current().fill);
+        renderer.draw(apply(Tmp.r1.set(x, y, w, h).toShape(Tmp.s14).rot(r)), Tmp.r1.set(0, 0, 1, 1).toShape(Tmp.s24), current().fill);
     }
 
 
-    /** Translation functions. */
+    /** Tmp.r1anslation functions. */
     public static void rotatet(float r){
         current().rotation = r;
     }
@@ -82,16 +90,16 @@ public class Drawf{
 
     /** Current setting manipulation. */
     public static void push(){
-        settingQueue.addLast(current() == null ? new DrawSetting() : current().cpy());
+        settings.addLast(current() == null ? new DrawSetting() : current().cpy());
     }
 
     public static void pop(){
-        settingQueue.removeLast();
+        settings.removeLast();
     }
 
 
     public static DrawSetting current(){
-        return settingQueue.last();
+        return settings.last();
     }
 
     public static Shape2 apply(Shape2 s){

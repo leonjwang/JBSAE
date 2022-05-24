@@ -41,7 +41,7 @@ public class Texture{
         MemoryStack stack = MemoryStack.stackPush();
         IntBuffer w = stack.mallocInt(1), h = stack.mallocInt(1);
         image = stbi_load(path, w, h, stack.mallocInt(1), 4);
-        if(image == null) printDebug("Failed to load texture: " + path);
+        if(image == null) System.out.println("Failed to load texture: " + path);
 
         width = w.get();
         height = h.get();

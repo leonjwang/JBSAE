@@ -34,7 +34,7 @@ public class Renderer{
         fragmentShader = new Shader("assets/shaders/shader.frag", GL_FRAGMENT_SHADER);
 
         program = new ShaderProgram(vertexShader, fragmentShader);
-        program.bindFragment("fragColor", 0);
+        program.bind("fragColor", 0);
         program.link();
         program.use();
 

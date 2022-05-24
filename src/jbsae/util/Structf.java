@@ -1,5 +1,6 @@
 package jbsae.util;
 
+import jbsae.*;
 import jbsae.func.prim.*;
 
 import java.lang.reflect.*;
@@ -9,8 +10,6 @@ import static jbsae.util.Mathf.*;
 
 @SuppressWarnings("all")
 public class Structf{
-    public static int[] tmp = new int[3];
-
     public static final int prime1 = 0xbe1f14b1;
     public static final int prime2 = 0xb4b82e39;
     public static final int prime3 = 0xced1c241;
@@ -302,11 +301,15 @@ public class Structf{
 
 
     /** Hashing integers. */
-    public static int[] hashes(int h, int l){
-        tmp[0] = hash(h, prime1, l);
-        tmp[1] = hash(h, prime2, l);
-        tmp[2] = hash(h, prime3, l);
-        return tmp;
+    public static int[] hash3(int h, int l){
+        return hash3(h, l, new int[3]);
+    }
+
+    public static int[] hash3(int h, int l, int[] arr){
+        arr[0] = hash(h, prime1, l);
+        arr[1] = hash(h, prime2, l);
+        arr[2] = hash(h, prime3, l);
+        return arr;
     }
 
     public static int hash(int h, int prime, int l){

@@ -61,7 +61,7 @@ public class Range2{
 
 
     public Shape2 toShape(Shape2 s){
-        s.set(x, y, x + w, y, x + w, y + h, x, y + h);
+        s.set(0, x, y).set(1, x + w, y).set(2, x + w, y + h).set(3, x, y + h);
         return s;
     }
 

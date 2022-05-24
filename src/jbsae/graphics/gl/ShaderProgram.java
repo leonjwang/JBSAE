@@ -31,7 +31,7 @@ public class ShaderProgram{
         glUniformMatrix4fv(uniform, false, value.buffer());
     }
 
-    public void bindFragment(String name, int number){
+    public void bind(String name, int number){
         glBindFragDataLocation(id, number, name);
     }
 

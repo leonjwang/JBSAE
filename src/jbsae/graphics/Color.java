@@ -1,5 +1,7 @@
 package jbsae.graphics;
 
+import jbsae.*;
+
 import static jbsae.util.Mathf.*;
 
 /** @author mzechner */
@@ -81,18 +83,33 @@ public class Color{
     }
 
     public float[] hsv(){
+        return hsv(new float[3]);
+    }
+
+    public float[] hsv(float[] arr){
         float max = max(r, g, b);
         float min = min(r, g, b);
         float range = max - min;
-        float[] hsv = new float[3];
-        if(range == 0) hsv[0] = 0;
-        else if(max == r) hsv[0] = (60 * (g - b) / range + 360) % 360;
-        else if(max == g) hsv[0] = 60 * (b - r) / range + 120;
-        else hsv[0] = 60 * (r - g) / range + 240;
-        if(max > 0) hsv[1] = 1 - min / max;
-        else hsv[1] = 0;
-        hsv[2] = max;
-        return hsv;
+        if(range == 0) arr[0] = 0;
+        else if(max == r) arr[0] = (60 * (g - b) / range + 360) % 360;
+        else if(max == g) arr[0] = 60 * (b - r) / range + 120;
+        else arr[0] = 60 * (r - g) / range + 240;
+        if(max > 0) arr[1] = 1 - min / max;
+        else arr[1] = 0;
+        arr[2] = max;
+        return arr;
+    }
+
+    public float hue(){
+        return hsv(Tmp.f3)[0];
+    }
+
+    public float sat(){
+        return hsv(Tmp.f3)[1];
+    }
+
+    public float val(){
+        return hsv(Tmp.f3)[2];
     }
 
     public Color rgba8888(int v){

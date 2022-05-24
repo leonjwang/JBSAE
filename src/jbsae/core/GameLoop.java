@@ -19,6 +19,7 @@ public class GameLoop{
         long lastLoop = time.millis();
         int frameTimer = 0, updateTimer = 0, loopTimer = 0;
         int lastFrames = 0, lastUpdates = 0;
+
         push();
         screen.init();
         while(!window.shouldClose()){

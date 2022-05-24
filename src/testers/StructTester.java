@@ -222,9 +222,11 @@ public class StructTester{
             }
 
             Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
-            for(int i = 0;i < 10000;i++) tree.findAll(range);
+            Seq<Pos2> inside = new Seq<>();
+            for(int i = 0;i < 10000;i++) tree.findAll(inside, range);
 
-            Seq<Pos2> inside = tree.findAll(range);
+            inside.clear();
+            tree.findAll(inside, range);
             Seq<Pos2> trueInside = new Seq<>();
             for(Vec2 v : original){
                 if(range.contains(v)){
@@ -292,10 +294,10 @@ public class StructTester{
     }
 
     public static void main(String[] args){
-//        testSeq();
-//        testSet();
-//        testQueue();
+        testSeq();
+        testSet();
+        testQueue();
         testTree();
-//        testMap();
+        testMap();
     }
 }

@@ -3,6 +3,7 @@ package jbsae;
 import jbsae.core.*;
 import jbsae.graphics.gl.*;
 import jbsae.input.*;
+import jbsae.util.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -46,6 +47,12 @@ public class JBSAE{
 
     public static void main(String[] args){
         init();
+        screen(new Screen(){
+            @Override
+            public void draw(){
+
+            }
+        });
         start();
         dispose();
     }

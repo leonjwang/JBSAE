@@ -1,5 +1,7 @@
 package jbsae.struct;
 
+import jbsae.*;
+
 import java.util.*;
 
 import static jbsae.util.Structf.*;
@@ -44,7 +46,7 @@ public class Map<K, V> implements Iterable<K>{
         K[] keys = this.keys;
         V[] values = this.values;
         int h = key.hashCode();
-        int[] checks = hashes(h, keys.length);
+        int[] checks = hash3(h, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return this;
         for(int i = 0;i < checks.length;i++){
             if(keys[checks[i]] == null){
@@ -68,7 +70,7 @@ public class Map<K, V> implements Iterable<K>{
         K[] keys = this.keys;
         V[] values = this.values;
         int h = key.hashCode();
-        int[] checks = hashes(h, keys.length);
+        int[] checks = hash3(h, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
             if(eql(keys[checks[i]], key)){
                 keys[checks[i]] = null;
@@ -87,7 +89,7 @@ public class Map<K, V> implements Iterable<K>{
 
     public V get(K key){
         int h = key.hashCode();
-        int[] checks = hashes(h, keys.length);
+        int[] checks = hash3(h, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
         return null;
     }
@@ -95,7 +97,7 @@ public class Map<K, V> implements Iterable<K>{
 
     public boolean contains(K key){
         int h = key.hashCode();
-        int[] checks = hashes(h, keys.length);
+        int[] checks = hash3(h, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return true;
         return false;
     }

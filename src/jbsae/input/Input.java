@@ -8,8 +8,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Input{
     public IntSet pressed = new IntSet();
-    public Vec2 mouse = new Vec2(0, 0);
-    public Vec2 pmouse = new Vec2(0, 0);
+    public Vec2 mouse = new Vec2();
+    public Vec2 pmouse = new Vec2();
     public boolean[] clicking = new boolean[]{false, false, false};
     public int scroll = 0;
 

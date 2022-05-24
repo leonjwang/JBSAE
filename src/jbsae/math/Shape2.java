@@ -22,6 +22,11 @@ public class Shape2{
     }
 
 
+    public Shape2 set(int i, float x, float y){
+        v[i].set(x, y);
+        return this;
+    }
+
     public Shape2 set(float... coords){
         for(int i = 0;i < coords.length;i += 2) v[i / 2].set(coords[i], coords[i + 1]);
         return this;

@@ -1,5 +1,6 @@
 package jbsae.struct.prim;
 
+import jbsae.*;
 import jbsae.func.prim.*;
 
 import static jbsae.util.Mathf.*;
@@ -34,7 +35,7 @@ public class FloatSet{
             return this;
         }
         int h = intBits(value);
-        int[] checks = hashes(h, table.length);
+        int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
         for(int i = 0;i < checks.length;i++){
             if(table[checks[i]] == 0){
@@ -60,7 +61,7 @@ public class FloatSet{
             return this;
         }
         int h = intBits(value);
-        int[] checks = hashes(h, table.length);
+        int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
             if(eqlf(table[checks[i]], value)){
                 table[checks[i]] = 0;
@@ -79,7 +80,7 @@ public class FloatSet{
     public boolean contains(float value){
         if(eqlf(value, 0)) return zero;
         int h = intBits(value);
-        int[] checks = hashes(h, table.length);
+        int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return true;
         return false;
     }

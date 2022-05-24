@@ -21,7 +21,7 @@ public class Shader{
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             while((line = reader.readLine()) != null) builder.append(line).append("\n");
         }catch(Exception e){
-            printDebug("Failed to load shader: " + path);
+            System.out.println("Failed to load shader: " + path);
         }
         glShaderSource(id, builder.toString());
         glCompileShader(id);

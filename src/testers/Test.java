@@ -18,13 +18,13 @@ public class Test{
     }
 
     public boolean run(){
-        print("Running test: [" + name + "]");
+        System.out.println("Running test: [" + name + "]");
         long start = System.currentTimeMillis();
         boolean result = true;
         for(int i = 0;i < times;i++) result = result & test.get();
-        print("[" + name + "] Result: " + result);
+        System.out.println("[" + name + "] Result: " + result);
         long end = System.currentTimeMillis();
-        print("[" + name + "] Runtime: " + (end - start) + "ms " + "(" + ((end - start) / 1000f) + "s)");
+        System.out.println("[" + name + "] Runtime: " + (end - start) + "ms " + "(" + ((end - start) / 1000f) + "s)");
         return result;
     }
 }
