@@ -85,12 +85,8 @@ public class Renderer{
         verticesNum += 6;
     }
 
-    public void vertex(Vec2 p, Vec2 t, Color c){
-        vertex(p.x, p.y, c.r, c.g, c.b, c.a, t.x, t.y);
-    }
-
-    public void vertex(float... values){
-        for(int i = 0;i < values.length;i++) vertices.put(values[i]);
+    public void vertex(Pos2 p, Pos2 t, Color c){
+        vertices.put(p.x()).put(p.y()).put(c.r).put(c.g).put(c.b).put(c.a).put(t.x()).put(t.y());
     }
 
     public void dispose(){

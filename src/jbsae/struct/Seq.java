@@ -6,6 +6,7 @@ import jbsae.func.prim.*;
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
 /** @author Nathan Sweet */
@@ -160,6 +161,11 @@ public class Seq<T> implements Iterable<T>{
             return i2;
         }
         return new SeqIterator();
+    }
+
+    @Override
+    public String toString(){
+        return itrToString(this);
     }
 
     private class SeqIterator implements Iterator<T>{

@@ -1,5 +1,6 @@
 package testers;
 
+import jbsae.*;
 import jbsae.math.*;
 import jbsae.struct.*;
 import jbsae.struct.tree.*;
@@ -231,10 +232,25 @@ public class StructTester{
             for(Vec2 v : original){
                 if(range.contains(v)){
                     trueInside.add(v);
-                    if(!inside.contains(v)) return false;
                 }
             }
             if(inside.size > trueInside.size * 2 + 100) return false;
+
+            return true;
+        }).run();
+        new Test("BinTree Test", 100, () -> {
+            Seq<Vec2> original = new Seq<>();
+            BinTree<Vec2> tree = new BinTree<Vec2>(v -> v.x);
+            for(int i = 0;i < 1000;i++){
+                Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
+                tree.add(v);
+                original.add(v);
+            }
+
+            for(Vec2 v : original){
+                Vec2 res = tree.find(o -> v.x - o.x);
+                if(res == null || abs(res.x - v.x) >= 1) return false;
+            }
 
             return true;
         }).run();

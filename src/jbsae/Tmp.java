@@ -1,5 +1,6 @@
 package jbsae;
 
+import jbsae.graphics.*;
 import jbsae.math.*;
 
 public class Tmp{
@@ -15,9 +16,19 @@ public class Tmp{
     public static Vec2 v2 = new Vec2();
     public static Vec2 v3 = new Vec2();
 
+    public static Point2 p1 = new Point2();
+    public static Point2 p2 = new Point2();
+
     public static Range2 r1 = new Range2();
     public static Range2 r2 = new Range2();
 
+    public static Circle2 e1 = new Circle2();
+    public static Circle2 e2 = new Circle2();
+
     public static Shape2 s14 = new Shape2(4);
     public static Shape2 s24 = new Shape2(4);
+
+    public static Color c1 = new Color();
+    public static Color c2 = new Color();
+    public static Color c3 = new Color();
 }

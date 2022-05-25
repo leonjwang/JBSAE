@@ -25,6 +25,8 @@ public class Test{
         System.out.println("[" + name + "] Result: " + result);
         long end = System.currentTimeMillis();
         System.out.println("[" + name + "] Runtime: " + (end - start) + "ms " + "(" + ((end - start) / 1000f) + "s)");
+
+        if(!result) new Exception("Test: [" + name + "] has failed!").printStackTrace();
         return result;
     }
 }

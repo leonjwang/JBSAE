@@ -48,7 +48,7 @@ public class Drawf{
     }
 
     public static void rect(float x, float y, float w, float h, float r){
-        renderer.draw(apply(Tmp.r1.set(x, y, w, h).toShape(Tmp.s14).rot(r)), Tmp.r1.set(0, 0, 1, 1).toShape(Tmp.s24), current().fill);
+        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r)), Tmp.r1.set(0, 0, 1, 1).shape(Tmp.s24), current().fill);
     }
 
 

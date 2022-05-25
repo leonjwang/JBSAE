@@ -1,6 +1,7 @@
 package jbsae.math;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 
 public class Vec2 implements Pos2{
     public float x, y;
@@ -13,7 +14,7 @@ public class Vec2 implements Pos2{
         set(x, y);
     }
 
-    public Vec2(Vec2 v){
+    public Vec2(Pos2 v){
         set(v);
     }
 
@@ -24,8 +25,8 @@ public class Vec2 implements Pos2{
         return this;
     }
 
-    public Vec2 set(Vec2 v){
-        return set(v.x, v.y);
+    public Vec2 set(Pos2 v){
+        return set(v.x(), v.y());
     }
 
     public Vec2 setr(float a, float l){
@@ -38,16 +39,16 @@ public class Vec2 implements Pos2{
         return this;
     }
 
-    public Vec2 add(Vec2 v){
-        return add(v.x, v.y);
+    public Vec2 add(Pos2 v){
+        return add(v.x(), v.y());
     }
 
     public Vec2 sub(float x, float y){
         return add(-x, -y);
     }
 
-    public Vec2 sub(Vec2 v){
-        return sub(v.x, v.y);
+    public Vec2 sub(Pos2 v){
+        return sub(v.x(), v.y());
     }
 
     public Vec2 scl(float x, float y){
@@ -56,8 +57,8 @@ public class Vec2 implements Pos2{
         return this;
     }
 
-    public Vec2 scl(Vec2 v){
-        return scl(v.x, v.y);
+    public Vec2 scl(Pos2 v){
+        return scl(v.x(), v.y());
     }
 
     public Vec2 scl(float v){
@@ -78,7 +79,7 @@ public class Vec2 implements Pos2{
 
 
     public float ang(){
-        return eqlf(x, 0) ? (y > 0 ? 90 : 270) : mod((x > 0 ? 0 : 180) + atan(y / x), 360);
+        return zero(x) ? (y > 0 ? 90 : 270) : mod((x > 0 ? 0 : 180) + atan(y / x), 360);
     }
 
     public float len(){
@@ -99,5 +100,10 @@ public class Vec2 implements Pos2{
     @Override
     public float y(){
         return y;
+    }
+
+    @Override
+    public String toString(){
+        return valToString(x, y);
     }
 }

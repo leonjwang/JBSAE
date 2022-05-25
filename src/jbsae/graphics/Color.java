@@ -3,6 +3,7 @@ package jbsae.graphics;
 import jbsae.*;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 
 /** @author mzechner */
 public class Color{
@@ -67,7 +68,7 @@ public class Color{
     }
 
     public Color hsv(float h, float s, float v){
-        float x = mod(h / 60f + 6, 6);
+        float x = mod(h / 60f, 6);
         int i = (int)x;
         float f = x - i;
         float p = v * (1 - s);
@@ -79,7 +80,7 @@ public class Color{
         if(i == 3) set(p, q, v);
         if(i == 4) set(t, p, v);
         if(i == 5) set(v, p, q);
-        return clip();
+        return trim();
     }
 
     public float[] hsv(){
@@ -147,7 +148,7 @@ public class Color{
         return scl(-1).add(1);
     }
 
-    public Color clip(){
+    public Color trim(){
         r = clamp(r, 0, 1);
         g = clamp(g, 0, 1);
         b = clamp(b, 0, 1);
@@ -157,5 +158,11 @@ public class Color{
 
     public Color cpy(){
         return new Color(this);
+    }
+
+
+    @Override
+    public String toString(){
+        return valToString(r, g, b, a);
     }
 }

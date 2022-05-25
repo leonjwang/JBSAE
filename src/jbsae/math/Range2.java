@@ -1,6 +1,7 @@
 package jbsae.math;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 
 public class Range2{
     public float x, y, w, h;
@@ -60,13 +61,13 @@ public class Range2{
     }
 
 
-    public Shape2 toShape(Shape2 s){
+    public Shape2 shape(Shape2 s){
         s.set(0, x, y).set(1, x + w, y).set(2, x + w, y + h).set(3, x, y + h);
         return s;
     }
 
     public Shape2 shape(){
-        return toShape(new Shape2(4));
+        return shape(new Shape2(4));
     }
 
 
@@ -81,5 +82,11 @@ public class Range2{
 
     public Range2 cpy(){
         return new Range2(x, y, w, h);
+    }
+
+
+    @Override
+    public String toString(){
+        return valToString(x, y, w, h);
     }
 }

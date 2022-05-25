@@ -4,6 +4,7 @@ import jbsae.*;
 
 import java.util.*;
 
+import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
 /** @author Nathan Sweet */
@@ -139,6 +140,11 @@ public class Map<K, V> implements Iterable<K>{
             return i2;
         }
         return new MapIterator();
+    }
+
+    @Override
+    public String toString(){
+        return itrToString(this);
     }
 
     private class MapIterator implements Iterator<K>{

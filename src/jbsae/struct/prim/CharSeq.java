@@ -118,6 +118,6 @@ public class CharSeq extends IntSeq{
     public String toString(){
         char[] chars = new char[size];
         for(int i = 0;i < size;i++) chars[i] = (char)items[i];
-        return arrToString(chars);
+        return combine(chars);
     }
 }

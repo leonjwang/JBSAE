@@ -20,7 +20,7 @@ import static jbsae.util.Mathf.*;
 public class InterpDisplay extends Screen{
     public static float displaySize = 150;
     public static float exampleSize = 5;
-    public static float exampleTime = 1000;
+    public static float exampleTime = 2000;
     public static float boxSize = 80;
     public static float boxOutline = 2;
     public static float boxSpacing = 100;

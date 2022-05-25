@@ -1,9 +1,16 @@
 package jbsae.graphics;
 
+import jbsae.func.*;
 import jbsae.graphics.gl.*;
+import jbsae.math.*;
+import jbsae.util.*;
+import org.lwjgl.*;
 import org.lwjgl.system.*;
 
+import java.nio.*;
+
 import static jbsae.util.Mathf.*;
+import static org.lwjgl.system.MemoryStack.*;
 
 public class Pixmap{
     public Color[][] map;
@@ -11,28 +18,54 @@ public class Pixmap{
     public Pixmap(Texture t){
         map = new Color[t.width][t.height];
 
-        byte[] a = new byte[t.image.capacity()];
-        t.image.position(0);
-        t.image.get(a);
-        //TODO: image
         int i = 0;
-        for(int y = 0;y < t.height;y++){
-            for(int x = 0;x < t.width;x++) map[x][y] = new Color(mod(t.image.get(i++), 256) / 255f, mod(t.image.get(i++), 256) / 255f, mod(t.image.get(i++), 256) / 255f, mod(t.image.get(i++), 256) / 255f);
+        t.image.position(0);
+        for(int y = 0;y < height();y++){
+            for(int x = 0;x < width();x++){
+                map[x][y] = new Color(
+                mod(t.image.get(), 256) / 255f,
+                mod(t.image.get(), 256) / 255f,
+                mod(t.image.get(), 256) / 255f,
+                mod(t.image.get(), 256) / 255f);
+            }
         }
     }
 
+    public int width(){
+        return map.length;
+    }
+
+    public int height(){
+        return map[0].length;
+    }
+
+    public Color get(Point2 pos){
+        return get(pos.x, pos.y);
+    }
+
+    public Color get(int x, int y){
+        return map[clamp(x, 0, width() - 1)][clamp(y, 0, height() - 1)];
+    }
+
+    public Pixmap each(Cons<Point2> cons){
+        Point2 pos = new Point2();
+        for(int y = 0;y < height();y++){
+            for(int x = 0;x < width();x++) cons.get(pos.set(x, y));
+        }
+        return this;
+    }
+
     public Texture create(){
-        byte[] b = new byte[map.length * map[0].length * 4];
-        int i = 0;
-        for(int y = 0;y < map[0].length;y++){
-            for(int x = 0;x < map.length;x++){
-                b[i++] = (int)(map[x][y].r * 255) >= 255 ? -1 : (byte)(map[x][y].r * 255);
-                b[i++] = (int)(map[x][y].g * 255) >= 255 ? -1 : (byte)(map[x][y].g * 255);
-                b[i++] = (int)(map[x][y].b * 255) >= 255 ? -1 : (byte)(map[x][y].b * 255);
-                b[i++] = (int)(map[x][y].a * 255) >= 255 ? -1 : (byte)(map[x][y].a * 255);
+        ByteBuffer buffer = BufferUtils.createByteBuffer(map.length * map[0].length * 4);
+        for(int y = 0;y < height();y++){
+            for(int x = 0;x < width();x++){
+                buffer.put((byte)((int)(map[x][y].r * 255) & 0xFF));
+                buffer.put((byte)((int)(map[x][y].g * 255) & 0xFF));
+                buffer.put((byte)((int)(map[x][y].b * 255) & 0xFF));
+                buffer.put((byte)((int)(map[x][y].a * 255) & 0xFF));
             }
         }
-        MemoryStack stack = MemoryStack.stackPush();
-        return new Texture(map.length, map[0].length, stack.bytes(b));
+        buffer.flip();
+        return new Texture(map.length, map[0].length, buffer);
     }
 }

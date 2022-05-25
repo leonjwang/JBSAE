@@ -5,6 +5,7 @@ import jbsae.func.*;
 
 import java.util.*;
 
+import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
 public class Set<T> implements Iterable<T>{
@@ -115,6 +116,11 @@ public class Set<T> implements Iterable<T>{
             return i2;
         }
         return new SetIterator();
+    }
+
+    @Override
+    public String toString(){
+        return itrToString(this);
     }
 
     private class SetIterator implements Iterator<T>{

@@ -1,6 +1,7 @@
 package jbsae.math;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 
 public class Circle2{
     public float x, y, r;
@@ -37,5 +38,11 @@ public class Circle2{
 
     public Circle2 cpy(){
         return new Circle2(x, y, r);
+    }
+
+
+    @Override
+    public String toString(){
+        return valToString(x, y, r);
     }
 }

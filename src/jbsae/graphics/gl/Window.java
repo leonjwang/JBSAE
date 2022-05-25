@@ -59,15 +59,15 @@ public class Window{
         errorCallback.free();
     }
 
-    public boolean shouldClose(){
-        return glfwWindowShouldClose(id);
+    public boolean keep(){
+        return !glfwWindowShouldClose(id);
     }
 
-    public void swapBuffers(){
+    public void swap(){
         glfwSwapBuffers(id);
     }
 
-    public void pollEvents(){
+    public void poll(){
         glfwPollEvents();
     }
 }

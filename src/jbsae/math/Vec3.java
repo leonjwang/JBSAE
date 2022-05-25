@@ -1,6 +1,7 @@
 package jbsae.math;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 
 public class Vec3 implements Pos3{
     public float x, y, z;
@@ -13,7 +14,7 @@ public class Vec3 implements Pos3{
         set(x, y, z);
     }
 
-    public Vec3(Vec3 v){
+    public Vec3(Pos3 v){
         set(v);
     }
 
@@ -25,8 +26,8 @@ public class Vec3 implements Pos3{
         return this;
     }
 
-    public Vec3 set(Vec3 v){
-        return set(v.x, v.y, v.z);
+    public Vec3 set(Pos3 v){
+        return set(v.x(), v.y(), v.z());
     }
 
     public Vec3 add(float x, float y, float z){
@@ -36,8 +37,8 @@ public class Vec3 implements Pos3{
         return this;
     }
 
-    public Vec3 add(Vec3 v){
-        return add(v.x, v.y, v.z);
+    public Vec3 add(Pos3 v){
+        return add(v.x(), v.y(), v.z());
     }
 
     public Vec3 scl(float x, float y, float z){
@@ -79,5 +80,10 @@ public class Vec3 implements Pos3{
     @Override
     public float z(){
         return z;
+    }
+
+    @Override
+    public String toString(){
+        return valToString(x, y, z);
     }
 }

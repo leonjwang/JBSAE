@@ -5,6 +5,7 @@ import jbsae.func.*;
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
 /** @author Anuken */
@@ -125,6 +126,11 @@ public class Queue<T> implements Iterable<T>{
             return i2;
         }
         return new QueueIterator();
+    }
+
+    @Override
+    public String toString(){
+        return itrToString(this);
     }
 
     private class QueueIterator implements Iterator<T>{

@@ -1,5 +1,7 @@
 package jbsae.math;
 
+import static jbsae.util.Stringf.*;
+
 public class Shape2{
     public Vec2[] v;
 
@@ -27,13 +29,8 @@ public class Shape2{
         return this;
     }
 
-    public Shape2 set(float... coords){
-        for(int i = 0;i < coords.length;i += 2) v[i / 2].set(coords[i], coords[i + 1]);
-        return this;
-    }
-
-    public Shape2 add(Vec2 v){
-        return add(v.x, v.y);
+    public Shape2 add(Pos2 v){
+        return add(v.x(), v.y());
     }
 
     public Shape2 add(float x, float y){
@@ -50,12 +47,12 @@ public class Shape2{
         return scl(s, s);
     }
 
-    public Shape2 scl(Vec2 v){
-        return scl(v.x, v.y);
+    public Shape2 scl(Pos2 v){
+        return scl(v.x(), v.y());
     }
 
-    public Shape2 sclc(Vec2 v){
-        return sclc(v.x, v.y);
+    public Shape2 sclc(Pos2 v){
+        return sclc(v.x(), v.y());
     }
 
     public Shape2 sclc(float x, float y){
@@ -71,10 +68,20 @@ public class Shape2{
     }
 
 
-    public Vec2 center(){
-        Vec2 c = new Vec2();
+    public Vec2 center(Vec2 c){
+        c.set(0, 0);
         for(int i = 0;i < v.length;i++) c.add(v[i]);
         c.scl(1f / v.length);
         return c;
+    }
+
+    public Vec2 center(){
+        return center(new Vec2());
+    }
+
+
+    @Override
+    public String toString(){
+        return arrToString(v);
     }
 }

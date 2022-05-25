@@ -29,7 +29,7 @@ public class FloatSet{
     }
 
     public FloatSet add(float value){
-        if(eqlf(value, 0)){
+        if(zero(value)){
             zero = true;
             size++;
             return this;
@@ -55,7 +55,7 @@ public class FloatSet{
     }
 
     public FloatSet remove(float value){
-        if(eqlf(value, 0)){
+        if(zero(value)){
             zero = false;
             size--;
             return this;
@@ -78,7 +78,7 @@ public class FloatSet{
     }
 
     public boolean contains(float value){
-        if(eqlf(value, 0)) return zero;
+        if(zero(value)) return zero;
         int h = intBits(value);
         int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return true;

@@ -79,46 +79,5 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
         if(branches.size > 0) return find(value).contains(value);
         else return values.contains(value);
     }
-
-    public static void main(String[] args){
-//        Seq<Vec2> original = new Seq<>();
-//        QuadTree tree = new QuadTree(10000, 10000).valueLimit(8);
-//        for(int i = 0;i < 10000;i++){
-//            Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
-//            tree.add(v);
-//            original.add(v);
-//        }
-//
-//        Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
-//        Seq<Pos2> inside = new Seq<>();
-//        tree.findAll(inside, range);
-//        Seq<Pos2> trueInside = new Seq<>();
-//        for(Vec2 v : original){
-//            if(range.contains(v)){
-//                trueInside.add(v);
-//                if(!inside.contains(v)) System.out.println("No");
-//            }
-//        }
-//        if(inside.size > trueInside.size * 2 + 100) System.out.println("False");
-
-        Seq<Vec2> original = new Seq<>();
-        QuadTree tree = new QuadTree(10000, 10000).valueLimit(8);
-        for(int i = 0;i < 1000000;i++){
-            Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
-            tree.add(v);
-            original.add(v);
-        }
-        Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
-        Seq<Pos2> inside = new Seq<>();
-
-        long start = System.currentTimeMillis();
-        for(Vec2 v : original) if(range.contains(v)) inside.add(v);
-        System.out.println(System.currentTimeMillis() - start);
-
-        inside.clear();
-        start = System.currentTimeMillis();
-        tree.findAll(inside, range);
-        System.out.println(System.currentTimeMillis() - start);
-    }
 }
 

@@ -56,7 +56,7 @@ public class Colorf{
     }
 
     public static Color lighten(Color c, float p){
-        return c.inv().scl(p).inv();
+        return c.inv().scl(1f - p).inv();
     }
 
 
@@ -65,16 +65,16 @@ public class Colorf{
     }
 
     public static Color darken(Color c, float p){
-        return c.scl(p);
+        return c.scl(1f - p);
     }
 
 
     /** Random creation. */
-    public static Color createRandom(){
+    public static Color randomc(){
         return new Color(random(), random(), random());
     }
 
-    public static Color createVibrant(){
+    public static Color vibrantc(){
         return new Color(random(0, 360), random(), random());
     }
 }

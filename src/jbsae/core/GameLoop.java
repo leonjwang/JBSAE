@@ -22,7 +22,7 @@ public class GameLoop{
 
         push();
         screen.init();
-        while(!window.shouldClose()){
+        while(window.keep()){
             time.update();
             frameTimer += time.time - lastLoop;
             updateTimer += time.time - lastLoop;
@@ -38,20 +38,22 @@ public class GameLoop{
             }
             if(frameTimer >= (1000 / fps)){
                 frameTimer %= (1000 / fps);
+//                System.out.println(fps);
                 time.frames++;
                 glClear(GL_COLOR_BUFFER_BIT);
                 screen.draw();
                 renderer.flush();
-                window.swapBuffers();
+                window.swap();
             }
             if(loopTimer >= 1000){
                 loopTimer %= 1000;
-                fps = time.frames - lastFrames;
-                ups = time.updates - lastUpdates;
+                time.cfps = time.frames - lastFrames;
+                time.cups = time.updates - lastUpdates;
                 lastFrames = time.frames;
                 lastUpdates = time.updates;
+                System.out.println("FPS: " + time.cfps + "UPS: " + time.cups);
             }
-            window.pollEvents();
+            window.poll();
         }
     }
 }
