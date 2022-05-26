@@ -17,11 +17,11 @@ public class Shader{
         StringBuilder builder = new StringBuilder();
         try{
             String line;
-            InputStream in = new FileInputStream(path);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
             while((line = reader.readLine()) != null) builder.append(line).append("\n");
         }catch(Exception e){
             System.out.println("Failed to load shader: " + path);
+            e.printStackTrace();
         }
         glShaderSource(id, builder.toString());
         glCompileShader(id);

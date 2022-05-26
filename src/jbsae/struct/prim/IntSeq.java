@@ -31,15 +31,13 @@ public class IntSeq{
     }
 
     public IntSeq add(int value){
-        int[] items = this.items;
-        if(size >= items.length) items = resize(max(8, size * 2));
+        if(size >= items.length) resize(max(8, size * 2));
         items[size++] = value;
         return this;
     }
 
     public IntSeq add(int value, int index){
-        int[] items = this.items;
-        if(size >= items.length) items = resize(max(8, size * 2));
+        if(size >= items.length) resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
         return this;
@@ -51,14 +49,12 @@ public class IntSeq{
     }
 
     public IntSeq remove(int index){
-        int[] items = this.items;
         shift(items, index + 1, size--, -1);
         items[size] = 0;
         return this;
     }
 
     public IntSeq removeValue(int value){
-        int[] items = this.items;
         for(int i = 0;i < size;i++){
             if(items[i] == value){
                 remove(i);
@@ -74,7 +70,6 @@ public class IntSeq{
     }
 
     public IntSeq removeAll(int... values){
-        int[] items = this.items;
         for(int i = 0;i < values.length;i++){
             for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
         }
@@ -117,11 +112,10 @@ public class IntSeq{
         return this;
     }
 
-    public int[] resize(int newSize){
-        int[] items = this.items;
-        int[] newItems = new int[newSize];
-        copy(items, newItems, size);
-        this.items = newItems;
-        return newItems;
+    public IntSeq resize(int newSize){
+        int[] items = new int[newSize];
+        copy(this.items, items, size);
+        this.items = items;
+        return this;
     }
 }

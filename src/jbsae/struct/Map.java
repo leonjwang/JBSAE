@@ -111,20 +111,12 @@ public class Map<K, V> implements Iterable<K>{
     }
 
     public Map<K, V> resize(int newSize){
-        K[] keys = this.keys;
-        V[] values = this.values;
-        K[] keyValues = create(size, keys);
-        V[] valueValues = create(size, values);
-        int i = (size = 0);
-        for(int j = 0;j < keys.length;j++){
-            if(keys[j] != null){
-                keyValues[i] = keys[j];
-                valueValues[i++] = values[j];
-            }
-        }
+        K[] keys = (K[])keys();
+        V[] values = (V[])values();
+        size = 0;
         this.keys = create(newSize, keys);
         this.values = create(newSize, values);
-        for(int j = 0;j < keyValues.length;j++) add(keyValues[j], valueValues[j]);
+        for(int j = 0;j < keys.length;j++) add(keys[j], values[j]);
         return this;
     }
 

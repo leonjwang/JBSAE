@@ -18,7 +18,7 @@ public class Test{
     }
 
     public boolean run(){
-        System.out.println("Running test: [" + name + "]");
+        System.out.println("\nRunning test: [" + name + "]");
         long start = System.currentTimeMillis();
         boolean result = true;
         for(int i = 0;i < times;i++) result = result & test.get();

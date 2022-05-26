@@ -52,6 +52,25 @@ public class Drawf{
     }
 
 
+    /** Draw a texture region. */
+    public static void drawc(Region region, float x, float y, float w, float h){
+        drawc(region, x, y, w, h, 0);
+    }
+
+    public static void drawc(Region region, float x, float y, float w, float h, float r){
+        drawc(region, x - w / 2, y - h / 2, w, h, r);
+    }
+
+    public static void draw(Region region, float x, float y, float w, float h){
+        draw(region, x, y, w, h, 0);
+    }
+
+    public static void draw(Region region, float x, float y, float w, float h, float r){
+        if(renderer.binded != region.texture) region.texture.bind();
+        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r)), Tmp.r1.set(region.region).shape(Tmp.s24), current().fill);
+    }
+
+
     /** Tmp.r1anslation functions. */
     public static void rotatet(float r){
         current().rotation = r;

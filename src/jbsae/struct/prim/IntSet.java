@@ -3,6 +3,7 @@ package jbsae.struct.prim;
 import jbsae.*;
 import jbsae.func.prim.*;
 
+import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
 public class IntSet{
@@ -29,8 +30,10 @@ public class IntSet{
 
     public IntSet add(int value){
         if(value == 0){
-            zero = true;
-            size++;
+            if(!zero){
+                zero = true;
+                size++;
+            }
             return this;
         }
         int[] checks = hash3(value, table.length, Tmp.i3);
@@ -42,9 +45,7 @@ public class IntSet{
                 return this;
             }
         }
-        resize(table.length << 1);
-        add(value);
-        return this;
+        return resize(table.length << 1).add(value);
     }
 
     public IntSet addAll(int... values){
@@ -54,8 +55,10 @@ public class IntSet{
 
     public IntSet remove(int value){
         if(value == 0){
-            zero = false;
-            size--;
+            if(zero){
+                zero = false;
+                size--;
+            }
             return this;
         }
         int[] checks = hash3(value, table.length, Tmp.i3);
@@ -95,10 +98,9 @@ public class IntSet{
     }
 
     public IntSet resize(int newSize){
-        int[] table = this.table;
-        int[] values = new int[size];
-        int i = (size = 0);
-        for(int j = 0;j < table.length;j++) if(table[j] != 0) values[i++] = table[j];
+        int[] values = list();
+        size = 0;
+        zero = false;
         this.table = new int[newSize];
         for(int j = 0;j < values.length;j++) add(values[j]);
         return this;

@@ -36,8 +36,7 @@ public class Queue<T> implements Iterable<T>{
 
 
     public Queue<T> addFirst(T value){
-        T[] items = this.items;
-        if(size == items.length) items = resize(max(8, size * 2));
+        if(size == items.length) resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
         size++;
@@ -45,8 +44,7 @@ public class Queue<T> implements Iterable<T>{
     }
 
     public Queue<T> addLast(T value){
-        T[] items = this.items;
-        if(size == items.length) items = resize(max(8, size * 2));
+        if(size == items.length) resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
         size++;
@@ -54,7 +52,6 @@ public class Queue<T> implements Iterable<T>{
     }
 
     public Queue<T> removeFirst(){
-        T[] items = this.items;
         items[head] = null;
         head = mod(head + 1, items.length);
         size--;
@@ -62,7 +59,6 @@ public class Queue<T> implements Iterable<T>{
     }
 
     public Queue<T> removeLast(){
-        T[] items = this.items;
         tail = mod(tail - 1, items.length);
         items[tail] = null;
         size--;
@@ -104,14 +100,13 @@ public class Queue<T> implements Iterable<T>{
         return this;
     }
 
-    public T[] resize(int newSize){
-        T[] items = this.items;
-        T[] newItems = create(newSize, items);
-        for(int i = 0;i < size;i++) newItems[i] = get(i);
-        this.items = newItems;
+    public Queue<T> resize(int newSize){
+        T[] items = create(newSize, this.items);
+        for(int i = 0;i < size;i++) items[i] = get(i);
+        this.items = items;
         head = 0;
         tail = size;
-        return newItems;
+        return this;
     }
 
 

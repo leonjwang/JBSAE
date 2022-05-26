@@ -31,15 +31,13 @@ public class FloatSeq{
     }
 
     public FloatSeq add(float value){
-        float[] items = this.items;
-        if(size >= items.length) items = resize(max(8, size * 2));
+        if(size >= items.length) resize(max(8, size * 2));
         items[size++] = value;
         return this;
     }
 
     public FloatSeq add(float value, int index){
-        float[] items = this.items;
-        if(size >= items.length) items = resize(max(8, size * 2));
+        if(size >= items.length) resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
         return this;
@@ -51,14 +49,12 @@ public class FloatSeq{
     }
 
     public FloatSeq remove(int index){
-        float[] items = this.items;
         shift(items, index + 1, size--, -1);
         items[size] = 0;
         return this;
     }
 
     public FloatSeq removeValue(float value){
-        float[] items = this.items;
         for(int i = 0;i < size;i++){
             if(items[i] == value){
                 remove(i);
@@ -74,7 +70,6 @@ public class FloatSeq{
     }
 
     public FloatSeq removeAll(float... values){
-        float[] items = this.items;
         for(int i = 0;i < values.length;i++){
             for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
         }
@@ -117,11 +112,10 @@ public class FloatSeq{
         return this;
     }
 
-    public float[] resize(int newSize){
-        float[] items = this.items;
-        float[] newItems = new float[newSize];
-        copy(items, newItems, size);
-        this.items = newItems;
-        return newItems;
+    public FloatSeq resize(int newSize){
+        float[] items = new float[newSize];
+        copy(this.items, items, size);
+        this.items = items;
+        return this;
     }
 }

@@ -23,30 +23,30 @@ public class FloatSet{
     public float[] list(){
         int i = 0;
         float[] values = new float[size];
-        for(int j = 0;j < table.length;j++) if(table[j] != 0) values[i++] = table[j];
+        for(int j = 0;j < table.length;j++) if(!zero(table[j])) values[i++] = table[j];
         if(zero) values[size - 1] = 0;
         return values;
     }
 
     public FloatSet add(float value){
         if(zero(value)){
-            zero = true;
-            size++;
+            if(!zero){
+                zero = true;
+                size++;
+            }
             return this;
         }
         int h = intBits(value);
         int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
         for(int i = 0;i < checks.length;i++){
-            if(table[checks[i]] == 0){
+            if(zero(table[checks[i]])){
                 table[checks[i]] = value;
                 size++;
                 return this;
             }
         }
-        resize(table.length << 1);
-        add(value);
-        return this;
+        return resize(table.length << 1).add(value);
     }
 
     public FloatSet addAll(float... values){
@@ -56,8 +56,10 @@ public class FloatSet{
 
     public FloatSet remove(float value){
         if(zero(value)){
-            zero = false;
-            size--;
+            if(zero){
+                zero = false;
+                size--;
+            }
             return this;
         }
         int h = intBits(value);
@@ -87,7 +89,7 @@ public class FloatSet{
 
     public FloatSet each(Floatc cons){
         if(zero) cons.get(0);
-        for(int j = 0;j < table.length;j++) if(table[j] != 0) cons.get(table[j]);
+        for(int j = 0;j < table.length;j++) if(!zero(table[j])) cons.get(table[j]);
         return this;
     }
 
@@ -99,10 +101,9 @@ public class FloatSet{
     }
 
     public FloatSet resize(int newSize){
-        float[] table = this.table;
-        float[] values = new float[size];
-        int i = (size = 0);
-        for(int j = 0;j < table.length;j++) if(table[j] != 0) values[i++] = table[j];
+        float[] values = list();
+        size = 0;
+        zero = false;
         this.table = new float[newSize];
         for(int j = 0;j < values.length;j++) add(values[j]);
         return this;

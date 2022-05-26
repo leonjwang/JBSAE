@@ -10,6 +10,7 @@ public class Mathf{
     public static final float pi = (float)Math.PI;
     public static final float degToRad = pi / 180;
     public static final float radToDeg = 180 / pi;
+    public static final float nan = Float.NaN;
 
     public static final int[] qx = new int[]{1, 0, 0, 1};
     public static final int[] qy = new int[]{1, 1, 0, 0};
@@ -233,6 +234,10 @@ public class Mathf{
 
 
     /** Comparison functions. */
+    public static boolean nan(float v){
+        return Float.isNaN(v);
+    }
+
     public static boolean zero(float v){
         return abs(v) < threshhold;
     }

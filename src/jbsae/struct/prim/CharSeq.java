@@ -20,15 +20,13 @@ public class CharSeq extends IntSeq{
     }
 
     public CharSeq add(String str, int index){
-        int[] items = this.items;
-        if(size + str.length() >= items.length) items = resize(max(8, (size + str.length()) * 2));
+        if(size + str.length() >= items.length) resize(max(8, (size + str.length()) * 2));
         shift(items, index, (size += str.length()), str.length());
         for(int i = 0;i < str.length();i++) items[i + index] = str.charAt(i);
         return this;
     }
 
     public CharSeq remove(int index, int range){
-        int[] items = this.items;
         shift(items, index + range, (size -= range) + range, -range);
         for(int i = 0;i < range;i++) items[size + i] = 0;
         return this;

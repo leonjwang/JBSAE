@@ -43,15 +43,13 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq<T> add(T value){
-        T[] items = this.items;
-        if(size >= items.length) items = resize(max(8, size * 2));
+        if(size >= items.length) resize(max(8, size * 2));
         items[size++] = value;
         return this;
     }
 
     public Seq<T> add(T value, int index){
-        T[] items = this.items;
-        if(size >= items.length) items = resize(max(8, size * 2));
+        if(size >= items.length) resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
         return this;
@@ -68,14 +66,12 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq<T> remove(int index){
-        T[] items = this.items;
         shift(items, index + 1, size--, -1);
         items[size] = null;
         return this;
     }
 
     public Seq<T> remove(T value){
-        T[] items = this.items;
         for(int i = 0;i < size;i++){
             if(eql(items[i], value)){
                 remove(i);
@@ -91,7 +87,6 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq<T> removeAll(T... values){
-        T[] items = this.items;
         for(T value : values){
             for(int i = 0;i < size;i++) if(eql(items[i], value)) remove(i--);
         }
@@ -142,12 +137,11 @@ public class Seq<T> implements Iterable<T>{
         return this;
     }
 
-    public T[] resize(int newSize){
-        T[] items = this.items;
-        T[] newItems = create(newSize, items);
-        copy(items, newItems, size);
-        this.items = newItems;
-        return newItems;
+    public Seq<T> resize(int newSize){
+        T[] items = create(newSize, this.items);
+        copy(this.items, items, size);
+        this.items = items;
+        return this;
     }
 
     @Override

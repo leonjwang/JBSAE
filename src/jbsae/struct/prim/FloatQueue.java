@@ -24,8 +24,7 @@ public class FloatQueue{
     }
 
     public FloatQueue addFirst(float value){
-        float[] items = this.items;
-        if(size == items.length) items = resize(max(8, size * 2));
+        if(size == items.length) resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
         size++;
@@ -33,8 +32,7 @@ public class FloatQueue{
     }
 
     public FloatQueue addLast(float value){
-        float[] items = this.items;
-        if(size == items.length) items = resize(max(8, size * 2));
+        if(size == items.length) resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
         size++;
@@ -42,7 +40,6 @@ public class FloatQueue{
     }
 
     public FloatQueue removeFirst(){
-        float[] items = this.items;
         items[head] = 0;
         head = mod(head + 1, items.length);
         size--;
@@ -50,7 +47,6 @@ public class FloatQueue{
     }
 
     public FloatQueue removeLast(){
-        float[] items = this.items;
         tail = mod(tail - 1, items.length);
         items[tail] = 0;
         size--;
@@ -95,13 +91,12 @@ public class FloatQueue{
         return this;
     }
 
-    public float[] resize(int newSize){
-        float[] items = this.items;
-        float[] newItems = new float[newSize];
-        for(int i = 0;i < size;i++) newItems[i] = get(i);
-        this.items = newItems;
+    public FloatQueue resize(int newSize){
+        float[] items = new float[newSize];
+        for(int i = 0;i < size;i++) items[i] = get(i);
+        this.items = items;
         head = 0;
         tail = size;
-        return newItems;
+        return this;
     }
 }

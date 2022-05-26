@@ -4,6 +4,7 @@ import org.lwjgl.system.*;
 
 import java.nio.*;
 
+import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.stb.STBImage.*;
@@ -14,7 +15,7 @@ public class Texture{
     public int width, height;
     public ByteBuffer image;
 
-    public Texture(String path){
+    public Texture(String path){ //TODO: File system
         id = glGenTextures();
         load(path);
         init();
@@ -48,6 +49,7 @@ public class Texture{
     }
 
     public void bind(){
+        renderer.binded = this;
         glBindTexture(GL_TEXTURE_2D, id);
     }
 

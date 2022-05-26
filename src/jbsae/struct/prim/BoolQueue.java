@@ -24,8 +24,7 @@ public class BoolQueue{
     }
 
     public BoolQueue addFirst(boolean value){
-        boolean[] items = this.items;
-        if(size == items.length) items = resize(max(8, size * 2));
+        if(size == items.length) resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
         size++;
@@ -33,8 +32,7 @@ public class BoolQueue{
     }
 
     public BoolQueue addLast(boolean value){
-        boolean[] items = this.items;
-        if(size == items.length) items = resize(max(8, size * 2));
+        if(size == items.length) resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
         size++;
@@ -42,7 +40,6 @@ public class BoolQueue{
     }
 
     public BoolQueue removeFirst(){
-        boolean[] items = this.items;
         items[head] = false;
         head = mod(head + 1, items.length);
         size--;
@@ -50,7 +47,6 @@ public class BoolQueue{
     }
 
     public BoolQueue removeLast(){
-        boolean[] items = this.items;
         tail = mod(tail - 1, items.length);
         items[tail] = false;
         size--;
@@ -85,13 +81,12 @@ public class BoolQueue{
         return this;
     }
 
-    public boolean[] resize(int newSize){
-        boolean[] items = this.items;
-        boolean[] newItems = new boolean[newSize];
-        for(int i = 0;i < size;i++) newItems[i] = get(i);
-        this.items = newItems;
+    public BoolQueue resize(int newSize){
+        boolean[] items = new boolean[newSize];
+        for(int i = 0;i < size;i++) items[i] = get(i);
+        this.items = items;
         head = 0;
         tail = size;
-        return newItems;
+        return this;
     }
 }

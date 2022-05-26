@@ -24,8 +24,7 @@ public class IntQueue{
     }
 
     public IntQueue addFirst(int value){
-        int[] items = this.items;
-        if(size == items.length) items = resize(max(8, size * 2));
+        if(size == items.length) resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
         size++;
@@ -33,8 +32,7 @@ public class IntQueue{
     }
 
     public IntQueue addLast(int value){
-        int[] items = this.items;
-        if(size == items.length) items = resize(max(8, size * 2));
+        if(size == items.length) resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
         size++;
@@ -42,7 +40,6 @@ public class IntQueue{
     }
 
     public IntQueue removeFirst(){
-        int[] items = this.items;
         items[head] = 0;
         head = mod(head + 1, items.length);
         size--;
@@ -50,7 +47,6 @@ public class IntQueue{
     }
 
     public IntQueue removeLast(){
-        int[] items = this.items;
         tail = mod(tail - 1, items.length);
         items[tail] = 0;
         size--;
@@ -95,13 +91,12 @@ public class IntQueue{
         return this;
     }
 
-    public int[] resize(int newSize){
-        int[] items = this.items;
-        int[] newItems = new int[newSize];
-        for(int i = 0;i < size;i++) newItems[i] = get(i);
-        this.items = newItems;
+    public IntQueue resize(int newSize){
+        int[] items = new int[newSize];
+        for(int i = 0;i < size;i++) items[i] = get(i);
+        this.items = items;
         head = 0;
         tail = size;
-        return newItems;
+        return this;
     }
 }

@@ -35,7 +35,6 @@ public class Set<T> implements Iterable<T>{
 
 
     public Set<T> add(T value){
-        T[] table = this.table;
         int h = value.hashCode();
         int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
@@ -57,7 +56,6 @@ public class Set<T> implements Iterable<T>{
     }
 
     public Set<T> remove(T value){
-        T[] table = this.table;
         int h = value.hashCode();
         int[] checks = hash3(h, table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
@@ -95,10 +93,8 @@ public class Set<T> implements Iterable<T>{
     }
 
     public Set<T> resize(int newSize){
-        T[] table = this.table;
-        T[] values = create(size, table);
-        int i = (size = 0);
-        for(int j = 0;j < table.length;j++) if(table[j] != null) values[i++] = table[j];
+        T[] values = (T[])list();
+        size = 0;
         this.table = create(newSize, table);
         for(int j = 0;j < values.length;j++) add(values[j]);
         return this;

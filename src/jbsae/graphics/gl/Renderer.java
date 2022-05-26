@@ -19,6 +19,8 @@ public class Renderer{
     public FloatBuffer vertices;
     public int verticesNum;
 
+    public Texture binded;
+
     public Renderer(){
     }
 

@@ -12,7 +12,7 @@ public class PrimStructTester{
     }
 
     public static void testSeqs(){
-        new Test("Float Seq Test", () -> {
+        new Test("Float Seq Test", 100, () -> {
             //Setup
             java.util.ArrayList<Float> arrList = new java.util.ArrayList<>();
             FloatSeq seq = new FloatSeq();
@@ -62,7 +62,7 @@ public class PrimStructTester{
 
             return true;
         }).run();
-        new Test("Boolean Seq Test", () -> {
+        new Test("Boolean Seq Test", 100, () -> {
             //Setup
             java.util.ArrayList<Boolean> arrList = new java.util.ArrayList<>();
             BoolSeq seq = new BoolSeq();
@@ -92,7 +92,7 @@ public class PrimStructTester{
 
             return true;
         }).run();
-        new Test("Int Seq Test", () -> {
+        new Test("Int Seq Test", 100, () -> {
             //Setup
             java.util.ArrayList<Integer> arrList = new java.util.ArrayList<>();
             IntSeq seq = new IntSeq();
@@ -142,7 +142,7 @@ public class PrimStructTester{
 
             return true;
         }).run();
-        new Test("Char Seq Test", () -> {
+        new Test("Char Seq Test", 100, () -> {
             //Setup
             String temp;
             String str = single();
@@ -188,38 +188,53 @@ public class PrimStructTester{
     }
 
     public static void testSets(){
-        new Test("Float Set Test", () -> {
+        new Test("Float Set Test", 1000, () -> {
             //Setup
             java.util.HashSet<Float> hashSet = new java.util.HashSet<>();
             FloatSet set = new FloatSet();
 
             //Add Test
-            float[] values = new float[randInt(10, 100)];
+            float[] values = new float[32];//new float[randInt(10, 100)];
             for(int i = 0;i < values.length;i++){
                 float value = (i == 0) ? 0 : random(0, 10000);
                 values[i] = value;
                 hashSet.add(value);
                 set.add(value);
             }
-            for(Float value : hashSet) if(!set.contains(value)) return false;
+
+            for(Float value : hashSet)
+                if(!set.contains(value)){
+                    return false;
+                }
             float[] list = set.list();
-            for(int i = 0;i < list.length;i++) if(!hashSet.contains(list[i])) return false;
+            for(int i = 0;i < list.length;i++)
+                if(!hashSet.contains(list[i])){
+                    return false;
+                }
 
             //Remove Test
             float removeValue = values[randInt(0, values.length - 1)];
             hashSet.remove(removeValue);
             set.remove(removeValue);
-            for(Float value : hashSet) if(!set.contains(value)) return false;
+            for(Float value : hashSet)
+                if(!set.contains(value)){
+                    return false;
+                }
             list = set.list();
-            for(int i = 0;i < list.length;i++) if(!hashSet.contains(list[i])) return false;
+            for(int i = 0;i < list.length;i++)
+                if(!hashSet.contains(list[i])){
+                    return false;
+                }
 
             //Contains Test
             float value = values[randInt(0, values.length - 1)];
-            if(hashSet.contains(value) != set.contains(value)) return false;
+            if(hashSet.contains(value) != set.contains(value)){
+                return false;
+            }
 
             return true;
         }).run();
-        new Test("Int Set Test", () -> {
+        new Test("Int Set Test", 100, () -> {
             //Setup
             java.util.HashSet<Integer> hashSet = new java.util.HashSet<>();
             IntSet set = new IntSet();
@@ -253,7 +268,7 @@ public class PrimStructTester{
     }
 
     public static void testQueues(){
-        new Test("Float Queue Test", () -> {
+        new Test("Float Queue Test", 100, () -> {
             //Setup
             java.util.LinkedList<Float> linkedList = new java.util.LinkedList<>();
             FloatQueue queue = new FloatQueue();
@@ -302,7 +317,7 @@ public class PrimStructTester{
 
             return true;
         }).run();
-        new Test("Boolean Queue Test", () -> {
+        new Test("Boolean Queue Test", 100, () -> {
             //Setup
             java.util.LinkedList<Boolean> linkedList = new java.util.LinkedList<>();
             BoolQueue queue = new BoolQueue();
@@ -347,7 +362,7 @@ public class PrimStructTester{
 
             return true;
         }).run();
-        new Test("Int Queue Test", () -> {
+        new Test("Int Queue Test", 100, () -> {
             //Setup
             java.util.LinkedList<Integer> linkedList = new java.util.LinkedList<>();
             IntQueue queue = new IntQueue();
@@ -398,9 +413,145 @@ public class PrimStructTester{
         }).run();
     }
 
+    public static void testMaps(){
+        new Test("Float Map Test", 100, () -> {
+            //Setup
+            java.util.HashMap<Float, String> hashSet = new java.util.HashMap<>();
+            FloatMap<String> set = new FloatMap<String>();
+
+            //Add Test
+            float[] values = new float[randInt(10, 100)];
+            for(int i = 0;i < values.length;i++){
+                float value = (i == 0) ? 0 : random(0, 10000);
+                String res = single();
+                values[i] = value;
+                hashSet.put(value, res);
+                set.add(value, res);
+            }
+
+            for(Float value : hashSet.keySet()) if(!set.contains(value)) return false;
+            float[] list = set.keys();
+            for(int i = 0;i < list.length;i++) if(!hashSet.containsKey(list[i])) return false;
+
+            //Remove Test
+            float removeValue = values[randInt(0, values.length - 1)];
+            hashSet.remove(removeValue);
+            set.remove(removeValue);
+
+            for(Float value : hashSet.keySet()) if(!set.contains(value)) return false;
+            list = set.keys();
+            for(int i = 0;i < list.length;i++) if(!hashSet.containsKey(list[i])) return false;
+
+
+            //Contains Test
+            float value = values[randInt(0, values.length - 1)];
+            if(hashSet.containsKey(value) != set.contains(value)) return false;
+
+            //Value Test
+            if(hashSet.get(value) != set.get(value)) return false; //Set to the same instance of string, so this should be fine
+
+            return true;
+        }).run();
+
+        new Test("Floatf Map Test", 100, () -> {
+            //Setup
+            java.util.HashMap<Float, Float> hashSet = new java.util.HashMap<>();
+            FloatfMap set = new FloatfMap();
+
+            //Add Test
+            float[] values = new float[randInt(10, 100)];
+            for(int i = 0;i < values.length;i++){
+                float value = (i == 0) ? 0 : random(0, 10000);
+                float res = chance(0.2f) ? 0 : random(0, 100);
+                values[i] = value;
+                hashSet.put(value, res);
+                set.add(value, res);
+            }
+
+            for(Float value : hashSet.keySet())
+                if(!set.contains(value)){
+                    return false;
+                }
+            float[] list = set.keys();
+            for(int i = 0;i < list.length;i++)
+                if(!hashSet.containsKey(list[i])){
+                    return false;
+                }
+
+            //Remove Test
+            float removeValue = values[randInt(0, values.length - 1)];
+            hashSet.remove(removeValue);
+            set.remove(removeValue);
+
+            for(Float value : hashSet.keySet())
+                if(!set.contains(value)){
+                    return false;
+                }
+            list = set.keys();
+            for(int i = 0;i < list.length;i++)
+                if(!hashSet.containsKey(list[i])){
+                    return false;
+                }
+
+
+            //Contains Test
+            float value = values[randInt(0, values.length - 1)];
+            if(hashSet.containsKey(value) != set.contains(value)){
+                return false;
+            }
+
+            //Value Test
+            if(hashSet.get(value) != null && hashSet.get(value) != set.get(value)){
+                return false;
+            }
+
+            return true;
+        }).run();
+
+        new Test("Int Map Test", 100, () -> {
+            //Setup
+            java.util.HashMap<Integer, String> hashSet = new java.util.HashMap<>();
+            IntMap<String> set = new IntMap<String>();
+
+            //Add Test
+            int[] values = new int[randInt(10, 100)];
+            for(int i = 0;i < values.length;i++){
+                int value = (i == 0) ? 0 : randInt(0, 10000);
+                String res = single();
+                values[i] = value;
+                hashSet.put(value, res);
+                set.add(value, res);
+            }
+
+            for(Integer value : hashSet.keySet()) if(!set.contains(value)) return false;
+            int[] list = set.keys();
+            for(int i = 0;i < list.length;i++) if(!hashSet.containsKey(list[i])) return false;
+
+            //Remove Test
+            int removeValue = values[randInt(0, values.length - 1)];
+            hashSet.remove(removeValue);
+            set.remove(removeValue);
+
+            for(Integer value : hashSet.keySet()) if(!set.contains(value)) return false;
+            list = set.keys();
+            for(int i = 0;i < list.length;i++) if(!hashSet.containsKey(list[i])) return false;
+
+
+            //Contains Test
+            int value = values[randInt(0, values.length - 1)];
+            if(hashSet.containsKey(value) != set.contains(value)) return false;
+
+            //Value Test
+            if(hashSet.get(value) != set.get(value)) return false; //Set to the same instance of string, so this should be fine
+
+            return true;
+        }).run();
+    }
+
     public static void main(String[] args){
         testSeqs();
         testSets();
         testQueues();
+        testMaps();
     }
 }

@@ -37,6 +37,7 @@ public class GameLoop{
                 rotation++;
             }
             if(frameTimer >= (1000 / fps)){
+                renderer.binded = null;
                 frameTimer %= (1000 / fps);
 //                System.out.println(fps);
                 time.frames++;
