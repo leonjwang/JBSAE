@@ -542,6 +542,56 @@ public class StructTester{
 
             if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
         }).run();
+        new Test("Objectb Map Test", 10000, () -> {
+            java.util.HashMap<String, Boolean> base = new java.util.HashMap<>();
+            ObjbMap<String> custom = new ObjbMap<>();
+
+            String[] keys = generate(100000);
+            for(String key : keys){
+                if(base.containsKey(key)) continue;
+                boolean value = chance(0.5f);
+                base.put(key, value);
+                custom.add(key, value);
+            }
+
+            for(String key : keys) if(base.get(key) != custom.get(key)) throw new Exception("Not equal after operation [add]");
+
+            int amount = randInt(0, base.size());
+            for(int i = 0;i < amount;i++){
+                int removeIndex = randInt(0, base.size() - 1);
+                base.remove(keys[removeIndex]);
+                custom.remove(keys[removeIndex]);
+            }
+
+            for(String key : keys) if(base.get(key) != null && base.get(key) != custom.get(key)) throw new Exception("Not equal after operation [remove]");
+
+            if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
+        }).run();
+        new Test("Objecti Map Test", 10000, () -> {
+            java.util.HashMap<String, Integer> base = new java.util.HashMap<>();
+            ObjiMap<String> custom = new ObjiMap<>();
+
+            String[] keys = generate(100000);
+            for(String key : keys){
+                if(base.containsKey(key)) continue;
+                int value = chance(0.05f) ? 0 : randInt(-10000, 10000);
+                base.put(key, value);
+                custom.add(key, value);
+            }
+
+            for(String key : keys) if(base.get(key) != custom.get(key)) throw new Exception("Not equal after operation [add]");
+
+            int amount = randInt(0, base.size());
+            for(int i = 0;i < amount;i++){
+                int removeIndex = randInt(0, base.size() - 1);
+                base.remove(keys[removeIndex]);
+                custom.remove(keys[removeIndex]);
+            }
+
+            for(String key : keys) if(base.get(key) != null && base.get(key) != custom.get(key)) throw new Exception("Not equal after operation [remove]");
+
+            if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
+        }).run();
         new Test("Float Map Test", 10000, () -> {
             java.util.HashMap<Float, String> base = new java.util.HashMap<>();
             FloatMap<String> custom = new FloatMap<>();

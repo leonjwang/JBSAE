@@ -1,6 +1,7 @@
 package jbsae.struct.prim;
 
 import jbsae.func.prim.*;
+import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -15,13 +16,24 @@ public class BoolSeq{
 
     public BoolSeq(boolean... values){
         this();
-        for(int i = 0;i < values.length;i++) add(values[i]);
+        set(values);
     }
 
     public boolean[] list(){
         boolean[] values = new boolean[size];
         copy(items, values, size);
         return values;
+    }
+
+    public BoolSeq set(boolean value, int index){
+        items[index] = value;
+        return this;
+    }
+
+    public BoolSeq set(boolean... values){
+        clear();
+        for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
     public BoolSeq set(BoolSeq values){

@@ -15,13 +15,24 @@ public class FloatSeq{
 
     public FloatSeq(float... values){
         this();
-        for(int i = 0;i < values.length;i++) add(values[i]);
+        set(values);
     }
 
     public float[] list(){
         float[] values = new float[size];
         copy(items, values, size);
         return values;
+    }
+
+    public FloatSeq set(float value, int index){
+        items[index] = value;
+        return this;
+    }
+
+    public FloatSeq set(float... values){
+        clear();
+        for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
     public FloatSeq set(FloatSeq values){

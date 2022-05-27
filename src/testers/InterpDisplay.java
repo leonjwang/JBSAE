@@ -3,6 +3,7 @@ package testers;
 
 import jbsae.*;
 import jbsae.core.*;
+import jbsae.files.*;
 import jbsae.graphics.*;
 import jbsae.graphics.gl.*;
 import jbsae.math.*;
@@ -39,8 +40,7 @@ public class InterpDisplay extends Screen{
 
     @Override
     public void init(){
-        box = new Texture("assets/sprites/effects/square.png");
-//        box = new Texture("assets/logo.png");
+        box = new Texture(new Fi("assets/sprites/effects/square.png"));
 
         Interpf tmp = new Interpf();
         try{

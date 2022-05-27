@@ -17,11 +17,6 @@ public class IntMap<V>{
         values = (V[])new Object[16];
     }
 
-    public IntMap(Object... entries){
-        this();
-        for(int i = 0;i < entries.length;i += 2) add((int)entries[i], (V)entries[i + 1]);
-    }
-
 
     public int[] keys(){
         int i = 0;
@@ -61,11 +56,6 @@ public class IntMap<V>{
             }
         }
         return resize(keys.length << 1).add(key, value);
-    }
-
-    public IntMap<V> addAll(Object... entries){
-        for(int i = 0;i < entries.length;i += 2) add((int)entries[i], (V)entries[i + 1]);
-        return this;
     }
 
     public IntMap<V> remove(int key){

@@ -17,11 +17,6 @@ public class FloatMap<V>{
         values = (V[])new Object[16];
     }
 
-    public FloatMap(Object... entries){
-        this();
-        for(int i = 0;i < entries.length;i += 2) add((Float)entries[i], (V)entries[i + 1]);
-    }
-
 
     public float[] keys(){
         int i = 0;
@@ -62,11 +57,6 @@ public class FloatMap<V>{
             }
         }
         return resize(keys.length << 1).add(key, value);
-    }
-
-    public FloatMap<V> addAll(Object... entries){
-        for(int i = 0;i < entries.length;i += 2) add((Float)entries[i], (V)entries[i + 1]);
-        return this;
     }
 
     public FloatMap<V> remove(float key){

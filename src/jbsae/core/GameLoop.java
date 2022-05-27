@@ -39,7 +39,6 @@ public class GameLoop{
             if(frameTimer >= (1000 / fps)){
                 renderer.binded = null;
                 frameTimer %= (1000 / fps);
-//                System.out.println(fps);
                 time.frames++;
                 glClear(GL_COLOR_BUFFER_BIT);
                 screen.draw();

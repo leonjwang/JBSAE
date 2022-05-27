@@ -1,5 +1,6 @@
 package jbsae.graphics;
 
+import jbsae.files.*;
 import jbsae.graphics.gl.*;
 import jbsae.struct.prim.*;
 
@@ -14,18 +15,19 @@ public class Font{
 
     public Glyph none;
     public IntMap<Glyph> glyphs = new IntMap<>();
-    public ObjiMap<String> data = new ObjiMap<>();
+    public ObjiMap<String> data = new ObjiMap<>(); //TODO: Switch to fields
     public IntMap<Texture> pages = new IntMap<>();
 
-    public int defaultSize;
+    public String sizeKey = "size";
+    public String pad1Key = "padding1", pad2Key = "padding2", pad3Key = "padding3", pad4Key = "padding4";
 
-    public Font(String path){
-        load(path);
+    public Font(Fi dir){
+        load(dir);
     }
 
-    public void load(String path){
+    public void load(Fi dir){
         try{
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path + "/font.fnt")));
+            BufferedReader reader = dir.get("font.fnt").reader();
             StringTokenizer info = new StringTokenizer(reader.readLine());
             if(!info.nextToken().equals("info")) throw new Exception("No font info");
             while(info.hasMoreTokens()){
@@ -52,13 +54,13 @@ public class Font{
                 if(!page.nextToken().equals("page")) throw new Exception("Missing page data");
 
                 int id = 0;
-                String file = "";
+                String name = "";
                 while(page.hasMoreTokens()){
                     String[] split = page.nextToken().split("=");
                     if(split[0].equals("id")) id = Integer.parseInt(split[1]);
-                    else if(split[0].equals("file")) file = split[1].substring(1, split[1].length() - 1);
+                    else if(split[0].equals("file")) name = split[1].substring(1, split[1].length() - 1);
                 }
-                pages.add(id, new Texture(path + "/" + file));
+                pages.add(id, new Texture(dir.get(name)));
             }
 
             StringTokenizer chars = new StringTokenizer(reader.readLine());
@@ -84,7 +86,6 @@ public class Font{
                 }
                 glyphs.add(glyph.id, glyph);
                 glyph.load();
-                defaultSize = max(defaultSize, glyph.height);
             }
 
             none = new Glyph(this);
@@ -93,8 +94,12 @@ public class Font{
             none.width = 0;
             none.height = 0;
         }catch(Exception e){
-            System.out.println("Failed loading font: " + path);
+            System.out.println("Failed loading font: " + dir.path());
             e.printStackTrace();
         }
+    }
+
+    public int size(){
+        return -data.get(sizeKey);
     }
 }

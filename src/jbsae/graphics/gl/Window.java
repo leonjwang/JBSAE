@@ -1,5 +1,6 @@
 package jbsae.graphics.gl;
 
+import jbsae.files.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -39,7 +40,7 @@ public class Window{
         glfwMakeContextCurrent(id);
         GL.createCapabilities();
 
-        Texture icon = new Texture("assets/" + programName + ".png");
+        Texture icon = new Texture(new Fi("assets/" + programName + ".png"));
         GLFWImage image = GLFWImage.malloc();
         image.set(icon.width, icon.height, icon.image);
         glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));

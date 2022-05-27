@@ -5,7 +5,7 @@ import jbsae.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-public class FloatfMap{
+public class FloatfMap{ //TODO: Redo these maps
     public float zero;
     public float[] keys;
     public float[] values;

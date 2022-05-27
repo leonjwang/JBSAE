@@ -1,5 +1,6 @@
 package jbsae.graphics.gl;
 
+import jbsae.files.*;
 import jbsae.graphics.*;
 import jbsae.math.*;
 import org.lwjgl.system.*;
@@ -32,8 +33,8 @@ public class Renderer{
         vertexBuffer = new VertexBuffer();
         vertexBuffer.data(GL_ARRAY_BUFFER, vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
 
-        vertexShader = new Shader("assets/shaders/shader.vert", GL_VERTEX_SHADER);
-        fragmentShader = new Shader("assets/shaders/shader.frag", GL_FRAGMENT_SHADER);
+        vertexShader = new Shader(new Fi("assets/shaders/shader.vert"), GL_VERTEX_SHADER);
+        fragmentShader = new Shader(new Fi("assets/shaders/shader.frag"), GL_FRAGMENT_SHADER);
 
         program = new ShaderProgram(vertexShader, fragmentShader);
         program.bind("fragColor", 0);

@@ -1,5 +1,6 @@
 package jbsae.graphics.gl;
 
+import jbsae.files.*;
 import org.lwjgl.system.*;
 
 import java.nio.*;
@@ -15,9 +16,9 @@ public class Texture{
     public int width, height;
     public ByteBuffer image;
 
-    public Texture(String path){ //TODO: File system
+    public Texture(Fi file){
         id = glGenTextures();
-        load(path);
+        load(file);
         init();
     }
 
@@ -38,11 +39,11 @@ public class Texture{
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
     }
 
-    public void load(String path){
+    public void load(Fi file){
         MemoryStack stack = MemoryStack.stackPush();
         IntBuffer w = stack.mallocInt(1), h = stack.mallocInt(1);
-        image = stbi_load(path, w, h, stack.mallocInt(1), 4);
-        if(image == null) System.out.println("Failed to load texture: " + path);
+        image = stbi_load(file.path(), w, h, stack.mallocInt(1), 4);
+        if(image == null) System.out.println("Failed to load texture: " + file.path());
 
         width = w.get();
         height = h.get();

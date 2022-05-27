@@ -24,6 +24,17 @@ public class IntSeq{
         return values;
     }
 
+    public IntSeq set(int value, int index){
+        items[index] = value;
+        return this;
+    }
+
+    public IntSeq set(int... values){
+        clear();
+        for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
+    }
+
     public IntSeq set(IntSeq values){
         items = values.items;
         size = values.size;

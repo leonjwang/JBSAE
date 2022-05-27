@@ -16,11 +16,6 @@ public class ObjiMap<K>{
         values = new int[16];
     }
 
-    public ObjiMap(Object... entries){
-        this();
-        for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (int)entries[i + 1]);
-    }
-
 
     public Object[] keys(){
         int i = 0;
@@ -51,11 +46,6 @@ public class ObjiMap<K>{
         }
         resize(keys.length << 1);
         add(key, value);
-        return this;
-    }
-
-    public ObjiMap<K> addAll(Object... entries){
-        for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (int)entries[i + 1]);
         return this;
     }
 

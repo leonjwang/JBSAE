@@ -1,5 +1,7 @@
 package jbsae.graphics.gl;
 
+import jbsae.files.*;
+
 import java.io.*;
 
 import static org.lwjgl.opengl.GL20.*;
@@ -8,19 +10,19 @@ import static org.lwjgl.opengl.GL20.*;
 public class Shader{
     public int id;
 
-    public Shader(String path, int type){
+    public Shader(Fi file, int type){
         id = glCreateShader(type);
-        load(path);
+        load(file);
     }
 
-    public void load(String path){
+    public void load(Fi file){
         StringBuilder builder = new StringBuilder();
         try{
             String line;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
+            BufferedReader reader =  file.reader();
             while((line = reader.readLine()) != null) builder.append(line).append("\n");
         }catch(Exception e){
-            System.out.println("Failed to load shader: " + path);
+            System.out.println("Failed to load shader: " + file.path());
             e.printStackTrace();
         }
         glShaderSource(id, builder.toString());

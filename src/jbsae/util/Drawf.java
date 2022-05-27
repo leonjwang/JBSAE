@@ -83,7 +83,7 @@ public class Drawf{
     }
 
     public static void text(String text, float x, float y, float size){
-        float tx = 0, scl = size / current().font.defaultSize;
+        float tx = 0, scl = size / current().font.size();
         for(int i = 0;i < text.length();i ++){
             Glyph glyph = current().font.glyphs.get(text.charAt(i));
             if(glyph == null) glyph = current().font.none;
