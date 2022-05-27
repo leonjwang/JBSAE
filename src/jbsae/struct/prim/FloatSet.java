@@ -94,7 +94,7 @@ public class FloatSet{
     }
 
     public FloatSet clear(){
-        table = new float[16];
+        fill(table, 0);
         zero = false;
         size = 0;
         return this;

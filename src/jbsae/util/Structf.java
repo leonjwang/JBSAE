@@ -65,9 +65,9 @@ public class Structf{
 
     /** Array copying. */
     public static <T> T[] copy(T[] arr){
-        T[] newArr = create(arr.length);
-        copy(arr, newArr);
-        return newArr;
+        T[] res = create(arr.length);
+        copy(arr, res);
+        return res;
     }
 
     public static <T> void copy(T[] from, T[] to){
@@ -92,9 +92,9 @@ public class Structf{
 
 
     public static float[] copy(float[] arr){
-        float[] newArr = new float[arr.length];
-        copy(arr, newArr);
-        return newArr;
+        float[] res = new float[arr.length];
+        copy(arr, res);
+        return res;
     }
 
     public static void copy(float[] from, float[] to){
@@ -119,9 +119,9 @@ public class Structf{
 
 
     public static boolean[] copy(boolean[] arr){
-        boolean[] newArr = new boolean[arr.length];
-        copy(arr, newArr);
-        return newArr;
+        boolean[] res = new boolean[arr.length];
+        copy(arr, res);
+        return res;
     }
 
     public static void copy(boolean[] from, boolean[] to){
@@ -146,9 +146,9 @@ public class Structf{
 
 
     public static int[] copy(int[] arr){
-        int[] newArr = new int[arr.length];
-        copy(arr, newArr);
-        return newArr;
+        int[] res = new int[arr.length];
+        copy(arr, res);
+        return res;
     }
 
     public static void copy(int[] from, int[] to){
@@ -232,23 +232,30 @@ public class Structf{
 
 
     /** Comparison functions. */
-    public static <T> boolean eql(T a, T b){
+    public static boolean eql(Object a, Object b){
         return (a != null && a.equals(b)) || a == b;
     }
 
-    public static <T> boolean eql(T[] a, T[] b){
+    public static boolean eql(Object[] a, Object[] b){
         if(a.length != b.length) return false;
         for(int i = 0;i < a.length;i++) if(!eql(a[i], b[i])) return false;
         return true;
     }
 
-    public static <T> boolean eql(T[][] a, T[][] b){
+    public static boolean eql(Object[][] a, Object[][] b){
         if(a.length != b.length) return false;
         for(int i = 0;i < a.length;i++){
             if(a[i].length != b[i].length) return false;
             for(int j = 0;j < a[i].length;j++) if(!eql(a[i][j], b[i][j])) return false;
         }
         return true;
+    }
+
+    
+    public static <T> boolean eql(Iterable<T> a, Iterable<T> b){
+        Iterator<T> bi = b.iterator();
+        for(T t : a) if(!eql(t, bi.next())) return false;
+        return !bi.hasNext();
     }
 
 
@@ -297,6 +304,84 @@ public class Structf{
             for(int j = 0;j < a[i].length;j++) if(a[i][j] != b[i][j]) return false;
         }
         return true;
+    }
+
+
+    public static boolean eqlc(Object[] a, Object[] b){
+        for(int i = 0;i < a.length;i++) if(!contains(b, a[i])) return false;
+        for(int i = 0;i < b.length;i++) if(!contains(a, b[i])) return false;
+        return true;
+    }
+
+    public static <T> boolean eqlc(Iterable<T> a, Iterable<T> b){
+        for(T t : a) if(!contains(b, t)) return false;
+        for(T t : b) if(!contains(a, t)) return false;
+        return true;
+    }
+
+    public static boolean eqlc(float[] a, float[] b){
+        for(int i = 0;i < a.length;i++) if(!contains(b, a[i])) return false;
+        for(int i = 0;i < b.length;i++) if(!contains(a, b[i])) return false;
+        return true;
+    }
+
+    public static boolean eqlc(boolean[] a, boolean[] b){
+        for(int i = 0;i < a.length;i++) if(!contains(b, a[i])) return false;
+        for(int i = 0;i < b.length;i++) if(!contains(a, b[i])) return false;
+        return true;
+    }
+
+    public static boolean eqlc(int[] a, int[] b){
+        for(int i = 0;i < a.length;i++) if(!contains(b, a[i])) return false;
+        for(int i = 0;i < b.length;i++) if(!contains(a, b[i])) return false;
+        return true;
+    }
+
+
+    /** Utility methods. */
+    public static boolean contains(Object[] arr, Object value){
+        for(int i = 0;i < arr.length;i++) if(eql(arr[i], value)) return true;
+        return false;
+    }
+
+    public static <T> boolean contains(Iterable<T> arr, T value){
+        for(T t : arr) if(eql(t, value)) return true;
+        return false;
+    }
+
+    public static boolean contains(float[] arr, float value){
+        for(int i = 0;i < arr.length;i++) if(eqlf(arr[i], value)) return true;
+        return false;
+    }
+
+    public static boolean contains(boolean[] arr, boolean value){
+        for(int i = 0;i < arr.length;i++) if(arr[i] == value) return true;
+        return false;
+    }
+
+    public static boolean contains(int[] arr, int value){
+        for(int i = 0;i < arr.length;i++) if(arr[i] == value) return true;
+        return false;
+    }
+
+
+    /** Object array conversions (Should not be needed with JBSAE). */
+    public static float[] objf(Object... arr){
+        float[] res = new float[arr.length];
+        for(int i = 0;i < arr.length;i++) res[i] = (Float)arr[i];
+        return res;
+    }
+
+    public static boolean[] objb(Object... arr){
+        boolean[] res = new boolean[arr.length];
+        for(int i = 0;i < arr.length;i++) res[i] = (Boolean)arr[i];
+        return res;
+    }
+
+    public static int[] obji(Object... arr){
+        int[] res = new int[arr.length];
+        for(int i = 0;i < arr.length;i++) res[i] = (Integer)arr[i];
+        return res;
     }
 
 

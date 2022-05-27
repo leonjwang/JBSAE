@@ -71,6 +71,28 @@ public class Drawf{
     }
 
 
+    /** Set the font. */
+    public static void font(Font font){
+        current().font = font;
+    }
+
+
+    /** Draw text. */
+    public static void text(String text, float x, float y){
+        text(text, x, y, 10);
+    }
+
+    public static void text(String text, float x, float y, float size){
+        float tx = 0, scl = size / current().font.defaultSize;
+        for(int i = 0;i < text.length();i ++){
+            Glyph glyph = current().font.glyphs.get(text.charAt(i));
+            if(glyph == null) glyph = current().font.none;
+            draw(glyph.region, x + tx + glyph.xOffset * scl, y + size - (glyph.yOffset + glyph.height) * scl, glyph.width * scl, glyph.height * scl);
+            tx += glyph.xAdvance * scl;
+        }
+    }
+
+
     /** Tmp.r1anslation functions. */
     public static void rotatet(float r){
         current().rotation = r;
@@ -131,6 +153,7 @@ public class Drawf{
         public float rotation = 0;
         public Vec2 scale = new Vec2(1, 1);
         public Vec2 translate = new Vec2(0, 0);
+        public Font font;
 
         public DrawSetting cpy(){
             DrawSetting n = new DrawSetting();
@@ -138,6 +161,7 @@ public class Drawf{
             n.rotation = rotation;
             n.scale = scale.cpy();
             n.translate = translate.cpy();
+            n.font = font;
             return n;
         }
     }

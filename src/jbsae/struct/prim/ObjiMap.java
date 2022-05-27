@@ -5,20 +5,20 @@ import jbsae.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-public class ObjfMap<K>{
+public class ObjiMap<K>{
     public K[] keys;
-    public float[] values;
+    public int[] values;
     public int size = 0;
 
 
-    public ObjfMap(){
+    public ObjiMap(){
         keys = (K[])new Object[16];
-        values = new float[16];
+        values = new int[16];
     }
 
-    public ObjfMap(Object... entries){
+    public ObjiMap(Object... entries){
         this();
-        for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (Float)entries[i + 1]);
+        for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (int)entries[i + 1]);
     }
 
 
@@ -29,15 +29,15 @@ public class ObjfMap<K>{
         return values;
     }
 
-    public float[] values(){
+    public int[] values(){
         K[] keys = (K[])keys();
-        float[] values = new float[size];
+        int[] values = new int[size];
         for(int j = 0;j < keys.length;j++) values[j] = get(keys[j]);
         return values;
     }
 
 
-    public ObjfMap<K> add(K key, float value){
+    public ObjiMap<K> add(K key, int value){
         int h = key.hashCode();
         int[] checks = hash3(h, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return this;
@@ -54,12 +54,12 @@ public class ObjfMap<K>{
         return this;
     }
 
-    public ObjfMap<K> addAll(Object... entries){
-        for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (Float)entries[i + 1]);
+    public ObjiMap<K> addAll(Object... entries){
+        for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (int)entries[i + 1]);
         return this;
     }
 
-    public ObjfMap<K> remove(K key){
+    public ObjiMap<K> remove(K key){
         int h = key.hashCode();
         int[] checks = hash3(h, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
@@ -72,17 +72,17 @@ public class ObjfMap<K>{
         return this;
     }
 
-    public ObjfMap<K> removeAll(K... keys){
+    public ObjiMap<K> removeAll(K... keys){
         for(K key : keys) remove(key);
         return this;
     }
 
 
-    public float get(K key){
+    public int get(K key){
         int h = key.hashCode();
         int[] checks = hash3(h, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
-        return nan;
+        return 0;
     }
 
 
@@ -93,19 +93,19 @@ public class ObjfMap<K>{
         return false;
     }
 
-    public ObjfMap<K> clear(){
+    public ObjiMap<K> clear(){
         fill(keys, null);
         fill(values, 0);
         size = 0;
         return this;
     }
 
-    public ObjfMap<K> resize(int newSize){
+    public ObjiMap<K> resize(int newSize){
         K[] keys = (K[])keys();
-        float[] values = values();
+        int[] values = values();
         size = 0;
         this.keys = create(newSize, keys);
-        this.values = new float[newSize];
+        this.values = new int[newSize];
         for(int j = 0;j < keys.length;j++) add(keys[j], values[j]);
         return this;
     }

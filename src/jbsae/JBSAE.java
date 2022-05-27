@@ -48,12 +48,13 @@ public class JBSAE{
 
     public static void main(String[] args){
         init();
-        Texture t = new Texture("assets/logo.png");
-        Region r = new Region(t, 10, 10, 500, 100);
+        Font roboto = new Font("assets/fonts/Roboto");
         screen(new Screen(){
             @Override
             public void draw(){
-                for(int i = 0;i < 4000;i++) Drawf.draw(r, 0, 0, 100, 100);
+                Drawf.font(roboto);
+                Drawf.fill(Colorf.vibrantc());
+                Drawf.text("Funni Noob :) haha", 100, 100, Mathf.absint() * 100);
             }
         });
         start();

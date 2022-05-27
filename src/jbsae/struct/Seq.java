@@ -24,7 +24,7 @@ public class Seq<T> implements Iterable<T>{
 
     public Seq(Object... values){
         this();
-        for(Object value : values) add((T)value);
+        set(values);
     }
 
 
@@ -35,6 +35,17 @@ public class Seq<T> implements Iterable<T>{
         return values;
     }
 
+
+    public Seq<T> set(T value, int index){
+        items[index] = value;
+        return this;
+    }
+
+    public Seq<T> set(Object... values){
+        clear();
+        for(Object value : values) add((T)value);
+        return this;
+    }
 
     public Seq<T> set(Seq<T> values){
         items = values.items;
@@ -127,7 +138,7 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq<T> clear(){
-        items = create(4, items);
+        fill(items, null);
         size = 0;
         return this;
     }

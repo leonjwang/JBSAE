@@ -102,7 +102,7 @@ public class IntSeq{
     }
 
     public IntSeq clear(){
-        items = new int[4];
+        fill(items, 0);
         size = 0;
         return this;
     }

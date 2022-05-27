@@ -115,8 +115,8 @@ public class FloatMap<V>{
     }
 
     public FloatMap<V> clear(){
-        keys = new float[16];
-        values = create(16, values);
+        fill(keys, 0);
+        fill(values, null);
         size = 0;
         return this;
     }

@@ -3,6 +3,7 @@ package jbsae.struct.prim;
 import jbsae.func.prim.*;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Structf.*;
 
 public class IntQueue{
     public int[] items;
@@ -81,7 +82,7 @@ public class IntQueue{
     }
 
     public IntQueue clear(){
-        items = new int[4];
+        fill(items, 0);
         head = tail = size = 0;
         return this;
     }

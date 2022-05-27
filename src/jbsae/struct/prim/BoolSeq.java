@@ -86,7 +86,7 @@ public class BoolSeq{
     }
 
     public BoolSeq clear(){
-        items = new boolean[4];
+        fill(items, false);
         size = 0;
         return this;
     }

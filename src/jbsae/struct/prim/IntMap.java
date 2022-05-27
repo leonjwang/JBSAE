@@ -50,9 +50,8 @@ public class IntMap<V>{
         }
         int[] keys = this.keys;
         V[] values = this.values;
-        int h = intBits(key);
-        int[] checks = hash3(h, keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return this;
+        int[] checks = hash3(key, keys.length, Tmp.i3);
+        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return this;
         for(int i = 0;i < checks.length;i++){
             if(keys[checks[i]] == 0){
                 keys[checks[i]] = key;
@@ -79,10 +78,9 @@ public class IntMap<V>{
         }
         int[] keys = this.keys;
         V[] values = this.values;
-        int h = intBits(key);
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(key, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
-            if(eqlf(keys[checks[i]], key)){
+            if(keys[checks[i]] == key){
                 keys[checks[i]] = 0;
                 values[checks[i]] = null;
                 size--;
@@ -99,24 +97,22 @@ public class IntMap<V>{
 
     public V get(int key){
         if(key == 0) return zero;
-        int h = intBits(key);
-        int[] checks = hash3(h, keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return values[checks[i]];
+        int[] checks = hash3(key, keys.length, Tmp.i3);
+        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return values[checks[i]];
         return null;
     }
 
 
     public boolean contains(int key){
         if(key == 0) return zero != null;
-        int h = intBits(key);
-        int[] checks = hash3(h, keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return true;
+        int[] checks = hash3(key, keys.length, Tmp.i3);
+        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return true;
         return false;
     }
 
     public IntMap<V> clear(){
-        keys = new int[16];
-        values = create(16, values);
+        fill(keys, 0);
+        fill(values, null);
         size = 0;
         return this;
     }

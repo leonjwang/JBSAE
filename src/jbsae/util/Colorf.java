@@ -75,6 +75,6 @@ public class Colorf{
     }
 
     public static Color vibrantc(){
-        return new Color(random(0, 360), random(), random());
+        return new Color().hsv(random(0, 360), 1f, 1f);
     }
 }

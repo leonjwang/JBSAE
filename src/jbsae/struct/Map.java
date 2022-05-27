@@ -104,8 +104,8 @@ public class Map<K, V> implements Iterable<K>{
     }
 
     public Map<K, V> clear(){
-        keys = create(16, keys);
-        values = create(16, values);
+        fill(keys, null);
+        fill(values, null);
         size = 0;
         return this;
     }

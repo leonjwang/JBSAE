@@ -116,8 +116,8 @@ public class FloatfMap{
     }
 
     public FloatfMap clear(){
-        keys = new float[16];
-        values = new float[16];
+        fill(keys, 0);
+        fill(values, 0);
         size = 0;
         zero = nan;
         return this;

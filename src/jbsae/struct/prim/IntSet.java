@@ -91,7 +91,7 @@ public class IntSet{
     }
 
     public IntSet clear(){
-        table = new int[16];
+        fill(table, 0);
         zero = false;
         size = 0;
         return this;

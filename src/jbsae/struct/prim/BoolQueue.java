@@ -3,6 +3,7 @@ package jbsae.struct.prim;
 import jbsae.func.prim.*;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Structf.*;
 
 public class BoolQueue{
     public boolean[] items;
@@ -71,7 +72,7 @@ public class BoolQueue{
     }
 
     public BoolQueue clear(){
-        items = new boolean[4];
+        fill(items, false);
         head = tail = size = 0;
         return this;
     }

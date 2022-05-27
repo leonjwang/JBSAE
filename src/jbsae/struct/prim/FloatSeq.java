@@ -102,7 +102,7 @@ public class FloatSeq{
     }
 
     public FloatSeq clear(){
-        items = new float[4];
+        fill(items, 0);
         size = 0;
         return this;
     }

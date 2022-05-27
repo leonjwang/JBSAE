@@ -90,7 +90,7 @@ public class Queue<T> implements Iterable<T>{
     }
 
     public Queue<T> clear(){
-        items = create(4, items);
+        fill(items, null);
         head = tail = size = 0;
         return this;
     }

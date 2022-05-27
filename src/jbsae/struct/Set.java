@@ -87,7 +87,7 @@ public class Set<T> implements Iterable<T>{
     }
 
     public Set<T> clear(){
-        table = create(16, table);
+        fill(table, null);
         size = 0;
         return this;
     }
