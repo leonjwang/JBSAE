@@ -1,6 +1,5 @@
 package jbsae.util;
 
-import jbsae.*;
 import jbsae.func.prim.*;
 
 import java.lang.reflect.*;

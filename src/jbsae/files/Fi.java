@@ -10,7 +10,7 @@ public class Fi{
     }
 
     public Fi(String name){
-        this(new File(name));
+        this(name == null ? null : new File(name));
     }
 
     public Fi(File file){
@@ -29,6 +29,10 @@ public class Fi{
 
     public String path(){
         return file.getPath();
+    }
+
+    public String parent(){
+        return file.getParent();
     }
 
     public BufferedReader reader(){

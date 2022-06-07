@@ -71,10 +71,18 @@ public class Colorf{
 
     /** Random creation. */
     public static Color randomc(){
-        return new Color(random(), random(), random());
+        return randomc(new Color());
+    }
+
+    public static Color randomc(Color c){
+        return c.set(random(), random(), random());
     }
 
     public static Color vibrantc(){
-        return new Color().hsv(random(0, 360), 1f, 1f);
+        return vibrantc(new Color());
+    }
+
+    public static Color vibrantc(Color c){
+        return c.hsv(random(0, 360), 1f, 1f);
     }
 }

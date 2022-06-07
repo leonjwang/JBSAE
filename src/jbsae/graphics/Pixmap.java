@@ -3,14 +3,11 @@ package jbsae.graphics;
 import jbsae.func.*;
 import jbsae.graphics.gl.*;
 import jbsae.math.*;
-import jbsae.util.*;
 import org.lwjgl.*;
-import org.lwjgl.system.*;
 
 import java.nio.*;
 
 import static jbsae.util.Mathf.*;
-import static org.lwjgl.system.MemoryStack.*;
 
 public class Pixmap{
     public Color[][] map;

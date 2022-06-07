@@ -1,6 +1,5 @@
 package jbsae.math;
 
-import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 
 public class Point2 implements Pos2{

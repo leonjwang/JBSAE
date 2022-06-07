@@ -2,7 +2,6 @@ package jbsae.struct;
 
 import java.util.*;
 
-import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
 public class Tree<T> implements Iterable<T>{

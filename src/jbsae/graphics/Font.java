@@ -2,15 +2,15 @@ package jbsae.graphics;
 
 import jbsae.files.*;
 import jbsae.graphics.gl.*;
+import jbsae.struct.*;
 import jbsae.struct.prim.*;
 
 import java.io.*;
 import java.util.*;
 
-import static jbsae.util.Drawf.*;
-import static jbsae.util.Mathf.*;
+public class Font extends Asset{
+    public static Seq<Font> all = new Seq<>();
 
-public class Font{
     public String name;
 
     public Glyph none;
@@ -21,13 +21,16 @@ public class Font{
     public String sizeKey = "size";
     public String pad1Key = "padding1", pad2Key = "padding2", pad3Key = "padding3", pad4Key = "padding4";
 
-    public Font(Fi dir){
-        load(dir);
+    public Font(String name){
+        super(name);
+        all.add(this);
     }
 
-    public void load(Fi dir){
+    @Override
+    public Font create(){
+        super.create();
         try{
-            BufferedReader reader = dir.get("font.fnt").reader();
+            BufferedReader reader = reader();
             StringTokenizer info = new StringTokenizer(reader.readLine());
             if(!info.nextToken().equals("info")) throw new Exception("No font info");
             while(info.hasMoreTokens()){
@@ -60,7 +63,8 @@ public class Font{
                     if(split[0].equals("id")) id = Integer.parseInt(split[1]);
                     else if(split[0].equals("file")) name = split[1].substring(1, split[1].length() - 1);
                 }
-                pages.add(id, new Texture(dir.get(name)));
+
+                pages.add(id, (Texture)new Texture(parent() + "/" + name).load());
             }
 
             StringTokenizer chars = new StringTokenizer(reader.readLine());
@@ -94,9 +98,10 @@ public class Font{
             none.width = 0;
             none.height = 0;
         }catch(Exception e){
-            System.out.println("Failed loading font: " + dir.path());
+            System.out.println("Failed loading font: " + path());
             e.printStackTrace();
         }
+        return this;
     }
 
     public int size(){

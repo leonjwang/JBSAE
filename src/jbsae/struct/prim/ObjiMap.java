@@ -2,7 +2,6 @@ package jbsae.struct.prim;
 
 import jbsae.*;
 
-import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
 public class ObjiMap<K>{
