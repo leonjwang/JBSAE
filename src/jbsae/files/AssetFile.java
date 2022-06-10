@@ -1,23 +1,18 @@
 package jbsae.files;
 
-import jbsae.struct.*;
-
-public class Asset extends Fi{
-    public static Seq<Asset> all = new Seq<>();
-
+public class AssetFile extends Fi{
     public boolean loaded;
 
-    public Asset(String name){
+    public AssetFile(String name){
         super(name);
-        all.add(this);
     }
 
-    public Asset load(){
+    public AssetFile load(){
         if(!loaded) create();
         return this;
     }
 
-    public Asset create(){
+    public AssetFile create(){
         loaded = true;
         return this;
     }

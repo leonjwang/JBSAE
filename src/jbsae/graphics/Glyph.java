@@ -10,6 +10,6 @@ public class Glyph{
     }
 
     public void load(){
-        region = new Region(font.pages.get(page), x, y, width, height);
+        region = new Region(font.page[page], x, y, width, height);
     }
 }

@@ -83,7 +83,15 @@ public class Vec2 implements Pos2{
     }
 
     public float len(){
-        return rt2(x * x + y * y);
+        return rt2(len2());
+    }
+
+    public float len2(){
+        return x * x + y * y;
+    }
+
+    public boolean eql(Vec2 v){
+        return eqlf(x, v.x) && eqlf(y, v.y);
     }
 
 

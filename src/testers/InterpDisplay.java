@@ -40,7 +40,7 @@ public class InterpDisplay extends Screen{
 
     @Override
     public void init(){
-        box = new Texture("assets/sprites/effects/square.png");
+        box = new TextureFile("assets/sprites/effects/square.png").load().texture;
 
         Interpf tmp = new Interpf();
         try{

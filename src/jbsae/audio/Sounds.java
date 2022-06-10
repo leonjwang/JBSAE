@@ -29,9 +29,6 @@ public class Sounds{
     }
 
     public void dispose(){
-        for(Sound sound : Sound.all) sound.dispose();
-        for(Source source : Source.all) source.dispose();
-
         if(context != NULL) alcDestroyContext(context);
         if(device != NULL) alcCloseDevice(device);
     }

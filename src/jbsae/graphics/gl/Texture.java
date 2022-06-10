@@ -1,19 +1,16 @@
 package jbsae.graphics.gl;
 
-import jbsae.files.*;
 import jbsae.graphics.*;
 import jbsae.struct.*;
-import org.lwjgl.system.*;
 
 import java.nio.*;
 
 import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.stb.STBImage.*;
 
 /** @author Heiko Brumme */
-public class Texture extends Asset{
+public class Texture{
     public static Seq<Texture> all = new Seq<>();
 
     public int id;
@@ -21,13 +18,9 @@ public class Texture extends Asset{
     public ByteBuffer image;
     public Region full;
 
-    public Texture(String name){
-        super(name);
-        all.add(this);
-    }
-
     public Texture(int width, int height, ByteBuffer image){
-        super(null);
+        all.add(this);
+
         id = glGenTextures();
         this.width = width;
         this.height = height;
@@ -44,26 +37,6 @@ public class Texture extends Asset{
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
         return this;
-    }
-
-    @Override
-    public Texture create(){
-        super.create();
-
-        id = glGenTextures();
-        try{
-            MemoryStack stack = MemoryStack.stackPush();
-            IntBuffer w = stack.mallocInt(1), h = stack.mallocInt(1);
-            image = stbi_load(path(), w, h, stack.mallocInt(1), 4);
-            if(image == null) throw new Exception("Image is null!");
-
-            width = w.get();
-            height = h.get();
-        }catch(Exception e){
-            System.out.println("Failed to load texture: " + path());
-            e.printStackTrace();
-        }
-        return init();
     }
 
     public void bind(){

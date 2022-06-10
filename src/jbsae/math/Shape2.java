@@ -1,5 +1,7 @@
 package jbsae.math;
 
+import jbsae.*;
+
 import static jbsae.util.Stringf.*;
 
 public class Shape2{
@@ -56,13 +58,13 @@ public class Shape2{
     }
 
     public Shape2 sclc(float x, float y){
-        Vec2 c = center();
+        Vec2 c = center(Tmp.v1);
         for(int i = 0;i < v.length;i++) v[i].add(-c.x, -c.y).scl(x, y).add(c);
         return this;
     }
 
     public Shape2 rot(float r){
-        Vec2 c = center();
+        Vec2 c = center(Tmp.v1);
         for(int i = 0;i < v.length;i++) v[i].add(-c.x, -c.y).rot(r).add(c);
         return this;
     }

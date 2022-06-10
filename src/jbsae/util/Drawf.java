@@ -3,13 +3,13 @@ package jbsae.util;
 import jbsae.*;
 import jbsae.graphics.*;
 import jbsae.math.*;
-import jbsae.struct.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
+import static jbsae.util.Mathf.*;
 
 public class Drawf{
-    public static Queue<DrawSetting> settings = new Queue<>();
+    public static DrawSetting current = new DrawSetting(null);
 
 
     /** Set fill color. */
@@ -18,7 +18,7 @@ public class Drawf{
     }
 
     public static void fill(float v){
-        current().fill.set(v, v, v, 1f);
+        current.fill.set(v, v, v, 1f);
     }
 
     public static void fill(float r, float g, float b){
@@ -26,11 +26,11 @@ public class Drawf{
     }
 
     public static void fill(float r, float g, float b, float a){
-        current().fill.set(r, g, b, a);
+        current.fill.set(r, g, b, a);
     }
 
     public static void fill(Color c){
-        current().fill.set(c);
+        current.fill.set(c);
     }
 
 
@@ -48,7 +48,7 @@ public class Drawf{
     }
 
     public static void rect(float x, float y, float w, float h, float r){
-        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r)), Tmp.r1.set(0, 0, 1, 1).shape(Tmp.s24), current().fill);
+        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r)), Tmp.r1.set(0, 0, 1, 1).shape(Tmp.s24), current.fill);
     }
 
 
@@ -62,18 +62,19 @@ public class Drawf{
     }
 
     public static void draw(Region region, float x, float y, float w, float h){
-        draw(region, x, y, w, h, 0);
+        if(renderer.binded != region.texture) region.texture.bind();
+        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14)), Tmp.r1.set(region.region).shape(Tmp.s24), current.fill);
     }
 
     public static void draw(Region region, float x, float y, float w, float h, float r){
         if(renderer.binded != region.texture) region.texture.bind();
-        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r)), Tmp.r1.set(region.region).shape(Tmp.s24), current().fill);
+        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r)), Tmp.r1.set(region.region).shape(Tmp.s24), current.fill);
     }
 
 
     /** Set the font. */
     public static void font(Font font){
-        current().font = font;
+        current.font = font;
     }
 
 
@@ -83,10 +84,10 @@ public class Drawf{
     }
 
     public static void text(String text, float x, float y, float size){
-        float tx = 0, scl = size / current().font.size();
-        for(int i = 0;i < text.length();i ++){
-            Glyph glyph = current().font.glyphs.get(text.charAt(i));
-            if(glyph == null) glyph = current().font.none;
+        float tx = 0, scl = size / current.font.size;
+        for(int i = 0;i < text.length();i++){
+            Glyph glyph = current.font.glyphs.get(text.charAt(i));
+            if(glyph == null) glyph = current.font.none;
             draw(glyph.region, x + tx + glyph.xOffset * scl, y + size - (glyph.yOffset + glyph.height) * scl, glyph.width * scl, glyph.height * scl);
             tx += glyph.xAdvance * scl;
         }
@@ -95,11 +96,11 @@ public class Drawf{
 
     /** Tmp.r1anslation functions. */
     public static void rotatet(float r){
-        current().rotation = r;
+        current.rotation = mod(r, 360);
     }
 
     public static void rotate(float r){
-        current().rotation += r;
+        current.rotation = mod(current.rotation + r, 360);
     }
 
 
@@ -108,7 +109,7 @@ public class Drawf{
     }
 
     public static void scalet(float x, float y){
-        current().scale.set(x, y);
+        current.scale.set(x, y);
     }
 
     public static void scale(float s){
@@ -116,47 +117,52 @@ public class Drawf{
     }
 
     public static void scale(float x, float y){
-        current().scale.scl(x, y);
+        current.scale.scl(x, y);
     }
 
 
     public static void translatet(float x, float y){
-        current().translate.set(x, y);
+        current.translate.set(x, y);
     }
 
     public static void translate(float x, float y){
-        current().translate.add(x, y);
+        current.translate.add(x, y);
     }
 
 
     /** Current setting manipulation. */
     public static void push(){
-        settings.addLast(current() == null ? new DrawSetting() : current().cpy());
+        current = current.cpy();
     }
 
     public static void pop(){
-        settings.removeLast();
+        current = current.parent;
     }
 
-
-    public static DrawSetting current(){
-        return settings.last();
-    }
 
     public static Shape2 apply(Shape2 s){
-        return s.rot(current().rotation).scl(current().scale).add(current().translate);
+        if(!zero(current.rotation)) s.rot(current.rotation);
+        if(!current.scale.eql(Tmp.v1.set(1f, 1f))) s.scl(current.scale);
+        if(!zero(current.translate.len())) s.add(current.translate);
+        return s;
     }
 
 
     public static class DrawSetting{
+        public DrawSetting parent;
+
         public Color fill = white.cpy();
         public float rotation = 0;
         public Vec2 scale = new Vec2(1, 1);
         public Vec2 translate = new Vec2(0, 0);
         public Font font;
 
+        public DrawSetting(DrawSetting parent){
+            this.parent = parent;
+        }
+
         public DrawSetting cpy(){
-            DrawSetting n = new DrawSetting();
+            DrawSetting n = new DrawSetting(this);
             n.fill = fill.cpy();
             n.rotation = rotation;
             n.scale = scale.cpy();

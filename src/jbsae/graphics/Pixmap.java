@@ -13,19 +13,22 @@ public class Pixmap{
     public Color[][] map;
 
     public Pixmap(Texture t){
-        map = new Color[t.width][t.height];
+        this(t.width, t.height);
 
         int i = 0;
         t.image.position(0);
-        for(int y = 0;y < height();y++){
-            for(int x = 0;x < width();x++){
-                map[x][y] = new Color(
-                mod(t.image.get(), 256) / 255f,
-                mod(t.image.get(), 256) / 255f,
-                mod(t.image.get(), 256) / 255f,
-                mod(t.image.get(), 256) / 255f);
-            }
-        }
+        each(pos -> {
+            set(new Color(
+            mod(t.image.get(), 256) / 255f,
+            mod(t.image.get(), 256) / 255f,
+            mod(t.image.get(), 256) / 255f,
+            mod(t.image.get(), 256) / 255f), pos);
+        });
+    }
+
+    public Pixmap(int width, int height){
+        map = new Color[width][height];
+        each(pos -> set(new Color(), pos));
     }
 
     public int width(){
@@ -44,10 +47,26 @@ public class Pixmap{
         return map[clamp(x, 0, width() - 1)][clamp(y, 0, height() - 1)];
     }
 
+    public Pixmap set(Color c, Point2 pos){
+        return set(c, pos.x, pos.y);
+    }
+
+    public Pixmap set(Color c, int x, int y){
+        map[clamp(x, 0, width() - 1)][clamp(y, 0, height() - 1)] = c;
+        return this;
+    }
+
     public Pixmap each(Cons<Point2> cons){
         Point2 pos = new Point2();
         for(int y = 0;y < height();y++){
             for(int x = 0;x < width();x++) cons.get(pos.set(x, y));
+        }
+        return this;
+    }
+
+    public Pixmap draw(Pixmap p, int tx, int ty){
+        for(int y = 0;y < p.height();y++){
+            for(int x = 0;x < p.width();x++) get(x + tx, y + ty).set(p.get(x, y));
         }
         return this;
     }
