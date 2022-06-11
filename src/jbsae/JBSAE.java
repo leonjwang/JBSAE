@@ -64,58 +64,58 @@ public class JBSAE{
         loop.screen = s;
     }
 
-    public static void main(String[] args){
-        init();
-        TextureFile icon = new TextureFile("assets/" + programName + ".png");
-        Font roboto = new FontFile("assets/fonts/Roboto/font.fnt").load().font;
-        SoundFile music = new SoundFile("assets/sounds/Spiritualcore Mix [Physical Emotion].ogg");
-
-
-        load();
-        Drawf.font(roboto);
-
-        Source sourceBack = new Source(music.sound).loop(true).pitch(1.65f);
-        sourceBack.play();
-
-        Pixmap pix = new Pixmap(icon.texture);
-        pix.each(pos -> {
-            pix.get(pos).inv();
-            if(Mathf.chance(0.1f)) pix.get(pos).set(Colorf.vibrantc());
-        });
-        Texture inv = pix.create();
-
-        Pixmap large = new Pixmap(pix.width() * 10, pix.height() * 10);
-        for(int x = 0;x < 10;x++){
-            for(int y = 0;y < 10;y++) large.draw(pix, x * pix.width(), y * pix.height());
-        }
-        Texture meow = large.create();
-
-        screen(new Screen(){
-            @Override
-            public void draw(){
-//                if(chance(0.01f)){
-//                    finalBuffBack.setPitch(2f);
-//                    finalBuffBack.setPosition(new Vec3(random(0, 1000), random(0, 1000), random(0, 1000)));
-//                    sounds.playSoundSource("Music");
+//    public static void main(String[] args){
+//        init();
+//        TextureFile icon = new TextureFile("assets/" + programName + ".png");
+//        Font roboto = new FontFile("assets/fonts/Roboto/font.fnt").load().font;
+//        SoundFile music = new SoundFile("assets/sounds/Spiritualcore Mix [Physical Emotion].ogg");
+//
+//
+//        load();
+//        Drawf.font(roboto);
+//
+//        Source sourceBack = new Source(music.sound).loop(true).pitch(1.65f);
+//        sourceBack.play();
+//
+//        Pixmap pix = new Pixmap(icon.texture);
+//        pix.each(pos -> {
+//            pix.get(pos).inv();
+//            if(Mathf.chance(0.1f)) pix.get(pos).set(Colorf.vibrantc());
+//        });
+//        Texture inv = pix.create();
+//
+//        Pixmap large = new Pixmap(pix.width() * 10, pix.height() * 10);
+//        for(int x = 0;x < 10;x++){
+//            for(int y = 0;y < 10;y++) large.draw(pix, x * pix.width(), y * pix.height());
+//        }
+//        Texture meow = large.create();
+//
+//        screen(new Screen(){
+//            @Override
+//            public void draw(){
+////                if(chance(0.01f)){
+////                    finalBuffBack.setPitch(2f);
+////                    finalBuffBack.setPosition(new Vec3(random(0, 1000), random(0, 1000), random(0, 1000)));
+////                    sounds.playSoundSource("Music");
+////                }
+////                Vec3 pos = new Vec3(Mathf.sint(5000) * 10000000f, Mathf.sint(2000) * 10000000f, Mathf.sint(15000) * 10000000f);
+////                sounds.listener.position(new Vec3(-20, 0, 0));
+////                sounds.listener.setOrientation(pos, new Vec3(0, 1, 0));
+//
+////                Drawf.fill(Colorf.lighten(Colorf.vibrantc(Tmp.c1)));
+//                Drawf.fill(Colorf.vibrantc(Tmp.c1));
+////                Drawf.draw(roboto.pages.get(0).full, 100, 100, 200, 200);
+//                Drawf.text("Testing chars BeCaUsE Font askjhafsdhjdsfhjdjasjdfshbdashdfgaAGerschkdnvskzcxzcsc", 20, 20, 100);
+//
+//                Drawf.fill();
+//                for(int i = 0;i < 10;i++){
+//                    for(int j = 0;j < 10;j++){
+//                        Drawf.draw(meow.full, i * width / 10f, j * height / 10f, width / 10f, height / 10f);
+//                    }
 //                }
-//                Vec3 pos = new Vec3(Mathf.sint(5000) * 10000000f, Mathf.sint(2000) * 10000000f, Mathf.sint(15000) * 10000000f);
-//                sounds.listener.position(new Vec3(-20, 0, 0));
-//                sounds.listener.setOrientation(pos, new Vec3(0, 1, 0));
-
-//                Drawf.fill(Colorf.lighten(Colorf.vibrantc(Tmp.c1)));
-                Drawf.fill(Colorf.vibrantc(Tmp.c1));
-//                Drawf.draw(roboto.pages.get(0).full, 100, 100, 200, 200);
-                Drawf.text("Testing chars BeCaUsE Font askjhafsdhjdsfhjdjasjdfshbdashdfgaAGerschkdnvskzcxzcsc", 20, 20, 100);
-
-                Drawf.fill();
-                for(int i = 0;i < 10;i++){
-                    for(int j = 0;j < 10;j++){
-                        Drawf.draw(meow.full, i * width / 10f, j * height / 10f, width / 10f, height / 10f);
-                    }
-                }
-            }
-        });
-        start();
-        dispose();
-    }
+//            }
+//        });
+//        start();
+//        dispose();
+//    }
 }

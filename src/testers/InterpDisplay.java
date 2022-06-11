@@ -41,6 +41,8 @@ public class InterpDisplay extends Screen{
     @Override
     public void init(){
         box = new TextureFile("assets/sprites/effects/square.png").load().texture;
+        FontFile font = new FontFile("assets/fonts/Roboto/font.fnt").load();
+        Drawf.font(font.font);
 
         Interpf tmp = new Interpf();
         try{
@@ -70,7 +72,6 @@ public class InterpDisplay extends Screen{
                 if(!nameSeq.get(i).equals(lastOver)){
                     lastOver = nameSeq.get(i);
                     lastExamplePos = interpSeq.get(i).get(time.millis() % exampleTime / exampleTime) - 0.5f;
-                    System.out.println(nameSeq.get(i));
                 }
                 scale(hoverSize);
             }
@@ -86,6 +87,12 @@ public class InterpDisplay extends Screen{
             for(float x = linePercision;x < 1;x += linePercision){
                 line(x - 0.5f, interpSeq.get(i).get(x) - 0.5f, x - linePercision - 0.5f, lasty - 0.5f, lineSize / boxSize);
                 lasty = interpSeq.get(i).get(x);
+            }
+
+            if(tmp2.contains(input.mouse)){
+                fill(boxColor);
+                text(nameSeq.get(i), -0.5f, 0.56f, 11f / boxSize);
+                box.bind();
             }
             pop();
         }
