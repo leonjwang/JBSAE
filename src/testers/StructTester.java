@@ -466,10 +466,10 @@ public class StructTester{
 
             Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
             Seq<Pos2> inside = new Seq<>();
-            for(int i = 0;i < 10000;i++) tree.findAll(inside, range);
+            for(int i = 0;i < 10000;i++) tree.query(inside, range);
 
             inside.clear();
-            tree.findAll(inside, range);
+            tree.query(inside, range);
             Seq<Vec2> trueInside = new Seq<>();
             for(Vec2 v : original) if(range.contains(v)) trueInside.add(v);
 
@@ -488,6 +488,28 @@ public class StructTester{
                 Vec2 res = tree.find(o -> v.x - o.x);
                 if(res == null || abs(res.x - v.x) >= 1) throw new Exception("Not equal for operation [find]");
             }
+        }).run();
+        new Test("RangeTree Test", () -> {
+            Seq<Range2> original = new Seq<>();
+            RangeTree<Range2> tree = new RangeTree(10000, 10000).valueLimit(8);
+            for(int i = 0;i < 10000;i++){
+                Range2 r = new Range2(random(0, 10000), random(0, 10000), random(10, 50), random(10, 50));
+                tree.add(r);
+                original.add(r);
+            }
+
+            Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
+            Seq<Range2> inside = new Seq<>();
+            for(int i = 0;i < 10000;i++) tree.query(inside, range);
+
+            inside.clear();
+            Seq<Range2> trueInside = null;
+            tree.query(inside, range);
+            trueInside = new Seq<>();
+            for(Range2 r : original) if(range.overlaps(r)) trueInside.add(r);
+
+            for(Range2 r : trueInside) if(!inside.contains(r)) throw new Exception("Not equal for operation [contains]");
+            System.out.println(inside.size + "," + trueInside.size);
         }).run();
     }
 

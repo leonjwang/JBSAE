@@ -2,7 +2,7 @@ package testers;
 
 import jbsae.*;
 import jbsae.core.*;
-import jbsae.files.*;
+import jbsae.files.assets.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Drawf.*;
@@ -10,7 +10,7 @@ import static jbsae.util.Drawf.*;
 public class DemoTester extends Screen{
     public static Block[][] world = new Block[20][20];
 
-    public static TextureFile box;
+    public static TextureFi box;
     public static Block wall = new Block();
 
     public static Block get(int x, int y){
@@ -20,7 +20,7 @@ public class DemoTester extends Screen{
 
     @Override
     public void init(){
-        box = new TextureFile("assets/sprites/effects/square.png").load();
+        box = new TextureFi("assets/sprites/effects/square.png").load();
 
         world[5][5] = new Liquid();
     }

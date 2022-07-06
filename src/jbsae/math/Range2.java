@@ -3,7 +3,7 @@ package jbsae.math;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 
-public class Range2{
+public class Range2 implements Pos4{
     public float x, y, w, h;
 
 
@@ -14,7 +14,7 @@ public class Range2{
         set(x, y, w, h);
     }
 
-    public Range2(Range2 r){
+    public Range2(Pos4 r){
         set(r);
     }
 
@@ -27,8 +27,8 @@ public class Range2{
         return this;
     }
 
-    public Range2 set(Range2 r){
-        return set(r.x, r.y, r.w, r.h);
+    public Range2 set(Pos4 r){
+        return set(r.x(), r.y(), r.w(), r.h());
     }
 
     public Range2 nor(){
@@ -75,8 +75,8 @@ public class Range2{
         return value.x() >= x && value.x() <= x + w && value.y() >= y && value.y() <= y + h;
     }
 
-    public boolean overlaps(Range2 o){
-        return o.x + o.w >= x && o.x <= x + w && o.y + o.h >= y && o.y <= y + h;
+    public boolean overlaps(Pos4 o){
+        return o.x() + o.w() >= x && o.x() <= x + w && o.y() + o.h() >= y && o.y() <= y + h;
     }
 
 
@@ -84,6 +84,26 @@ public class Range2{
         return new Range2(x, y, w, h);
     }
 
+
+    @Override
+    public float x(){
+        return x;
+    }
+
+    @Override
+    public float y(){
+        return y;
+    }
+
+    @Override
+    public float w(){
+        return w;
+    }
+
+    @Override
+    public float h(){
+        return h;
+    }
 
     @Override
     public String toString(){

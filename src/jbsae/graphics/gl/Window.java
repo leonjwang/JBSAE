@@ -1,6 +1,6 @@
 package jbsae.graphics.gl;
 
-import jbsae.files.*;
+import jbsae.files.assets.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -31,6 +31,7 @@ public class Window{
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+        glfwWindowHint(GLFW_SAMPLES, 4);
         id = glfwCreateWindow(width, height, programName, NULL, NULL);
         widthBuffer = MemoryUtil.memAllocInt(1);
         heightBuffer = MemoryUtil.memAllocInt(1);
@@ -40,7 +41,7 @@ public class Window{
         glfwMakeContextCurrent(id);
         GL.createCapabilities();
 
-        Texture icon = new TextureFile("assets/" + programName + ".png").load().texture;
+        Texture icon = new TextureFi("assets/" + programName + ".png").load().texture;
         GLFWImage image = GLFWImage.malloc();
         image.set(icon.width, icon.height, icon.image);
         glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));

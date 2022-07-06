@@ -43,11 +43,11 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
         return this;
     }
 
-    public Seq<T> findAll(Seq<T> arr, Range2 range){
+    public Seq<T> query(Seq<T> arr, Range2 range){
         if(branches.size <= 0) arr.addAll(values);
         else for(Tree<T> branch : branches){
             QuadTree<T> b = (QuadTree<T>)branch;
-            if(b.range.overlaps(range)) b.findAll(arr, range);
+            if(b.range.overlaps(range)) b.query(arr, range);
         }
         return arr;
     }

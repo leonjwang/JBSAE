@@ -3,7 +3,7 @@ package testers;
 
 import jbsae.*;
 import jbsae.core.*;
-import jbsae.files.*;
+import jbsae.files.assets.*;
 import jbsae.graphics.*;
 import jbsae.graphics.gl.*;
 import jbsae.math.*;
@@ -40,8 +40,8 @@ public class InterpDisplay extends Screen{
 
     @Override
     public void init(){
-        box = new TextureFile("assets/sprites/effects/square.png").load().texture;
-        FontFile font = new FontFile("assets/fonts/Roboto/font.fnt").load();
+        box = new TextureFi("assets/sprites/effects/square.png").load().texture;
+        FontFi font = new FontFi("assets/fonts/Roboto/font.fnt").load();
         Drawf.font(font.font);
 
         Interpf tmp = new Interpf();

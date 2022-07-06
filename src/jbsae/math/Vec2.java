@@ -29,7 +29,7 @@ public class Vec2 implements Pos2{
         return set(v.x(), v.y());
     }
 
-    public Vec2 setr(float a, float l){
+    public Vec2 setr(float l, float a){
         return set(cos(a) * l, sin(a) * l);
     }
 
@@ -70,7 +70,7 @@ public class Vec2 implements Pos2{
     }
 
     public Vec2 rot(float a){
-        return setr(ang() + a, len());
+        return setr(len(), ang() + a);
     }
 
     public Vec2 nor(){

@@ -3,11 +3,15 @@ package jbsae;
 import jbsae.audio.*;
 import jbsae.core.*;
 import jbsae.files.*;
+import jbsae.files.assets.*;
 import jbsae.graphics.*;
 import jbsae.graphics.gl.*;
 import jbsae.input.*;
+import jbsae.math.*;
+import jbsae.struct.*;
 import jbsae.util.*;
 
+import static jbsae.util.Drawf.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class JBSAE{
@@ -36,10 +40,7 @@ public class JBSAE{
     }
 
     public static void load(){
-        for(ShaderFile shader : ShaderFile.all) shader.load();
-        for(SoundFile sound : SoundFile.all) sound.load();
-        for(TextureFile texture : TextureFile.all) texture.load();
-        for(FontFile font : FontFile.all) font.load();
+        for(Object assetName : AssetFi.all.keys()) AssetFi.all.get((String)assetName).load();
     }
 
     public static void start(){
@@ -64,55 +65,37 @@ public class JBSAE{
         loop.screen = s;
     }
 
-//    public static void main(String[] args){
+    public static void main(String[] args){
+        Fi file = new Fi("sus");
+        file.create();
+    }
 //        init();
-//        TextureFile icon = new TextureFile("assets/" + programName + ".png");
-//        Font roboto = new FontFile("assets/fonts/Roboto/font.fnt").load().font;
-//        SoundFile music = new SoundFile("assets/sounds/Spiritualcore Mix [Physical Emotion].ogg");
-//
+//        AssetDir root = new AssetDir("assets");
+//        root.list(new Seq<AssetFi>());
 //
 //        load();
-//        Drawf.font(roboto);
 //
-//        Source sourceBack = new Source(music.sound).loop(true).pitch(1.65f);
-//        sourceBack.play();
+//        Drawf.font(Font.all.get(0));
+////        Vec2 center = new Vec2(width / 2, height / 2);
 //
-//        Pixmap pix = new Pixmap(icon.texture);
-//        pix.each(pos -> {
-//            pix.get(pos).inv();
-//            if(Mathf.chance(0.1f)) pix.get(pos).set(Colorf.vibrantc());
-//        });
-//        Texture inv = pix.create();
-//
-//        Pixmap large = new Pixmap(pix.width() * 10, pix.height() * 10);
-//        for(int x = 0;x < 10;x++){
-//            for(int y = 0;y < 10;y++) large.draw(pix, x * pix.width(), y * pix.height());
-//        }
-//        Texture meow = large.create();
+////        ((TextureFi)AssetFi.all.get("square.png")).texture.bind();
 //
 //        screen(new Screen(){
 //            @Override
 //            public void draw(){
-////                if(chance(0.01f)){
-////                    finalBuffBack.setPitch(2f);
-////                    finalBuffBack.setPosition(new Vec3(random(0, 1000), random(0, 1000), random(0, 1000)));
-////                    sounds.playSoundSource("Music");
+////                Drawf.scalet(50);
+//                Drawf.line(((TextureFi)AssetFi.all.get("square.png")).texture.full, 1f, 1f, 2f, 2f, 0.1f);
+//
+//                Drawf.text("safkjhsd", 12, 130, 100);
+////                for(int i = 0;i < 8;i++){
+////                    Tmp.v1.setr(100 + (i % 2 == 0 ? 1 : -1) * Mathf.cos((time.frames / 180f) * 360f / 2f) * 25f, (Interpf.spow3.get(Mathf.mod(time.frames / 180f, 1f)) + i / 8f) * 360f).add(center);
+////                    Drawf.fill(Tmp.c1.hsv((time.frames / 180f + (i < 4 ? i : 8 - i) / 8f) * 360f / 3f, 1f, 1f));
+////                    Drawf.rectc(Tmp.v1.x, Tmp.v1.y, 20, 20);
 ////                }
-////                Vec3 pos = new Vec3(Mathf.sint(5000) * 10000000f, Mathf.sint(2000) * 10000000f, Mathf.sint(15000) * 10000000f);
-////                sounds.listener.position(new Vec3(-20, 0, 0));
-////                sounds.listener.setOrientation(pos, new Vec3(0, 1, 0));
-//
-////                Drawf.fill(Colorf.lighten(Colorf.vibrantc(Tmp.c1)));
-//                Drawf.fill(Colorf.vibrantc(Tmp.c1));
-////                Drawf.draw(roboto.pages.get(0).full, 100, 100, 200, 200);
-//                Drawf.text("Testing chars BeCaUsE Font askjhafsdhjdsfhjdjasjdfshbdashdfgaAGerschkdnvskzcxzcsc", 20, 20, 100);
-//
-//                Drawf.fill();
-//                for(int i = 0;i < 10;i++){
-//                    for(int j = 0;j < 10;j++){
-//                        Drawf.draw(meow.full, i * width / 10f, j * height / 10f, width / 10f, height / 10f);
-//                    }
-//                }
+////
+////                Drawf.line(width / 2, height / 2, input.mouse.x, input.mouse.y);
+////
+////                float a = Tmp.v1.set(0, -1).ang();
 //            }
 //        });
 //        start();

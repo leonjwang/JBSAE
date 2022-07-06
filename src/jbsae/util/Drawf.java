@@ -36,7 +36,7 @@ public class Drawf{
 
     /** Draw a rectangle. */
     public static void rectc(float x, float y, float w, float h){
-        rectc(x, y, w, h, 0);
+        rect(x - w / 2, y - h / 2, w, h, 0);
     }
 
     public static void rectc(float x, float y, float w, float h, float r){
@@ -44,31 +44,71 @@ public class Drawf{
     }
 
     public static void rect(float x, float y, float w, float h){
-        rect(x, y, w, h, 0);
+        draw(Tmp.r1.set(x, y, w, h).shape(Tmp.s14));
     }
 
     public static void rect(float x, float y, float w, float h, float r){
-        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r)), Tmp.r1.set(0, 0, 1, 1).shape(Tmp.s24), current.fill);
+        draw(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r));
+    }
+
+
+    /** Draw a line. */
+    public static void line(float x1, float y1, float x2, float y2){
+        line(x1, y1, x2, y2, 1);
+    }
+
+    public static void line(float x1, float y1, float x2, float y2, float w){
+        float a = Tmp.v1.set(x2, y2).sub(x1, y1).ang();
+        draw(Tmp.s14.set(
+        0, x1 + Tmp.v1.setr(w / 2, a + 90).x, y1 + Tmp.v1.y).set(
+        1, x2 + Tmp.v1.setr(w / 2, a + 90).x, y2 + Tmp.v1.y).set(
+        2, x2 + Tmp.v1.setr(w / 2, a - 90).x, y2 + Tmp.v1.y).set(
+        3, x1 + Tmp.v1.setr(w / 2, a - 90).x, y1 + Tmp.v1.y));
+    }
+
+    public static void line(Region region, float x1, float y1, float x2, float y2){
+        line(region, x1, y1, x2, y2, 1);
+    }
+
+    public static void line(Region region, float x1, float y1, float x2, float y2, float w){
+        float a = Tmp.v1.set(x2, y2).sub(x1, y1).ang();
+        draw(Tmp.s14.set(
+        0, x1 + Tmp.v1.setr(w / 2, a + 90).x, y1 + Tmp.v1.y).set(
+        1, x2 + Tmp.v1.setr(w / 2, a + 90).x, y2 + Tmp.v1.y).set(
+        2, x2 + Tmp.v1.setr(w / 2, a - 90).x, y2 + Tmp.v1.y).set(
+        3, x1 + Tmp.v1.setr(w / 2, a - 90).x, y1 + Tmp.v1.y), region);
     }
 
 
     /** Draw a texture region. */
     public static void drawc(Region region, float x, float y, float w, float h){
-        drawc(region, x, y, w, h, 0);
+        draw(region, x - w / 2, y - h / 2, w, h);
     }
 
     public static void drawc(Region region, float x, float y, float w, float h, float r){
-        drawc(region, x - w / 2, y - h / 2, w, h, r);
+        draw(region, x - w / 2, y - h / 2, w, h, r);
     }
 
     public static void draw(Region region, float x, float y, float w, float h){
-        if(renderer.binded != region.texture) region.texture.bind();
-        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14)), Tmp.r1.set(region.region).shape(Tmp.s24), current.fill);
+        draw(Tmp.r1.set(x, y, w, h).shape(Tmp.s14), region);
     }
 
     public static void draw(Region region, float x, float y, float w, float h, float r){
+        draw(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r), region);
+    }
+
+
+    public static void draw(Shape2 pos){
+        draw(pos, Tmp.r1.set(0, 0, 1, 1).shape(Tmp.s24));
+    }
+
+    public static void draw(Shape2 pos, Region region){
         if(renderer.binded != region.texture) region.texture.bind();
-        renderer.draw(apply(Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r)), Tmp.r1.set(region.region).shape(Tmp.s24), current.fill);
+        draw(pos, Tmp.r1.set(region.region).shape(Tmp.s24));
+    }
+
+    public static void draw(Shape2 pos, Shape2 region){
+        renderer.draw(apply(pos), region, current.fill);
     }
 
 
