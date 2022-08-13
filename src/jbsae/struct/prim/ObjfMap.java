@@ -1,6 +1,8 @@
 package jbsae.struct.prim;
 
 import jbsae.*;
+import jbsae.func.*;
+import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -12,8 +14,12 @@ public class ObjfMap<K>{
 
 
     public ObjfMap(){
-        keys = (K[])new Object[16];
-        values = new float[16];
+        this(16);
+    }
+
+    public ObjfMap(int size){
+        keys = (K[])new Object[size];
+        values = new float[size];
     }
 
 
@@ -33,25 +39,23 @@ public class ObjfMap<K>{
 
 
     public ObjfMap<K> add(K key, float value){
-        int h = key.hashCode();
-        int[] checks = hash3(h, keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return this;
-        for(int i = 0;i < checks.length;i++){
-            if(keys[checks[i]] == null){
-                keys[checks[i]] = key;
-                values[checks[i]] = value;
-                size++;
-                return this;
-            }
-        }
+        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+        for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
+        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == null) return set(checks[i], key, value);
         resize(keys.length << 1);
         add(key, value);
         return this;
     }
 
+    private ObjfMap<K> set(int i, K key, float value){
+        if(keys[i] == null) size++;
+        keys[i] = key;
+        values[i] = value;
+        return this;
+    }
+
     public ObjfMap<K> remove(K key){
-        int h = key.hashCode();
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
             if(eql(keys[checks[i]], key)){
                 keys[checks[i]] = null;
@@ -69,18 +73,21 @@ public class ObjfMap<K>{
 
 
     public float get(K key){
-        int h = key.hashCode();
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
         return nan;
     }
 
 
     public boolean contains(K key){
-        int h = key.hashCode();
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return true;
         return false;
+    }
+
+    public ObjfMap<K> eachKey(Cons<K> cons){
+        for(int j = 0;j < keys.length;j++) if(keys[j] != null) cons.get(keys[j]);
+        return this;
     }
 
     public ObjfMap<K> clear(){

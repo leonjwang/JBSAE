@@ -1,6 +1,6 @@
 package jbsae.math.interp;
 
-/** @author Nathan Sweet */
+
 public class Bounce implements Interp{
     public float[] x, y;
 

@@ -10,11 +10,15 @@ public class FloatSeq{
     public int size;
 
     public FloatSeq(){
-        items = new float[4];
+        this(4);
+    }
+
+    public FloatSeq(int size){
+        items = new float[size];
     }
 
     public FloatSeq(float... values){
-        this();
+        this(values.length);
         set(values);
     }
 

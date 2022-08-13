@@ -2,7 +2,6 @@ package jbsae.files.assets;
 
 import jbsae.graphics.*;
 import jbsae.graphics.gl.*;
-import jbsae.struct.Set;
 
 import java.io.*;
 import java.util.*;
@@ -14,23 +13,13 @@ public class FontFi extends AssetFi{
         super(name);
     }
 
-    public FontFi(File file){
-        super(file);
-    }
-
     @Override
-    public FontFi load(){
-        return (FontFi)super.load();
-    }
-
-    @Override
-    public FontFi create(){
-        super.create();
+    public FontFi gen(){
         try{
             font = new Font();
             BufferedReader reader = reader();
             StringTokenizer info = new StringTokenizer(reader.readLine());
-            if(!info.nextToken().equals("info")) throw new Exception("No font info");
+            if(!info.nextToken().equals("info")) throw new IOException("No font info");
             while(info.hasMoreTokens()){
                 String[] split = info.nextToken().split("=");
                 if(split[0].equals("face")) font.name = split[1].substring(1, split[1].length() - 1);
@@ -42,7 +31,7 @@ public class FontFi extends AssetFi{
             }
 
             StringTokenizer common = new StringTokenizer(reader.readLine());
-            if(!common.nextToken().equals("common")) throw new Exception("Missing common data");
+            if(!common.nextToken().equals("common")) throw new IOException("Missing common data");
             while(common.hasMoreTokens()){
                 String[] split = common.nextToken().split("=");
                 if(split[0].equals("pages")) font.pages = Integer.parseInt(split[1]);
@@ -51,7 +40,7 @@ public class FontFi extends AssetFi{
             font.page = new Texture[font.pages];
             for(int i = 0;i < font.pages;i++){
                 StringTokenizer page = new StringTokenizer(reader.readLine());
-                if(!page.nextToken().equals("page")) throw new Exception("Missing page data");
+                if(!page.nextToken().equals("page")) throw new IOException("Missing page data");
 
                 int id = 0;
                 String name = "";
@@ -61,15 +50,15 @@ public class FontFi extends AssetFi{
                     else if(split[0].equals("file")) name = split[1].substring(1, split[1].length() - 1);
                 }
 
-                font.page[id] = new TextureFi(parent() + "/" + name).load().texture;
+                font.page[id] = ((TextureFi)AssetFi.create(parent() + "/" + name).load()).texture;
             }
 
             StringTokenizer chars = new StringTokenizer(reader.readLine());
-            if(!chars.nextToken().equals("chars")) throw new Exception("Missing char number");
+            if(!chars.nextToken().equals("chars")) throw new IOException("Missing char number");
             int n = Integer.parseInt(chars.nextToken().split("=")[1]);
             for(int i = 0;i < n;i++){
                 StringTokenizer charData = new StringTokenizer(reader.readLine());
-                if(!charData.nextToken().equals("char")) throw new Exception("Missing char data");
+                if(!charData.nextToken().equals("char")) throw new IOException("Missing char data");
 
                 Glyph glyph = new Glyph(font);
                 while(charData.hasMoreTokens()){
@@ -94,6 +83,6 @@ public class FontFi extends AssetFi{
             System.out.println("Failed loading font: " + path());
             e.printStackTrace();
         }
-        return this;
+        return (FontFi)super.gen();
     }
 }

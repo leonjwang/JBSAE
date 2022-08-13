@@ -20,11 +20,7 @@ public class AssetDir extends Fi{
         File[] contents = file.listFiles();
         for(File file : contents){
             if(file.isDirectory()) new AssetDir(file).list(arr);
-            else if(file.getName().endsWith(".fnt")) arr.add(new FontFi(file));
-            else if(file.getName().endsWith(".frag")) arr.add(new ShaderFi(file, GL_FRAGMENT_SHADER));
-            else if(file.getName().endsWith(".vert")) arr.add(new ShaderFi(file, GL_VERTEX_SHADER));
-            else if(file.getName().endsWith(".ogg")) arr.add(new SoundFi(file));
-            else if(file.getName().endsWith(".png")) arr.add(new TextureFi(file));
+            else arr.add(AssetFi.create(file.getPath()));
         }
         return arr;
     }

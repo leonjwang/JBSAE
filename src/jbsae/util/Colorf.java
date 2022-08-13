@@ -85,4 +85,9 @@ public class Colorf{
     public static Color vibrantc(Color c){
         return c.hsv(random(0, 360), 1f, 1f);
     }
+
+    /** Bit packing. */
+    public static int pack(int r, int g, int b, int a){
+        return (r << 24) | (g << 16) | (b << 8) | (a);
+    }
 }

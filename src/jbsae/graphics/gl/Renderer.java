@@ -10,7 +10,7 @@ import java.nio.*;
 import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL30.*;
 
-/** @author Heiko Brumme */
+
 public class Renderer{
     public Shader vertexShader, fragmentShader;
     public VertexArray vertexArray;
@@ -33,8 +33,8 @@ public class Renderer{
         vertexBuffer = new VertexBuffer();
         vertexBuffer.data(GL_ARRAY_BUFFER, vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
 
-        vertexShader = new ShaderFi("assets/shaders/shader.vert", GL_VERTEX_SHADER).load().shader;
-        fragmentShader = new ShaderFi("assets/shaders/shader.frag", GL_FRAGMENT_SHADER).load().shader;
+        vertexShader = ((ShaderFi)AssetFi.create(assetsFolder + "/shaders/shader.vert").load()).shader;
+        fragmentShader = ((ShaderFi)AssetFi.create(assetsFolder + "/shaders/shader.frag").load()).shader;
 
         program = new ShaderProgram(vertexShader, fragmentShader);
         program.bind("fragColor", 0);
@@ -75,23 +75,37 @@ public class Renderer{
         verticesNum = 0;
     }
 
-    public void draw(Shape2 d, Shape2 t, Color c){
+    public void draw(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float rx1, float ry1, float rx2, float ry2, float rx3, float ry3, float rx4, float ry4, float r, float g, float b, float a){
         if(vertices.remaining() < 8 * 6) flush();
 
-        d.scl(2);
-        t.sclc(1, -1);
-        vertex(d.v[0], t.v[0], c);
-        vertex(d.v[1], t.v[1], c);
-        vertex(d.v[2], t.v[2], c);
-        vertex(d.v[0], t.v[0], c);
-        vertex(d.v[3], t.v[3], c);
-        vertex(d.v[2], t.v[2], c);
+        x1 *= 2;
+        y1 *= 2;
+        x2 *= 2;
+        y2 *= 2;
+        x3 *= 2;
+        y3 *= 2;
+        x4 *= 2;
+        y4 *= 2;
+
+        float c = (ry1 + ry2 + ry3 + ry4) / 4;
+        ry1 = 2 * c - ry1;
+        ry2 = 2 * c - ry2;
+        ry3 = 2 * c - ry3;
+        ry4 = 2 * c - ry4;
+
+
+        vertex(x1, y1, rx1, ry1, r, g, b, a);
+        vertex(x2, y2, rx2, ry2, r, g, b, a);
+        vertex(x3, y3, rx3, ry3, r, g, b, a);
+        vertex(x1, y1, rx1, ry1, r, g, b, a);
+        vertex(x4, y4, rx4, ry4, r, g, b, a);
+        vertex(x3, y3, rx3, ry3, r, g, b, a);
 
         verticesNum += 6;
     }
 
-    public void vertex(Pos2 p, Pos2 t, Color c){
-        vertices.put(p.x()).put(p.y()).put(c.r).put(c.g).put(c.b).put(c.a).put(t.x()).put(t.y());
+    public void vertex(float x, float y, float rx, float ry, float r, float g, float b, float a){
+        vertices.put(x).put(y).put(r).put(g).put(b).put(a).put(rx).put(ry);
     }
 
     public void dispose(){

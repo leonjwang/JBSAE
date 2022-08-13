@@ -1,5 +1,7 @@
 package jbsae.math;
 
+import jbsae.*;
+
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 
@@ -33,6 +35,11 @@ public class Circle2{
 
     public boolean overlaps(Circle2 o){
         return dst(x, y, o.x, o.y) <= r + o.r;
+    }
+
+    public Vec2 constrain(Vec2 pos){
+        if(contains(pos)) return pos;
+        return pos.setr(pos.sub(x, y).ang(), r);
     }
 
 

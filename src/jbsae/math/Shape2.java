@@ -69,6 +69,11 @@ public class Shape2{
         return this;
     }
 
+    public Shape2 rot(float r, float x, float y){
+        for(int i = 0;i < v.length;i++) v[i].add(-x, -y).rot(r).add(x, y);
+        return this;
+    }
+
 
     public Vec2 center(Vec2 c){
         c.set(0, 0);

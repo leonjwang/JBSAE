@@ -2,9 +2,12 @@ package jbsae.struct;
 
 import jbsae.*;
 import jbsae.func.*;
+import jbsae.struct.Queue.*;
+import jbsae.struct.Seq.*;
 
 import java.util.*;
 
+import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
@@ -15,14 +18,23 @@ public class Set<T> implements Iterable<T>{
 
 
     public Set(){
-        table = (T[])new Object[16];
+        this(4);
+    }
+
+    public Set(int size){
+        table = (T[])new Object[size];
         i1 = new SetIterator();
         i2 = new SetIterator();
     }
 
     public Set(Object... values){
-        this();
+        this(values.length);
         for(Object value : values) add((T)value);
+    }
+
+    public Set(Iterable<T> values){
+        this();
+        for(T value : values) add(value);
     }
 
 
@@ -35,8 +47,7 @@ public class Set<T> implements Iterable<T>{
 
 
     public Set<T> add(T value){
-        int h = value.hashCode();
-        int[] checks = hash3(h, table.length, Tmp.i3);
+        int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
         for(int i = 0;i < checks.length;i++){
             if(table[checks[i]] == null){
@@ -56,8 +67,7 @@ public class Set<T> implements Iterable<T>{
     }
 
     public Set<T> remove(T value){
-        int h = value.hashCode();
-        int[] checks = hash3(h, table.length, Tmp.i3);
+        int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
             if(eql(table[checks[i]], value)){
                 table[checks[i]] = null;
@@ -75,8 +85,7 @@ public class Set<T> implements Iterable<T>{
 
 
     public boolean contains(T value){
-        int h = value.hashCode();
-        int[] checks = hash3(h, table.length, Tmp.i3);
+        int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return true;
         return false;
     }

@@ -37,7 +37,7 @@ public class Mathf{
     }
 
     public static int randInt(int min, int max){
-        return (int)random(min, max + 0.99f);
+        return (int)random(min, max + 1f - threshhold);
     }
 
     public static boolean chance(float c){
@@ -65,6 +65,11 @@ public class Mathf{
 
 
     /** Ported Math functions. */
+    public static int round(float a){
+        return Math.round(a);
+    }
+
+
     public static float abs(float a){
         return a > 0 ? a : -a;
     }
@@ -379,8 +384,29 @@ public class Mathf{
         return Float.floatToIntBits(f);
     }
 
+    public static float bitFloat(int i){
+        return Float.intBitsToFloat(i);
+    }
+
+    public static long longBits(double d){
+        return Double.doubleToLongBits(d);
+    }
+
+    public static double bitDouble(long l){
+        return Double.longBitsToDouble(l);
+    }
+
 
     /** Angle related functions. */
+    public static float angle(float x, float y){
+        return zero(x) ? (y > 0 ? 90 : 270) : mod((x > 0 ? 0 : 180) + atan(y / x), 360);
+    }
+
+    public static float angler(float x, float y){
+        return angle(x, y) * degToRad;
+    }
+
+
     public static float dsta(float a, float b){
         return min((a - b) < 0 ? a - b + 360 : a - b, (b - a) < 0 ? b - a + 360 : b - a);
     }
@@ -412,91 +438,5 @@ public class Mathf{
 
     public static float turnr(float a, float to, float speed){
         return turn(a * radToDeg, to * radToDeg, speed * radToDeg) * degToRad;
-    }
-
-
-    /** @author Inferno, davebaol, Anuken */
-    public static class Rand{
-        private static double NORM_DOUBLE = 1.0 / (1L << 53);
-        private static double NORM_FLOAT = 1.0 / (1L << 24);
-
-        public long seed0, seed1;
-
-        public Rand(){
-            seed(new Random().nextLong());
-        }
-
-        public Rand(long seed){
-            seed(seed);
-        }
-
-        public Rand(long seed0, long seed1){
-            seed(seed0, seed1);
-        }
-
-        public Rand seed(long seed){
-            long seed0 = murmurHash3(seed == 0 ? Long.MIN_VALUE : seed);
-            return seed(seed0, murmurHash3(seed0));
-        }
-
-        public Rand seed(long seed0, long seed1){
-            this.seed0 = seed0;
-            this.seed1 = seed1;
-            return this;
-        }
-
-        public long nextl(){
-            long s1 = this.seed0, s0 = this.seed1;
-            this.seed0 = s0;
-            s1 ^= s1 << 23;
-            return (this.seed1 = (s1 ^ s0 ^ (s1 >>> 17) ^ (s0 >>> 26))) + s0;
-        }
-
-        public long nextl(final long n){
-            for(;;){
-                final long bits = nextl() >>> 1;
-                final long value = bits % n;
-                if(bits - value + (n - 1) >= 0) return value;
-            }
-        }
-
-        public int nexti(){
-            return (int)nextl();
-        }
-
-        public int nexti(final int n){
-            return (int)nextl(n);
-        }
-
-        public double nextd(){
-            return (nextl() >>> 11) * NORM_DOUBLE;
-        }
-
-        public float nextf(){
-            return (float)((nextl() >>> 40) * NORM_FLOAT);
-        }
-
-        public boolean nextb(){
-            return (nextl() & 1) != 0;
-        }
-
-        public void next(byte[] bytes){
-            int n;
-            int i = bytes.length;
-            while(i != 0){
-                n = i < 8 ? i : 8;
-                for(long bits = nextl();n-- != 0;bits >>= 8) bytes[--i] = (byte)bits;
-            }
-        }
-
-        private static long murmurHash3(long x){
-            x ^= x >>> 33;
-            x *= 0xff51afd7ed558ccdL;
-            x ^= x >>> 33;
-            x *= 0xc4ceb9fe1a85ec53L;
-            x ^= x >>> 33;
-
-            return x;
-        }
     }
 }

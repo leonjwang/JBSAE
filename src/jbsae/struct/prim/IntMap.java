@@ -1,6 +1,7 @@
 package jbsae.struct.prim;
 
 import jbsae.*;
+import jbsae.func.prim.*;
 
 import static jbsae.util.Structf.*;
 
@@ -10,9 +11,12 @@ public class IntMap<V>{
     public V[] values;
     public int size = 0;
 
-
     public IntMap(){
-        keys = new int[16];
+        this(16);
+    }
+
+    public IntMap(int size){
+        keys = new int[size];
         values = (V[])new Object[16];
     }
 
@@ -45,16 +49,16 @@ public class IntMap<V>{
         int[] keys = this.keys;
         V[] values = this.values;
         int[] checks = hash3(key, keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return this;
-        for(int i = 0;i < checks.length;i++){
-            if(keys[checks[i]] == 0){
-                keys[checks[i]] = key;
-                values[checks[i]] = value;
-                size++;
-                return this;
-            }
-        }
+        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return set(checks[i], key, value);
+        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
         return resize(keys.length << 1).add(key, value);
+    }
+
+    private IntMap<V> set(int i, int key, V value){
+        if(keys[i] == 0) size++;
+        keys[i] = key;
+        values[i] = value;
+        return this;
     }
 
     public IntMap<V> remove(int key){
@@ -97,6 +101,12 @@ public class IntMap<V>{
         int[] checks = hash3(key, keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return true;
         return false;
+    }
+
+    public IntMap<V> eachKey(Floatc cons){
+        if(zero != null) cons.get(0);
+        for(int j = 0;j < keys.length;j++) if(keys[j] != 0) cons.get(keys[j]);
+        return this;
     }
 
     public IntMap<V> clear(){

@@ -10,7 +10,7 @@ public class CharSeq extends IntSeq{
     }
 
     public CharSeq(String str){
-        this();
+        super(str.length());
         add(str);
     }
 

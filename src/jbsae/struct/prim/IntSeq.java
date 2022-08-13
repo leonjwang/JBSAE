@@ -10,11 +10,15 @@ public class IntSeq{
     public int size;
 
     public IntSeq(){
-        items = new int[4];
+        this(4);
+    }
+
+    public IntSeq(int size){
+        items = new int[size];
     }
 
     public IntSeq(int... values){
-        this();
+        this(values.length);
         for(int i = 0;i < values.length;i++) add(values[i]);
     }
 

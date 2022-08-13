@@ -5,28 +5,73 @@ import jbsae.struct.*;
 
 import java.io.*;
 
+import static jbsae.JBSAE.*;
+import static org.lwjgl.opengl.GL20.*;
+
 public class AssetFi extends Fi{
-    public static Map<String, AssetFi> all = new Map<>(); //If you have more than one asset with the same exact name, I declare you have skill issue
+    public static Map<String, AssetFi> all = new Map<>();
 
-    public boolean loaded;
+    public String path, name, parent;
 
-    public AssetFi(String name){
-        super(name);
-        all.add(name(), this);
+    public boolean loaded = false;
+
+    public AssetFi(String path){
+        this.path = path;
+        this.name = path.substring(path.lastIndexOf("/") + 1);
+        this.parent = path.substring(0, path.lastIndexOf("/"));
+        all.add(path(), this);
     }
 
-    public AssetFi(File file){
-        super(file);
-        all.add(name(), this);
+    @Override
+    public String name(){
+        return name;
+    }
+
+    @Override
+    public String path(){
+        return path;
+    }
+
+    @Override
+    public String parent(){
+        return parent;
+    }
+
+    @Override
+    public InputStream input(){
+        try{
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path.substring(assetsFolder.length() + 1));
+            if(stream == null){
+                this.file = new File(path);
+                stream = super.input();
+            }
+            return stream;
+        }catch(NullPointerException e){
+            System.out.println("Failed reading file: " + path);
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public AssetFi load(){
-        if(!loaded) create();
+        return loaded ? this : gen();
+    }
+
+    public AssetFi gen(){
+        this.loaded = true;
         return this;
     }
 
-    public AssetFi create(){
-        loaded = true;
-        return this;
+    public static AssetFi create(String path){
+        if(all.contains(path)) return all.get(path);
+        if(path.endsWith(".fnt")) return new FontFi(path);
+        if(path.endsWith(".frag")) return new ShaderFi(path, GL_FRAGMENT_SHADER);
+        if(path.endsWith(".vert")) return new ShaderFi(path, GL_VERTEX_SHADER);
+        if(path.endsWith(".au")) return new SoundFi(path);
+        if(path.endsWith(".mp3")) return new SoundFi(path);
+        if(path.endsWith(".ogg")) return new SoundFi(path);
+        if(path.endsWith(".wav")) return new SoundFi(path);
+        if(path.endsWith(".png")) return new TextureFi(path);
+        return null;
     }
 }

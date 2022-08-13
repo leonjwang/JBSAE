@@ -5,7 +5,7 @@ import jbsae.math.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-/** @author Heiko Brumme */
+
 public class ShaderProgram{
     public int id;
 

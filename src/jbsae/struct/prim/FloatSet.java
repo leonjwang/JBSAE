@@ -12,11 +12,15 @@ public class FloatSet{
     public int size = 0;
 
     public FloatSet(){
-        table = new float[16];
+        this(16);
+    }
+
+    public FloatSet(int size){
+        table = new float[size];
     }
 
     public FloatSet(float... values){
-        this();
+        this(values.length);
         for(int i = 0;i < values.length;i++) add(values[i]);
     }
 
@@ -36,8 +40,7 @@ public class FloatSet{
             }
             return this;
         }
-        int h = intBits(value);
-        int[] checks = hash3(h, table.length, Tmp.i3);
+        int[] checks = hash3(intBits(value), table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
         for(int i = 0;i < checks.length;i++){
             if(zero(table[checks[i]])){
@@ -62,8 +65,7 @@ public class FloatSet{
             }
             return this;
         }
-        int h = intBits(value);
-        int[] checks = hash3(h, table.length, Tmp.i3);
+        int[] checks = hash3(intBits(value), table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
             if(eqlf(table[checks[i]], value)){
                 table[checks[i]] = 0;
@@ -81,8 +83,7 @@ public class FloatSet{
 
     public boolean contains(float value){
         if(zero(value)) return zero;
-        int h = intBits(value);
-        int[] checks = hash3(h, table.length, Tmp.i3);
+        int[] checks = hash3(intBits(value), table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return true;
         return false;
     }

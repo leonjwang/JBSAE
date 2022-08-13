@@ -40,8 +40,8 @@ public class InterpDisplay extends Screen{
 
     @Override
     public void init(){
-        box = new TextureFi("assets/sprites/effects/square.png").load().texture;
-        FontFi font = new FontFi("assets/fonts/Roboto/font.fnt").load();
+        box = ((TextureFi)AssetFi.create("assets/sprites/effects/square.png").load()).texture;
+        FontFi font = (FontFi)AssetFi.create("assets/fonts/Roboto/font.fnt").load();
         Drawf.font(font.font);
 
         Interpf tmp = new Interpf();
@@ -105,7 +105,7 @@ public class InterpDisplay extends Screen{
             if(tmp2.contains(input.mouse)){
                 push();
                 float rx = clamp(input.mouse.x, displaySize / 2f, width - displaySize / 2f);
-                translatet(rx, input.mouse.y + displaySize / 10f);
+                translate(rx, input.mouse.y + displaySize / 10f);
                 fill(boxColor);
                 rectc(0, 0, displaySize, displaySize / 5f);
                 fill(black);

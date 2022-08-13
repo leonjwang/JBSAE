@@ -695,10 +695,10 @@ public class StructTester{
     }
 
     public static void main(String[] args){
-        testSeqs();
+//        testSeqs();
         testSets();
-        testQueues();
-        testTrees();
+//        testQueues();
+//        testTrees();
         testMaps();
 
         if(failed == 0) System.out.println("\nAll tests passed!");

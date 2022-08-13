@@ -1,13 +1,15 @@
 package jbsae.struct;
 
 import jbsae.*;
+import jbsae.func.*;
+import jbsae.struct.Seq.*;
 
 import java.util.*;
 
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-/** @author Nathan Sweet */
+
 public class Map<K, V> implements Iterable<K>{
     public MapIterator i1, i2;
     public K[] keys;
@@ -16,14 +18,18 @@ public class Map<K, V> implements Iterable<K>{
 
 
     public Map(){
-        keys = (K[])new Object[16];
-        values = (V[])new Object[16];
+        this(16);
+    }
+
+    public Map(int size){
+        keys = (K[])new Object[size];
+        values = (V[])new Object[size];
         i1 = new MapIterator();
         i2 = new MapIterator();
     }
 
     public Map(Object... entries){
-        this();
+        this(entries.length);
         for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (V)entries[i + 1]);
     }
 
@@ -46,19 +52,18 @@ public class Map<K, V> implements Iterable<K>{
     public Map<K, V> add(K key, V value){
         K[] keys = this.keys;
         V[] values = this.values;
-        int h = key.hashCode();
-        int[] checks = hash3(h, keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return this;
-        for(int i = 0;i < checks.length;i++){
-            if(keys[checks[i]] == null){
-                keys[checks[i]] = key;
-                values[checks[i]] = value;
-                size++;
-                return this;
-            }
-        }
+        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+        for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
+        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == null) return set(checks[i], key, value);
         resize(keys.length << 1);
         add(key, value);
+        return this;
+    }
+
+    private Map<K, V> set(int i, K key, V value){
+        if(keys[i] == null) size++;
+        keys[i] = key;
+        values[i] = value;
         return this;
     }
 
@@ -70,8 +75,7 @@ public class Map<K, V> implements Iterable<K>{
     public Map<K, V> remove(K key){
         K[] keys = this.keys;
         V[] values = this.values;
-        int h = key.hashCode();
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
             if(eql(keys[checks[i]], key)){
                 keys[checks[i]] = null;
@@ -89,18 +93,21 @@ public class Map<K, V> implements Iterable<K>{
 
 
     public V get(K key){
-        int h = key.hashCode();
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
         return null;
     }
 
 
     public boolean contains(K key){
-        int h = key.hashCode();
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return true;
         return false;
+    }
+
+    public Map<K, V> eachKey(Cons<K> cons){
+        for(K key : this) cons.get(key);
+        return this;
     }
 
     public Map<K, V> clear(){

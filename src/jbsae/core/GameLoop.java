@@ -1,10 +1,9 @@
 package jbsae.core;
 
 import static jbsae.JBSAE.*;
-import static jbsae.util.Drawf.*;
 import static org.lwjgl.opengl.GL11.*;
 
-/** @author Heiko Brumme */
+
 public class GameLoop{
     public int rotation = 0;
     public Screen screen;
@@ -13,7 +12,6 @@ public class GameLoop{
     }
 
     public void init(){
-        push();
     }
 
     public void start(){
@@ -42,6 +40,7 @@ public class GameLoop{
                 time.frames++;
                 glClear(GL_COLOR_BUFFER_BIT);
                 screen.draw();
+                draw.render();
                 renderer.flush();
                 window.swap();
             }

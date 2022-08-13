@@ -5,7 +5,6 @@ import jbsae.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 
-/** @author mzechner */
 public class Color{
     public float r, g, b, a;
 

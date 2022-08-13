@@ -1,6 +1,6 @@
 package jbsae.math.interp;
 
-/** @author Nathan Sweet */
+
 public class Pow implements Interp{
     final int power;
 

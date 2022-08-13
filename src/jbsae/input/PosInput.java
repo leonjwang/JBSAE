@@ -9,6 +9,6 @@ public class PosInput extends GLFWCursorPosCallback{
     @Override
     public void invoke(long id, double x, double y){
         input.pmouse.set(input.mouse);
-        input.mouse.set((float)x, curHeight / 2f - (float)y).scl(2f * width / curWidth, 2f * height / curHeight);
+        input.mouse.set((float)x, curHeight - (float)y).scl((float)width / curWidth, (float)height / curHeight);
     }
 }

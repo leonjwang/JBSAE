@@ -1,8 +1,8 @@
 package jbsae.math.interp;
 
-/** @author Nathan Sweet */
+
 public class Swing implements Interp{
-    private final float scale;
+    public float scale;
 
     public Swing(float scale){
         this.scale = scale * 2;

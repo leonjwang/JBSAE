@@ -10,11 +10,15 @@ public class FloatQueue{
     public int head, tail, size;
 
     public FloatQueue(){
-        items = new float[4];
+        this(4);
+    }
+
+    public FloatQueue(int size){
+        items = new float[size];
     }
 
     public FloatQueue(float... values){
-        this();
+        this(values.length);
         for(int i = 0;i < values.length;i++) addLast(values[i]);
     }
 
@@ -52,6 +56,18 @@ public class FloatQueue{
         items[tail] = 0;
         size--;
         return this;
+    }
+
+    public float popFirst(){
+        float value = first();
+        removeFirst();
+        return value;
+    }
+
+    public float popLast(){
+        float value = last();
+        removeLast();
+        return value;
     }
 
     public float get(int index){

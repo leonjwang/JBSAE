@@ -11,11 +11,15 @@ public class IntSet{
     public int size = 0;
 
     public IntSet(){
-        table = new int[16];
+        this(16);
+    }
+
+    public IntSet(int size){
+        table = new int[size];
     }
 
     public IntSet(int... values){
-        this();
+        this(values.length);
         for(int i = 0;i < values.length;i++) add(values[i]);
     }
 

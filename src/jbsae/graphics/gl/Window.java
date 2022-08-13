@@ -1,6 +1,7 @@
 package jbsae.graphics.gl;
 
 import jbsae.files.assets.*;
+import jbsae.util.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -12,7 +13,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-/** @author Heiko Brumme */
+
 public class Window{
     public long id;
     public IntBuffer widthBuffer, heightBuffer;
@@ -41,19 +42,22 @@ public class Window{
         glfwMakeContextCurrent(id);
         GL.createCapabilities();
 
-        Texture icon = new TextureFi("assets/" + programName + ".png").load().texture;
-        GLFWImage image = GLFWImage.malloc();
-        image.set(icon.width, icon.height, icon.image);
-        glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));
+        TextureFi icon = (TextureFi)AssetFi.create(assetsFolder + "/" + programName + ".png");
+        if(icon != null && icon.texture != null){
+            icon.load();
+            GLFWImage image = GLFWImage.malloc();
+            image.set(icon.texture.width, icon.texture.height, icon.texture.image);
+            glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));
+        }
     }
 
     public void update(){
         glfwGetFramebufferSize(id, widthBuffer, heightBuffer);
-        curWidth = widthBuffer.get();
-        curHeight = heightBuffer.get();
+        curWidth = Mathf.max((widthBuffer.get() + 1) / 2, 1);
+        curHeight = Mathf.max((heightBuffer.get() + 1) / 2, 1);
         widthBuffer.rewind();
         heightBuffer.rewind();
-        glViewport(0, 0, curWidth, curHeight);
+        glViewport(0, 0, curWidth * 2, curHeight * 2);
     }
 
     public void dispose(){

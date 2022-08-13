@@ -9,25 +9,35 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-/** @author Nathan Sweet */
-public class Seq<T> implements Iterable<T>{
+
+public class Seq<T> implements List<T>{
     public SeqIterator i1, i2;
     public T[] items;
     public int size;
 
 
     public Seq(){
-        items = (T[])new Object[4];
+        this(4);
+    }
+
+    public Seq(int size){
+        items = (T[])new Object[size];
         i1 = new SeqIterator();
         i2 = new SeqIterator();
     }
 
     public Seq(Object... values){
-        this();
+        this(values.length);
         set(values);
     }
 
+    public Seq(Iterable<T> values){
+        this();
+        for(T value : values) add(value);
+    }
 
+
+    @Override
     public Object[] list(){
         int i = 0;
         Object[] values = create(size);
@@ -36,17 +46,27 @@ public class Seq<T> implements Iterable<T>{
     }
 
 
+    @Override
     public Seq<T> set(T value, int index){
         items[index] = value;
         return this;
     }
 
+    @Override
     public Seq<T> set(Object... values){
         clear();
         for(Object value : values) add((T)value);
         return this;
     }
 
+    @Override
+    public List<T> set(List<T> values){
+        clear();
+        for(T value : values) add(value);
+        return this;
+    }
+
+    /** WARNING: This only copies the array reference and not each value themselves. */
     public Seq<T> set(Seq<T> values){
         items = values.items;
         size = values.size;
@@ -54,12 +74,14 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq<T> add(T value){
+        if(value == null) return this;
         if(size >= items.length) resize(max(8, size * 2));
         items[size++] = value;
         return this;
     }
 
     public Seq<T> add(T value, int index){
+        if(value == null) return this;
         if(size >= items.length) resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
@@ -105,8 +127,14 @@ public class Seq<T> implements Iterable<T>{
     }
 
 
+    @Override
     public T get(int index){
         return items[index];
+    }
+
+    @Override //This sucks
+    public int size(){
+        return size;
     }
 
 

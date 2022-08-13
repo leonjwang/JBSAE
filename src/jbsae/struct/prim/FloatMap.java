@@ -1,6 +1,7 @@
 package jbsae.struct.prim;
 
 import jbsae.*;
+import jbsae.func.prim.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -13,6 +14,10 @@ public class FloatMap<V>{
 
 
     public FloatMap(){
+        this(16);
+    }
+
+    public FloatMap(int size){
         keys = new float[16];
         values = (V[])new Object[16];
     }
@@ -45,18 +50,17 @@ public class FloatMap<V>{
         }
         float[] keys = this.keys;
         V[] values = this.values;
-        int h = intBits(key);
-        int[] checks = hash3(h, keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return this;
-        for(int i = 0;i < checks.length;i++){
-            if(zero(keys[checks[i]])){
-                keys[checks[i]] = key;
-                values[checks[i]] = value;
-                size++;
-                return this;
-            }
-        }
+        int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
+        for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return set(checks[i], key, value);
+        for(int i = 0;i < checks.length;i++) if(zero(keys[checks[i]])) return set(checks[i], key, value);
         return resize(keys.length << 1).add(key, value);
+    }
+
+    private FloatMap<V> set(int i, float key, V value){
+        if(keys[i] == 0) size++;
+        keys[i] = key;
+        values[i] = value;
+        return this;
     }
 
     public FloatMap<V> remove(float key){
@@ -69,8 +73,7 @@ public class FloatMap<V>{
         }
         float[] keys = this.keys;
         V[] values = this.values;
-        int h = intBits(key);
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++){
             if(eqlf(keys[checks[i]], key)){
                 keys[checks[i]] = 0;
@@ -89,8 +92,7 @@ public class FloatMap<V>{
 
     public V get(float key){
         if(zero(key)) return zero;
-        int h = intBits(key);
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return values[checks[i]];
         return null;
     }
@@ -98,10 +100,15 @@ public class FloatMap<V>{
 
     public boolean contains(float key){
         if(zero(key)) return zero != null;
-        int h = intBits(key);
-        int[] checks = hash3(h, keys.length, Tmp.i3);
+        int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return true;
         return false;
+    }
+
+    public FloatMap<V> eachKey(Floatc cons){
+        if(zero != null) cons.get(0);
+        for(int j = 0;j < keys.length;j++) if(keys[j] != 0) cons.get(keys[j]);
+        return this;
     }
 
     public FloatMap<V> clear(){

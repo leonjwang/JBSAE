@@ -10,11 +10,15 @@ public class BoolSeq{
     public int size;
 
     public BoolSeq(){
-        items = new boolean[4];
+        this(4);
+    }
+
+    public BoolSeq(int size){
+        items = new boolean[size];
     }
 
     public BoolSeq(boolean... values){
-        this();
+        this(values.length);
         set(values);
     }
 
@@ -62,16 +66,6 @@ public class BoolSeq{
     public BoolSeq remove(int index){
         shift(items, index + 1, size--, -1);
         items[size] = false;
-        return this;
-    }
-
-    public BoolSeq removeValue(boolean value){
-        for(int i = 0;i < size;i++){
-            if(items[i] == value){
-                remove(i);
-                break;
-            }
-        }
         return this;
     }
 

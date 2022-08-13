@@ -4,6 +4,7 @@ import jbsae.struct.*;
 import org.lwjgl.stb.*;
 import org.lwjgl.system.*;
 
+import javax.sound.sampled.*;
 import java.nio.*;
 
 import static org.lwjgl.openal.AL10.*;
@@ -13,21 +14,18 @@ public class Sound{
 
     public int id;
 
-    public ShortBuffer pcm;
-    public STBVorbisInfo info;
+    public ByteBuffer data;
 
-    public Sound(ShortBuffer pcm, STBVorbisInfo info){
+    public Sound(ByteBuffer data, int openALFormat, AudioFormat format){
         all.add(this);
 
         id = alGenBuffers();
-        this.pcm = pcm;
-        this.info = info;
-        alBufferData(id, info.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, pcm, info.sample_rate());
+        this.data = data;
+        alBufferData(id, openALFormat, data, (int)format.getSampleRate());
     }
 
     public void dispose(){
         all.remove(this);
         alDeleteBuffers(id);
-        if(pcm != null) MemoryUtil.memFree(pcm);
     }
 }

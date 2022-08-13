@@ -2,9 +2,11 @@ package jbsae.files;
 
 import java.io.*;
 
-/** @author mzechner, Nathan Sweet */
 public class Fi{
     public File file;
+
+    public Fi(){
+    }
 
     public Fi(String name){
         this(new File(name));
@@ -32,20 +34,20 @@ public class Fi{
         return file.getParent();
     }
 
-    public FileInputStream input(){
+    public InputStream input(){
         try{
             return new FileInputStream(path());
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println("Failed reading file: " + path());
             e.printStackTrace();
             return null;
         }
     }
 
-    public FileOutputStream output(){
+    public OutputStream output(){
         try{
             return new FileOutputStream(path());
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println("Failed reading file: " + path());
             e.printStackTrace();
             return null;
@@ -56,12 +58,32 @@ public class Fi{
         return new BufferedReader(new InputStreamReader(input()));
     }
 
-    public void create(){
+    public byte[] bytes(InputStream input){
+        try{
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            int read;
+            byte[] data = new byte[4];
+
+            while((read = input.read(data, 0, data.length)) != -1) buffer.write(data, 0, read);
+
+            buffer.flush();
+            return buffer.toByteArray();
+        }catch(IOException e){
+            System.out.println("Failed reading file: " + path());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public Fi create(){
         try{
             file.createNewFile();
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println("Failed reading file: " + path());
             e.printStackTrace();
         }
+        return this;
     }
 }

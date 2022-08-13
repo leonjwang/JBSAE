@@ -1,6 +1,7 @@
 package jbsae.struct.prim;
 
 import jbsae.func.prim.*;
+import jbsae.struct.Seq.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -10,11 +11,15 @@ public class BoolQueue{
     public int head, tail, size;
 
     public BoolQueue(){
-        items = new boolean[4];
+        this(4);
+    }
+
+    public BoolQueue(int size){
+        items = new boolean[size];
     }
 
     public BoolQueue(boolean... values){
-        this();
+        this(values.length);
         for(int i = 0;i < values.length;i++) addLast(values[i]);
     }
 
@@ -52,6 +57,18 @@ public class BoolQueue{
         items[tail] = false;
         size--;
         return this;
+    }
+
+    public boolean popFirst(){
+        boolean value = first();
+        removeFirst();
+        return value;
+    }
+
+    public boolean popLast(){
+        boolean value = last();
+        removeLast();
+        return value;
     }
 
     public boolean get(int index){

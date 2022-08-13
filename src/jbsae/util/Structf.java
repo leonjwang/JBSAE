@@ -1,6 +1,9 @@
 package jbsae.util;
 
+import jbsae.func.*;
 import jbsae.func.prim.*;
+import jbsae.struct.List;
+import jbsae.struct.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -34,6 +37,23 @@ public class Structf{
         for(int i = start;i < end;i++) arr[i] = value;
     }
 
+    public static <T> void fill(T[][] arr, T value){
+        fill(arr, value, 0, arr.length, 0, arr[0].length);
+    }
+
+    public static <T> void fill(T[][] arr, T value, int start, int end, int bottom, int top){
+        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
+    }
+
+
+    public static <T> void fill(List<T> arr, T value){
+        fill(arr, value, 0, arr.size());
+    }
+
+    public static <T> void fill(List<T> arr, T value, int start, int end){
+        for(int i = start;i < end;i++) arr.set(i, value);
+    }
+
 
     public static void fill(float[] arr, float value){
         fill(arr, value, 0, arr.length);
@@ -41,6 +61,14 @@ public class Structf{
 
     public static void fill(float[] arr, float value, int start, int end){
         for(int i = start;i < end;i++) arr[i] = value;
+    }
+
+    public static void fill(float[][] arr, float value){
+        fill(arr, value, 0, arr.length, 0, arr[0].length);
+    }
+
+    public static void fill(float[][] arr, float value, int start, int end, int bottom, int top){
+        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
     }
 
 
@@ -52,6 +80,14 @@ public class Structf{
         for(int i = start;i < end;i++) arr[i] = value;
     }
 
+    public static void fill(int[][] arr, int value){
+        fill(arr, value, 0, arr.length, 0, arr[0].length);
+    }
+
+    public static void fill(int[][] arr, int value, int start, int end, int bottom, int top){
+        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
+    }
+
 
     public static void fill(boolean[] arr, boolean value){
         fill(arr, value, 0, arr.length);
@@ -59,6 +95,92 @@ public class Structf{
 
     public static void fill(boolean[] arr, boolean value, int start, int end){
         for(int i = start;i < end;i++) arr[i] = value;
+    }
+
+    public static void fill(boolean[][] arr, boolean value){
+        fill(arr, value, 0, arr.length, 0, arr[0].length);
+    }
+
+    public static void fill(boolean[][] arr, boolean value, int start, int end, int bottom, int top){
+        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
+    }
+
+
+    /** Array iteration and eaching. */
+    public static <T> void each(T[] arr, Cons<T> cons){
+        each(arr, cons, 0, arr.length);
+    }
+
+    public static <T> void each(T[] arr, Cons<T> cons, int start, int end){
+        for(int i = start;i < end;i++) cons.get(arr[i]);
+    }
+
+    public static <T> void each(T[][] arr, Cons<T> cons){
+        each(arr, cons, 0, arr.length, 0, arr[0].length);
+    }
+
+    public static <T> void each(T[][] arr, Cons<T> cons, int start, int end, int bottom, int top){
+        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
+    }
+
+
+    public static <T> void each(List<T> arr, Cons<T> cons){
+        each(arr, cons, 0, arr.size());
+    }
+
+    public static <T> void each(List<T> arr, Cons<T> cons, int start, int end){
+        for(int i = start;i < end;i++) cons.get(arr.get(i));
+    }
+
+
+    public static void each(float[] arr, Floatc cons){
+        each(arr, cons, 0, arr.length);
+    }
+
+    public static void each(float[] arr, Floatc cons, int start, int end){
+        for(int i = start;i < end;i++) cons.get(arr[i]);
+    }
+
+    public static void each(float[][] arr, Floatc cons){
+        each(arr, cons, 0, arr.length, 0, arr[0].length);
+    }
+
+    public static void each(float[][] arr, Floatc cons, int start, int end, int bottom, int top){
+        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
+    }
+
+
+    public static void each(int[] arr, Intc cons){
+        each(arr, cons, 0, arr.length);
+    }
+
+    public static void each(int[] arr, Intc cons, int start, int end){
+        for(int i = start;i < end;i++) cons.get(arr[i]);
+    }
+
+    public static void each(int[][] arr, Intc cons){
+        each(arr, cons, 0, arr.length, 0, arr[0].length);
+    }
+
+    public static void each(int[][] arr, Intc cons, int start, int end, int bottom, int top){
+        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
+    }
+
+
+    public static void each(boolean[] arr, Boolc cons){
+        each(arr, cons, 0, arr.length);
+    }
+
+    public static void each(boolean[] arr, Boolc cons, int start, int end){
+        for(int i = start;i < end;i++) cons.get(arr[i]);
+    }
+
+    public static void each(boolean[][] arr, Boolc cons){
+        each(arr, cons, 0, arr.length, 0, arr[0].length);
+    }
+
+    public static void each(boolean[][] arr, Boolc cons, int start, int end, int bottom, int top){
+        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
     }
 
 
@@ -86,6 +208,31 @@ public class Structf{
             int toIndex = toStart + (toStart < toEnd ? i : -i), fromIndex = fromStart + (fromStart < fromEnd ? i : -i);
             if(toIndex < 0 || toIndex >= to.length || fromIndex < 0 || fromIndex >= from.length) continue;
             to[toIndex] = from[fromIndex];
+        }
+    }
+
+
+    public static <T> Seq<T> copy(List<T> arr){
+        return new Seq<>(arr);
+    }
+
+    public static <T> void copy(List<T> from, List<T> to){
+        copy(from, to, min(from.size(), to.size()));
+    }
+
+    public static <T> void copy(List<T> from, List<T> to, int size){
+        copy(from, 0, size, to, 0);
+    }
+
+    public static <T> void copy(List<T> from, int fromStart, int fromEnd, List<T> to, int toStart){
+        copy(from, fromStart, fromEnd, to, toStart, toStart + (fromEnd - fromStart));
+    }
+
+    public static <T> void copy(List<T> from, int fromStart, int fromEnd, List<T> to, int toStart, int toEnd){
+        for(int i = 0;i < min(abs(fromEnd - fromStart), abs(toEnd - toStart));i++){
+            int toIndex = toStart + (toStart < toEnd ? i : -i), fromIndex = fromStart + (fromStart < fromEnd ? i : -i);
+            if(toIndex < 0 || toIndex >= to.size() || fromIndex < 0 || fromIndex >= from.size()) continue;
+            to.set(from.get(fromIndex), toIndex);
         }
     }
 
@@ -208,15 +355,61 @@ public class Structf{
     }
 
 
+    /** Array flipping. */
+    public static <T> void flip(T[] arr){
+        flip(arr, 0, arr.length);
+    }
+
+    public static <T> void flip(T[] arr, int start, int end){
+        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
+    }
+
+
+    public static <T> void flip(List<T> arr){
+        flip(arr, 0, arr.size());
+    }
+
+    public static <T> void flip(List<T> arr, int start, int end){
+        for(int i = start;i < (start + end) / 2;i++) arr.set(i, arr.get(end - i - 1));
+    }
+
+
+    public static void flip(float[] arr){
+        flip(arr, 0, arr.length);
+    }
+
+    public static void flip(float[] arr, int start, int end){
+        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
+    }
+
+
+    public static void flip(boolean[] arr){
+        flip(arr, 0, arr.length);
+    }
+
+    public static void flip(boolean[] arr, int start, int end){
+        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
+    }
+
+
+    public static void flip(int[] arr){
+        flip(arr, 0, arr.length);
+    }
+
+    public static void flip(int[] arr, int start, int end){
+        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
+    }
+
+
     /** Array sorting. */
     public static <T> void sortArr(T[] arr){
         Arrays.sort(arr);
     }
 
     public static <T> void sortArr(T[] arr, Floatf<T> value){
-        Arrays.sort(arr, new Comparator<T>(){
+        Arrays.sort(arr, new Comparator<T>(){ //Maybe not create a new one every time something is sorted
             public int compare(T a, T b){
-                return (int)(value.get(a) - value.get(b));
+                return value.get(a) > value.get(b) ? 1 : -1;
             }
         });
     }
@@ -250,7 +443,7 @@ public class Structf{
         return true;
     }
 
-    
+
     public static <T> boolean eql(Iterable<T> a, Iterable<T> b){
         Iterator<T> bi = b.iterator();
         for(T t : a) if(!eql(t, bi.next())) return false;
@@ -361,6 +554,60 @@ public class Structf{
     public static boolean contains(int[] arr, int value){
         for(int i = 0;i < arr.length;i++) if(arr[i] == value) return true;
         return false;
+    }
+
+
+    public static boolean inside(Object[] arr, int i){
+        return i >= 0 && i < arr.length;
+    }
+
+    public static boolean inside(Object[][] arr, int i, int j){
+        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
+    }
+
+    public static boolean inside(float[] arr, int i){
+        return i >= 0 && i < arr.length;
+    }
+
+    public static boolean inside(float[][] arr, int i, int j){
+        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
+    }
+
+    public static boolean inside(boolean[] arr, int i){
+        return i >= 0 && i < arr.length;
+    }
+
+    public static boolean inside(boolean[][] arr, int i, int j){
+        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
+    }
+
+    public static boolean inside(int[] arr, int i){
+        return i >= 0 && i < arr.length;
+    }
+
+    public static boolean inside(int[][] arr, int i, int j){
+        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
+    }
+
+
+    public static Object choose(Object[] arr){
+        return arr[randInt(0, arr.length - 1)];
+    }
+
+    public static <T> Object choose(List<T> arr){
+        return arr.get(randInt(0, arr.size() - 1));
+    }
+
+    public static float choose(float[] arr){
+        return arr[randInt(0, arr.length - 1)];
+    }
+
+    public static boolean choose(boolean[] arr){
+        return arr[randInt(0, arr.length - 1)];
+    }
+
+    public static int choose(int[] arr){
+        return arr[randInt(0, arr.length - 1)];
     }
 
 

@@ -1,6 +1,7 @@
 package jbsae.struct;
 
 import jbsae.func.*;
+import jbsae.struct.Seq.*;
 
 import java.util.*;
 
@@ -8,25 +9,34 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-/** @author Anuken */
-public class Queue<T> implements Iterable<T>{
+public class Queue<T> implements List<T>{
     public QueueIterator i1, i2;
     public T[] items;
     public int head, tail, size;
 
 
     public Queue(){
-        items = (T[])new Object[4];
+        this(4);
+    }
+
+    public Queue(int size){
+        items = (T[])new Object[size];
         i1 = new QueueIterator();
         i2 = new QueueIterator();
     }
 
     public Queue(Object... values){
+        this(values.length);
+        set(values);
+    }
+
+    public Queue(Iterable<T> values){
         this();
-        for(Object value : values) addLast((T)value);
+        for(T value : values) addLast(value);
     }
 
 
+    @Override
     public Object[] list(){
         int i = 0;
         Object[] values = create(size);
@@ -35,7 +45,29 @@ public class Queue<T> implements Iterable<T>{
     }
 
 
+    @Override
+    public List<T> set(T value, int index){
+        items[mod((head + index), items.length)] = value;
+        return this;
+    }
+
+    @Override
+    public List<T> set(Object... values){
+        clear();
+        for(Object value : values) addLast((T)value);
+        return this;
+    }
+
+    @Override
+    public List<T> set(List<T> values){
+        clear();
+        for(T value : values) addLast(value);
+        return this;
+    }
+
+
     public Queue<T> addFirst(T value){
+        if(value == null) return this;
         if(size == items.length) resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
@@ -44,6 +76,7 @@ public class Queue<T> implements Iterable<T>{
     }
 
     public Queue<T> addLast(T value){
+        if(value == null) return this;
         if(size == items.length) resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
@@ -65,7 +98,20 @@ public class Queue<T> implements Iterable<T>{
         return this;
     }
 
+    public T popFirst(){
+        T value = first();
+        removeFirst();
+        return value;
+    }
 
+    public T popLast(){
+        T value = last();
+        removeLast();
+        return value;
+    }
+
+
+    @Override
     public T get(int index){
         return items[mod((head + index), items.length)];
     }
@@ -76,6 +122,11 @@ public class Queue<T> implements Iterable<T>{
 
     public T last(){
         return get(size - 1);
+    }
+
+    @Override
+    public int size(){
+        return size;
     }
 
 

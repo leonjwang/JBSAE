@@ -2,7 +2,7 @@ package jbsae.core;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-/** @author Heiko Brumme */
+
 public class Time{
     public long time = 0;
     public int frames, updates;

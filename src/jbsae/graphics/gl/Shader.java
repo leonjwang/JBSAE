@@ -4,7 +4,7 @@ import jbsae.struct.*;
 
 import static org.lwjgl.opengl.GL20.*;
 
-/** @author Heiko Brumme */
+
 public class Shader{
     public static Seq<Shader> all = new Seq<>();
 

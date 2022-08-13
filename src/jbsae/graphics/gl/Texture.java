@@ -9,13 +9,13 @@ import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 
-/** @author Heiko Brumme */
+
 public class Texture{
     public static Seq<Texture> all = new Seq<>();
 
     public int id;
     public int width, height;
-    public ByteBuffer image;
+    public ByteBuffer image; //It might not be a good idea to keep this on reference
     public Region full;
 
     public Texture(int width, int height, ByteBuffer image){

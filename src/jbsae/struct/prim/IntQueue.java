@@ -10,11 +10,15 @@ public class IntQueue{
     public int head, tail, size;
 
     public IntQueue(){
-        items = new int[4];
+        this(4);
+    }
+
+    public IntQueue(int size){
+        items = new int[size];
     }
 
     public IntQueue(int... values){
-        this();
+        this(values.length);
         for(int i = 0;i < values.length;i++) addLast(values[i]);
     }
 
@@ -52,6 +56,18 @@ public class IntQueue{
         items[tail] = 0;
         size--;
         return this;
+    }
+
+    public int popFirst(){
+        int value = first();
+        removeFirst();
+        return value;
+    }
+
+    public int popLast(){
+        int value = last();
+        removeLast();
+        return value;
     }
 
     public int get(int index){
