@@ -1,0 +1,8 @@
+/bin/
+/classes/
+/dist/
+/out/
+/.idea/
+*.iml
+*.xml
+*.DS_Store
