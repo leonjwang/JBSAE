@@ -4,8 +4,8 @@ import java.util.*;
 
 /** Stolen from Anuken/Arc which in turn took this from LibGDX probably  */
 public class Rand{
-    private static final double NORM_DOUBLE = 1.0 / (1L << 53);
-    private static final double NORM_FLOAT = 1.0 / (1L << 24);
+    public static final double NORM_DOUBLE = 1.0 / (1L << 53);
+    public static final double NORM_FLOAT = 1.0 / (1L << 24);
 
     public long seed0, seed1;
 
@@ -76,7 +76,7 @@ public class Rand{
         }
     }
 
-    private static long murmurHash3(long x){
+    public static long murmurHash3(long x){
         x ^= x >>> 33;
         x *= 0xff51afd7ed558ccdL;
         x ^= x >>> 33;

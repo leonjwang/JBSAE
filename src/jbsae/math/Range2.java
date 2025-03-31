@@ -40,7 +40,7 @@ public class Range2 implements Pos4{
     }
 
     public Range2 splt(int parts, int i){
-        return splt(parts, parts, qx[i], qy[i]);
+        return splt(parts, parts, QX[i], QY[i]);
     }
 
     public Range2 expand(float amount){

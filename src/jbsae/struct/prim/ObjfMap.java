@@ -2,7 +2,6 @@ package jbsae.struct.prim;
 
 import jbsae.*;
 import jbsae.func.*;
-import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -75,7 +74,7 @@ public class ObjfMap<K>{
     public float get(K key){
         int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
-        return nan;
+        return NAN;
     }
 
 

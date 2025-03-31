@@ -1,9 +1,7 @@
 package jbsae.struct.prim;
 
 import jbsae.*;
-import jbsae.func.*;
 import jbsae.func.prim.*;
-import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
@@ -22,7 +20,7 @@ public class FloatfMap{
     public FloatfMap(int size){
         keys = new float[size];
         values = new float[size];
-        zero = nan;
+        zero = NAN;
     }
 
     public FloatfMap(float... entries){
@@ -79,7 +77,7 @@ public class FloatfMap{
     public FloatfMap remove(float key){
         if(zero(key)){
             if(!nan(zero)){
-                zero = nan;
+                zero = NAN;
                 size--;
             }
             return this;
@@ -107,7 +105,7 @@ public class FloatfMap{
         if(zero(key)) return zero;
         int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return values[checks[i]];
-        return nan;
+        return NAN;
     }
 
 
@@ -128,7 +126,7 @@ public class FloatfMap{
         fill(keys, 0);
         fill(values, 0);
         size = 0;
-        zero = nan;
+        zero = NAN;
         return this;
     }
 
@@ -136,7 +134,7 @@ public class FloatfMap{
         float[] keys = keys();
         float[] values = values();
         size = 0;
-        zero = nan;
+        zero = NAN;
         this.keys = new float[newSize];
         this.values = new float[newSize];
         for(int j = 0;j < keys.length;j++) add(keys[j], values[j]);

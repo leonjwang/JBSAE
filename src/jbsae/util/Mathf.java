@@ -2,34 +2,32 @@ package jbsae.util;
 
 import jbsae.math.*;
 
-import java.util.*;
-
 import static jbsae.JBSAE.*;
 
 public class Mathf{
-    public static final float threshhold = 0.001f;
+    public static final float THRESHHOLD = 0.001f;
 
-    public static final float pi = (float)Math.PI;
-    public static final float degToRad = pi / 180;
-    public static final float radToDeg = 180 / pi;
-    public static final float nan = Float.NaN;
+    public static final float PI = (float)Math.PI;
+    public static final float DEG_TO_RAD = PI / 180;
+    public static final float RAD_TO_DEG = 180 / PI;
+    public static final float NAN = Float.NaN;
 
-    public static final int[] qx = new int[]{1, 0, 0, 1};
-    public static final int[] qy = new int[]{1, 1, 0, 0};
-    public static final int[] d4x = new int[]{0, 1, 0, -1};
-    public static final int[] d4y = new int[]{1, 0, -1, 0};
-    public static final int[] d8x = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
-    public static final int[] d8y = new int[]{1, 1, 0, -1, -1, -1, 0, 1};
+    public static final int[] QX = new int[]{1, 0, 0, 1};
+    public static final int[] QY = new int[]{1, 1, 0, 0};
+    public static final int[] D4X = new int[]{0, 1, 0, -1};
+    public static final int[] D4Y = new int[]{1, 0, -1, 0};
+    public static final int[] D8X = new int[]{0, 1, 1, 1, 0, -1, -1, -1};
+    public static final int[] D8Y = new int[]{1, 1, 0, -1, -1, -1, 0, 1};
 
-    public static final Rand rand = new Rand();
+    public static final Rand RAND = new Rand();
 
     /** Random functions. */
     public static void seed(long seed){
-        rand.seed(seed);
+        RAND.seed(seed);
     }
 
     public static float random(){
-        return rand.nextf();
+        return RAND.nextf();
     }
 
     public static float random(float min, float max){
@@ -37,7 +35,7 @@ public class Mathf{
     }
 
     public static int randInt(int min, int max){
-        return (int)random(min, max + 1f - threshhold);
+        return (int)random(min, max + 1f - THRESHHOLD);
     }
 
     public static boolean chance(float c){
@@ -47,20 +45,20 @@ public class Mathf{
 
     /** Directional adders. */
     public static int d4x(int rot){
-        return d4x[mod(rot, 4)];
+        return D4X[mod(rot, 4)];
     }
 
     public static int d4y(int rot){
-        return d4y[mod(rot, 4)];
+        return D4Y[mod(rot, 4)];
     }
 
 
     public static int d8x(int rot){
-        return d8x[mod(rot, 8)];
+        return D8X[mod(rot, 8)];
     }
 
     public static int d8y(int rot){
-        return d8y[mod(rot, 8)];
+        return D8Y[mod(rot, 8)];
     }
 
 
@@ -177,7 +175,7 @@ public class Mathf{
         if(n == 0) return 0;
 
         float a = n, b = n / d;
-        while(abs(a - b) > threshhold){
+        while(abs(a - b) > THRESHHOLD){
             a = b;
             b = (float)((d - 1) * b + n / pow(b, d - 1)) / d;
         }
@@ -259,17 +257,17 @@ public class Mathf{
     }
 
     public static boolean zero(float v){
-        return abs(v) < threshhold;
+        return abs(v) < THRESHHOLD;
     }
 
     public static boolean eqlf(float a, float b){
-        return abs(a - b) < threshhold;
+        return abs(a - b) < THRESHHOLD;
     }
 
 
     /** Trigonometry functions. */
     public static float sin(float a){
-        return sinr(a * degToRad);
+        return sinr(a * DEG_TO_RAD);
     }
 
     public static float sinr(float a){
@@ -278,7 +276,7 @@ public class Mathf{
 
 
     public static float cos(float a){
-        return cosr(a * degToRad);
+        return cosr(a * DEG_TO_RAD);
     }
 
     public static float cosr(float a){
@@ -287,7 +285,7 @@ public class Mathf{
 
 
     public static float tan(float a){
-        return tanr(a * degToRad);
+        return tanr(a * DEG_TO_RAD);
     }
 
     public static float tanr(float a){
@@ -296,7 +294,7 @@ public class Mathf{
 
 
     public static float asin(float v){
-        return asinr(v) * radToDeg;
+        return asinr(v) * RAD_TO_DEG;
     }
 
     public static float asinr(float v){
@@ -305,7 +303,7 @@ public class Mathf{
 
 
     public static float acos(float v){
-        return acosr(v) * radToDeg;
+        return acosr(v) * RAD_TO_DEG;
     }
 
     public static float acosr(float v){
@@ -314,7 +312,7 @@ public class Mathf{
 
 
     public static float atan(float v){
-        return atanr(v) * radToDeg;
+        return atanr(v) * RAD_TO_DEG;
     }
 
     public static float atanr(float v){
@@ -403,7 +401,7 @@ public class Mathf{
     }
 
     public static float angler(float x, float y){
-        return angle(x, y) * degToRad;
+        return angle(x, y) * DEG_TO_RAD;
     }
 
 
@@ -412,7 +410,7 @@ public class Mathf{
     }
 
     public static float dstar(float a, float b){
-        return dsta(a * radToDeg, b * radToDeg) * degToRad;
+        return dsta(a * RAD_TO_DEG, b * RAD_TO_DEG) * DEG_TO_RAD;
     }
 
     /** Returns the difference in angle between a and b. */
@@ -422,8 +420,8 @@ public class Mathf{
     }
 
     public static float diffar(float a, float b){
-        if(a > b) return (b + (2 * pi) - a > a - b) ? (a - b) : -(b + (2 * pi) - a);
-        else return (a + (2 * pi) - b > b - a)  ? -(b - a) : (a + (2 * pi) - b);
+        if(a > b) return (b + (2 * PI) - a > a - b) ? (a - b) : -(b + (2 * PI) - a);
+        else return (a + (2 * PI) - b > b - a)  ? -(b - a) : (a + (2 * PI) - b);
     }
 
 
@@ -448,6 +446,6 @@ public class Mathf{
     }
 
     public static float turnr(float a, float to, float speed){
-        return turn(a * radToDeg, to * radToDeg, speed * radToDeg) * degToRad;
+        return turn(a * RAD_TO_DEG, to * RAD_TO_DEG, speed * RAD_TO_DEG) * DEG_TO_RAD;
     }
 }

@@ -47,15 +47,25 @@ public class Set<T> implements Iterable<T>{
 
 
     public Set<T> add(T value){
-        int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
-        for(int i = 0;i < checks.length;i++){
-            if(table[checks[i]] == null){
-                table[checks[i]] = value;
-                size++;
-                return this;
+        int maxSteps = 16;
+        for(int step = 0; step < maxSteps; step++){
+            int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
+            for(int i = 0; i < checks.length; i++) if(eql(table[checks[i]], value)) return this;
+            for(int i = 0; i < checks.length; i++){
+                int index = checks[i];
+                if(table[index] == null){
+                    table[index] = value;
+                    size++;
+                    return this;
+                }
             }
+            int randomIndex = checks[randInt(0, checks.length)];
+            T displaced = table[randomIndex];
+            table[randomIndex] = value;
+            value = displaced;
         }
+
+        // Resize if max displacement steps reached
         resize(table.length << 1);
         add(value);
         return this;

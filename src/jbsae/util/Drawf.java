@@ -3,8 +3,6 @@ package jbsae.util;
 import jbsae.*;
 import jbsae.graphics.*;
 import jbsae.graphics.draw.*;
-import jbsae.graphics.gl.*;
-import jbsae.math.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
@@ -12,7 +10,7 @@ import static jbsae.util.Colorf.*;
 public class Drawf{
     /** Set fill color. */
     public static void fill(){
-        fill(white);
+        fill(WHITE);
     }
 
     public static void fill(float v){

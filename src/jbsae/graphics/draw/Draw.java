@@ -12,7 +12,7 @@ import static jbsae.util.Colorf.*;
 
 public class Draw{
     public Font font;
-    public Color fill = white.cpy();
+    public Color fill = WHITE.cpy();
     public Queue<DrawMatrix> matrixes = new Queue<>();
 
 

@@ -57,7 +57,7 @@ public class InterpDisplay extends Screen{
     @Override
     public void draw(){
         box.bind();
-        fill(black);
+        fill(BLACK);
         rect(0, 0, width, height);
         int max = (int)(width / boxSpacing);
         for(int i = 0;i < interpSeq.size;i++){
@@ -78,7 +78,7 @@ public class InterpDisplay extends Screen{
 
             fill(boxColor);
             rectc(0, 0, boxSize, boxSize);
-            fill(black);
+            fill(BLACK);
             rectc(0, 0, boxSize - boxOutline * 2, boxSize - boxOutline * 2);
             fill(boxColor);
 
@@ -108,7 +108,7 @@ public class InterpDisplay extends Screen{
                 translate(rx, input.mouse.y + displaySize / 10f);
                 fill(boxColor);
                 rectc(0, 0, displaySize, displaySize / 5f);
-                fill(black);
+                fill(BLACK);
                 rectc(0, 0, displaySize - boxOutline * 2, displaySize / 5f - boxOutline * 2);
                 scale(0.9f * displaySize);
 
