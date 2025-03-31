@@ -2,8 +2,6 @@ package jbsae.struct;
 
 import jbsae.*;
 import jbsae.func.*;
-import jbsae.struct.Queue.*;
-import jbsae.struct.Seq.*;
 
 import java.util.*;
 
@@ -11,10 +9,8 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-//TODO: Regenerate prim sets
+//TODO: Regenerate prim sets and maps
 public class Set<T> implements Iterable<T>{
-    public static final int MAX_STEPS = 16;
-
     public SetIterator i1, i2;
     public T[] table;
     public int size = 0;
@@ -50,7 +46,8 @@ public class Set<T> implements Iterable<T>{
 
 
     public Set<T> add(T value){
-        for(int step = 0;step < MAX_STEPS;step++){
+        int steps = (trailZeros(table.length) << 1) + 1;
+        for(int step = 0;step < steps;step++){
             int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
             for(int i = 0;step == 0 && i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
             for(int i = 0;i < checks.length;i++){
@@ -61,13 +58,11 @@ public class Set<T> implements Iterable<T>{
                     return this;
                 }
             }
-            int randomIndex = checks[randInt(0, checks.length - 1)];
-            T displaced = table[randomIndex];
-            table[randomIndex] = value;
+            int index = checks[randInt(0, checks.length - 1)];
+            T displaced = table[index];
+            table[index] = value;
             value = displaced;
         }
-
-        // Resize if max displacement steps reached
         resize(table.length << 1);
         add(value);
         return this;

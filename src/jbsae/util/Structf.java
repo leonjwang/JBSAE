@@ -632,19 +632,19 @@ public class Structf{
 
 
     /** Hashing integers. */
-    public static int[] hash3(int h, int l){
-        return hash3(h, l, new int[3]);
+    public static int[] hash3(int h, int n){
+        return hash3(h, n, new int[3]);
     }
 
-    public static int[] hash3(int h, int l, int[] arr){
-        arr[0] = hash(h, prime1, l);
-        arr[1] = hash(h, prime2, l);
-        arr[2] = hash(h, prime3, l);
+    public static int[] hash3(int h, int n, int[] arr){
+        arr[0] = hash(h, prime1, n);
+        arr[1] = hash(h, prime2, n);
+        arr[2] = hash(h, prime3, n);
         return arr;
     }
 
-    public static int hash(int h, int prime, int l){
+    public static int hash(int h, int prime, int n){
         h *= prime;
-        return (h ^ h >>> (31 - trailZeros(l))) & (l - 1);
+        return (h ^ h >>> (31 - trailZeros(n))) & (n - 1);
     }
 }
