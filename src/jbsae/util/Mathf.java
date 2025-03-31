@@ -415,6 +415,17 @@ public class Mathf{
         return dsta(a * radToDeg, b * radToDeg) * degToRad;
     }
 
+    /** Returns the difference in angle between a and b. */
+    public static float diffa(float a, float b){
+        if(a > b) return (b + 360 - a > a - b) ? (a - b) : -(b + 360 - a);
+        else return (a + 360 - b > b - a)  ? -(b - a) : (a + 360 - b);
+    }
+
+    public static float diffar(float a, float b){
+        if(a > b) return (b + (2 * pi) - a > a - b) ? (a - b) : -(b + (2 * pi) - a);
+        else return (a + (2 * pi) - b > b - a)  ? -(b - a) : (a + (2 * pi) - b);
+    }
+
 
     public static boolean withina(float a, float b, float cone){
         return dsta(a, b) < cone;

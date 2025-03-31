@@ -12,6 +12,7 @@ public class Listener{
     public Listener(Vec3 pos){
         alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
         alListener3f(AL_VELOCITY, 0, 0, 0);
+        alListenerfv(AL_ORIENTATION, new float[]{0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f});
     }
 
     public void speed(Vec3 speed){

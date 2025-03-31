@@ -20,16 +20,33 @@ public class FontFi extends AssetFi{
             BufferedReader reader = reader();
             StringTokenizer info = new StringTokenizer(reader.readLine());
             if(!info.nextToken().equals("info")) throw new IOException("No font info");
+
             while(info.hasMoreTokens()){
                 String[] split = info.nextToken().split("=");
+
                 if(split[0].equals("face")) font.name = split[1].substring(1, split[1].length() - 1);
-                else{
-                    if(split[0].equals("size")) font.size = -Integer.parseInt(split[1]);
-                    else if(split[0].equals("unicode")) font.unicode = Integer.parseInt(split[1]);
-                    //TODO: Finish porting
+                else if(split[0].equals("size")) font.size = -Integer.parseInt(split[1]);
+                else if(split[0].equals("unicode")) font.unicode = Integer.parseInt(split[1]);
+                else if(split[0].equals("bold")) font.bold = Integer.parseInt(split[1]) == 1;
+                else if(split[0].equals("italic")) font.italic = Integer.parseInt(split[1]) == 1;
+                else if(split[0].equals("stretchH")) font.stretchH = Integer.parseInt(split[1]);
+                else if(split[0].equals("smooth")) font.smooth = Integer.parseInt(split[1]);
+                else if(split[0].equals("aa")) font.aa = Integer.parseInt(split[1]);
+                else if(split[0].equals("outline")) font.outline = Integer.parseInt(split[1]);
+                else if(split[0].equals("charset")) font.charset = split[1].substring(1, split[1].length() - 1);
+                else if(split[0].equals("padding")){
+                    String[] padding = split[1].split(",");
+                    font.padLeft = Integer.parseInt(padding[0]);
+                    font.padTop = Integer.parseInt(padding[1]);
+                    font.padRight = Integer.parseInt(padding[2]);
+                    font.padBot = Integer.parseInt(padding[3]);
+                }else if(split[0].equals("spacing")){
+                    String[] spacing = split[1].split(",");
+                    font.spacing = Integer.parseInt(spacing[0]);
                 }
             }
 
+            // Parse common properties
             StringTokenizer common = new StringTokenizer(reader.readLine());
             if(!common.nextToken().equals("common")) throw new IOException("Missing common data");
             while(common.hasMoreTokens()){
@@ -37,6 +54,7 @@ public class FontFi extends AssetFi{
                 if(split[0].equals("pages")) font.pages = Integer.parseInt(split[1]);
             }
 
+            // Load texture pages
             font.page = new Texture[font.pages];
             for(int i = 0;i < font.pages;i++){
                 StringTokenizer page = new StringTokenizer(reader.readLine());
@@ -44,6 +62,7 @@ public class FontFi extends AssetFi{
 
                 int id = 0;
                 String name = "";
+
                 while(page.hasMoreTokens()){
                     String[] split = page.nextToken().split("=");
                     if(split[0].equals("id")) id = Integer.parseInt(split[1]);
@@ -53,6 +72,7 @@ public class FontFi extends AssetFi{
                 font.page[id] = ((TextureFi)AssetFi.create(parent() + "/" + name).load()).texture;
             }
 
+            // Parse glyphs
             StringTokenizer chars = new StringTokenizer(reader.readLine());
             if(!chars.nextToken().equals("chars")) throw new IOException("Missing char number");
             int n = Integer.parseInt(chars.nextToken().split("=")[1]);
