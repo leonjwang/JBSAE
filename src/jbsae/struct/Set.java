@@ -11,7 +11,10 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
+//TODO: Regenerate prim sets
 public class Set<T> implements Iterable<T>{
+    public static final int MAX_STEPS = 16;
+
     public SetIterator i1, i2;
     public T[] table;
     public int size = 0;
@@ -47,11 +50,10 @@ public class Set<T> implements Iterable<T>{
 
 
     public Set<T> add(T value){
-        int maxSteps = 16;
-        for(int step = 0; step < maxSteps; step++){
+        for(int step = 0;step < MAX_STEPS;step++){
             int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
-            for(int i = 0; i < checks.length; i++) if(eql(table[checks[i]], value)) return this;
-            for(int i = 0; i < checks.length; i++){
+            for(int i = 0;step == 0 && i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
+            for(int i = 0;i < checks.length;i++){
                 int index = checks[i];
                 if(table[index] == null){
                     table[index] = value;
@@ -59,7 +61,7 @@ public class Set<T> implements Iterable<T>{
                     return this;
                 }
             }
-            int randomIndex = checks[randInt(0, checks.length)];
+            int randomIndex = checks[randInt(0, checks.length - 1)];
             T displaced = table[randomIndex];
             table[randomIndex] = value;
             value = displaced;
