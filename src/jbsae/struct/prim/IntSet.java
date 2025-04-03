@@ -3,6 +3,7 @@ package jbsae.struct.prim;
 import jbsae.*;
 import jbsae.func.prim.*;
 
+import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
 public class IntSet{
@@ -39,14 +40,22 @@ public class IntSet{
             }
             return this;
         }
-        int[] checks = hash3(value, table.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(table[checks[i]] == value) return this;
-        for(int i = 0;i < checks.length;i++){
-            if(table[checks[i]] == 0){
-                table[checks[i]] = value;
-                size++;
-                return this;
+        int steps = (trailZeros(table.length) << 1) + 1;
+        for(int step = 0;step < steps;step++){
+            int[] checks = hash3(value, table.length, Tmp.i3);
+            for(int i = 0;step == 0 && i < checks.length;i++) if(table[checks[i]] == value) return this;
+            for(int i = 0;i < checks.length;i++){
+                int index = checks[i];
+                if(table[index] == 0){
+                    table[index] = value;
+                    size++;
+                    return this;
+                }
             }
+            int index = checks[randInt(0, checks.length - 1)];
+            int displaced = table[index];
+            table[index] = value;
+            value = displaced;
         }
         return resize(table.length << 1).add(value);
     }

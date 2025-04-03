@@ -9,7 +9,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-//TODO: Regenerate prim sets and maps
+
 public class Set<T> implements Iterable<T>{
     public SetIterator i1, i2;
     public T[] table;
@@ -63,9 +63,7 @@ public class Set<T> implements Iterable<T>{
             table[index] = value;
             value = displaced;
         }
-        resize(table.length << 1);
-        add(value);
-        return this;
+        return resize(table.length << 1).add(value);
     }
 
     public Set<T> addAll(T... values){

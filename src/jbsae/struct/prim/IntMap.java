@@ -3,6 +3,7 @@ package jbsae.struct.prim;
 import jbsae.*;
 import jbsae.func.prim.*;
 
+import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
 public class IntMap<V>{
@@ -39,25 +40,34 @@ public class IntMap<V>{
 
     public IntMap<V> add(int key, V value){
         if(value == null) return this;
-        if(key == 0){
-            if(zero == null){
-                zero = value;
-                size++;
-            }
-            return this;
+        if(key == 0) return setZero(value);
+        int steps = (trailZeros(keys.length) << 1) + 1;
+        for(int step = 0;step < steps;step++){
+            int[] checks =  hash3(intBits(key), keys.length, Tmp.i3);
+            for(int i = 0;step == 0 && i < checks.length;i++) if(keys[checks[i]] == key) return set(checks[i], key, value);
+            for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
+            int index = checks[randInt(0, checks.length - 1)];
+            int displacedKey = keys[index];
+            V displacedValue = values[index];
+            keys[index] = key;
+            values[index] = value;
+            key = displacedKey;
+            value = displacedValue;
         }
-        int[] keys = this.keys;
-        V[] values = this.values;
-        int[] checks = hash3(key, keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return set(checks[i], key, value);
-        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
-        return resize(keys.length << 1).add(key, value);
+        resize(keys.length << 1);
+        return add(key, value);
     }
 
     private IntMap<V> set(int i, int key, V value){
         if(keys[i] == 0) size++;
         keys[i] = key;
         values[i] = value;
+        return this;
+    }
+
+    private IntMap<V> setZero(V value){
+        if(zero == null) size++;
+        zero = value;
         return this;
     }
 
@@ -77,6 +87,7 @@ public class IntMap<V>{
                 keys[checks[i]] = 0;
                 values[checks[i]] = null;
                 size--;
+                return this;
             }
         }
         return this;

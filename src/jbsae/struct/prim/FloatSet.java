@@ -40,14 +40,22 @@ public class FloatSet{
             }
             return this;
         }
-        int[] checks = hash3(intBits(value), table.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
-        for(int i = 0;i < checks.length;i++){
-            if(zero(table[checks[i]])){
-                table[checks[i]] = value;
-                size++;
-                return this;
+        int steps = (trailZeros(table.length) << 1) + 1;
+        for(int step = 0;step < steps;step++){
+            int[] checks = hash3(intBits(value), table.length, Tmp.i3);
+            for(int i = 0;step == 0 && i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
+            for(int i = 0;i < checks.length;i++){
+                int index = checks[i];
+                if(table[index] == 0){
+                    table[index] = value;
+                    size++;
+                    return this;
+                }
             }
+            int index = checks[randInt(0, checks.length - 1)];
+            float displaced = table[index];
+            table[index] = value;
+            value = displaced;
         }
         return resize(table.length << 1).add(value);
     }

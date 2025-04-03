@@ -4,6 +4,7 @@ import jbsae.*;
 import jbsae.func.*;
 import jbsae.func.prim.*;
 
+import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
 public class ObjbMap<K>{
@@ -38,12 +39,20 @@ public class ObjbMap<K>{
 
 
     public ObjbMap<K> add(K key, boolean value){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
-        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == null) return set(checks[i], key, value);
-        resize(keys.length << 1);
-        add(key, value);
-        return this;
+        int steps = (trailZeros(keys.length) << 1) + 1;
+        for(int step = 0;step < steps;step++){
+            int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+            for(int i = 0;step == 0 && i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
+            for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == null) return set(checks[i], key, value);
+            int index = checks[randInt(0, checks.length - 1)];
+            K displacedKey = keys[index];
+            boolean displacedValue = values[index];
+            keys[index] = key;
+            values[index] = value;
+            key = displacedKey;
+            value = displacedValue;
+        }
+        return resize(keys.length << 1).add(key, value);
     }
 
     private ObjbMap<K> set(int i, K key, boolean value){
@@ -60,6 +69,7 @@ public class ObjbMap<K>{
                 keys[checks[i]] = null;
                 values[checks[i]] = false;
                 size--;
+                return this;
             }
         }
         return this;

@@ -41,25 +41,34 @@ public class FloatMap<V>{
 
     public FloatMap<V> add(float key, V value){
         if(value == null) return this;
-        if(zero(key)){
-            if(zero == null){
-                zero = value;
-                size++;
-            }
-            return this;
+        if(zero(key)) return setZero(value);
+        int steps = (trailZeros(keys.length) << 1) + 1;
+        for(int step = 0;step < steps;step++){
+            int[] checks =  hash3(intBits(key), keys.length, Tmp.i3);
+            for(int i = 0;step == 0 && i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return set(checks[i], key, value);
+            for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
+            int index = checks[randInt(0, checks.length - 1)];
+            float displacedKey = keys[index];
+            V displacedValue = values[index];
+            keys[index] = key;
+            values[index] = value;
+            key = displacedKey;
+            value = displacedValue;
         }
-        float[] keys = this.keys;
-        V[] values = this.values;
-        int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return set(checks[i], key, value);
-        for(int i = 0;i < checks.length;i++) if(zero(keys[checks[i]])) return set(checks[i], key, value);
-        return resize(keys.length << 1).add(key, value);
+        resize(keys.length << 1);
+        return add(key, value);
     }
 
     private FloatMap<V> set(int i, float key, V value){
         if(keys[i] == 0) size++;
         keys[i] = key;
         values[i] = value;
+        return this;
+    }
+
+    private FloatMap<V> setZero(V value){
+        if(zero == null) size++;
+        zero = value;
         return this;
     }
 
@@ -79,6 +88,7 @@ public class FloatMap<V>{
                 keys[checks[i]] = 0;
                 values[checks[i]] = null;
                 size--;
+                return this;
             }
         }
         return this;
