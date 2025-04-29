@@ -42,7 +42,7 @@ public class ObjbMap<K>{
         int steps = (trailZeros(keys.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
             int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
-            for(int i = 0;step == 0 && i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
+            for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
             for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == null) return set(checks[i], key, value);
             int index = checks[randInt(0, checks.length - 1)];
             K displacedKey = keys[index];

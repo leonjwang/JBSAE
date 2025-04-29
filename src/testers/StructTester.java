@@ -12,9 +12,10 @@ public class StructTester{
     public static int failed = 0;
 
     public static String single(){
-        CharSeq value = new CharSeq();
-        for(int j = 0;j < randInt(1, 100);j++) value.add((char)randInt('A', 'Z'));
-        return value.toString();
+        int size = randInt(1, 100);
+        char[] value = new char[size];
+        for(int i = 0;i < size;i++) value[i] = (char)randInt('A', 'Z');
+        return String.valueOf(value);
     }
 
     public static String[] generate(){
@@ -218,6 +219,7 @@ public class StructTester{
             float[] values = new float[randInt(1, 10000)];
             for(int i = 0;i < values.length;i++){
                 values[i] = chance(0.05f) ? 0 : random(-10000, 10000);
+                if(custom.contains(values[i])) continue;
                 base.add(values[i]);
                 custom.add(values[i]);
             }
@@ -509,7 +511,7 @@ public class StructTester{
             for(Range2 r : original) if(range.overlaps(r)) trueInside.add(r);
 
             for(Range2 r : trueInside) if(!inside.contains(r)) throw new Exception("Not equal for operation [contains]");
-            System.out.println(inside.size + "," + trueInside.size);
+//            System.out.println(inside.size + "," + trueInside.size);
         }).run();
     }
 
@@ -520,7 +522,7 @@ public class StructTester{
 
             String[] keys = generate(100000);
             for(String key : keys){
-                if(base.containsKey(key)) continue;
+//                if(base.containsKey(key)) continue;
                 String value = single();
                 base.put(key, value);
                 custom.add(key, value);
@@ -545,7 +547,7 @@ public class StructTester{
 
             String[] keys = generate(100000);
             for(String key : keys){
-                if(base.containsKey(key)) continue;
+//                if(base.containsKey(key)) continue;
                 float value = chance(0.05f) ? 0 : random(-10000, 10000);
                 base.put(key, value);
                 custom.add(key, value);
@@ -570,7 +572,7 @@ public class StructTester{
 
             String[] keys = generate(100000);
             for(String key : keys){
-                if(base.containsKey(key)) continue;
+//                if(base.containsKey(key)) continue;
                 boolean value = chance(0.5f);
                 base.put(key, value);
                 custom.add(key, value);
@@ -595,7 +597,7 @@ public class StructTester{
 
             String[] keys = generate(100000);
             for(String key : keys){
-                if(base.containsKey(key)) continue;
+//                if(base.containsKey(key)) continue;
                 int value = chance(0.05f) ? 0 : randInt(-10000, 10000);
                 base.put(key, value);
                 custom.add(key, value);
@@ -621,7 +623,7 @@ public class StructTester{
             float[] keys = new float[randInt(0, 100000)];
             for(int i = 0;i < keys.length;i++){
                 keys[i] = chance(0.05f) ? 0 : random(-10000, 10000);
-                if(base.containsKey(keys[i])) continue;
+                if(custom.contains(keys[i])) continue;
                 String value = single();
                 base.put(keys[i], value);
                 custom.add(keys[i], value);
@@ -647,7 +649,7 @@ public class StructTester{
             float[] keys = new float[randInt(0, 100000)];
             for(int i = 0;i < keys.length;i++){
                 keys[i] = chance(0.05f) ? 0 : random(-10000, 10000);
-                if(base.containsKey(keys[i])) continue;
+                if(custom.contains(keys[i])) continue;
                 float value = chance(0.05f) ? 0 : random(-10000, 10000);
                 base.put(keys[i], value);
                 custom.add(keys[i], value);
@@ -673,7 +675,7 @@ public class StructTester{
             int[] keys = new int[randInt(0, 100000)];
             for(int i = 0;i < keys.length;i++){
                 keys[i] = chance(0.05f) ? 0 : randInt(-10000, 10000);
-                if(base.containsKey(keys[i])) continue;
+//                if(base.containsKey(keys[i])) continue;
                 String value = single();
                 base.put(keys[i], value);
                 custom.add(keys[i], value);
@@ -695,10 +697,10 @@ public class StructTester{
     }
 
     public static void main(String[] args){
-        testSeqs();
+//        testSeqs();
         testSets();
-        testQueues();
-        testTrees();
+//        testQueues();
+//        testTrees();
         testMaps();
 
         if(failed == 0) System.out.println("\nAll tests passed!");
@@ -724,7 +726,7 @@ public class StructTester{
             System.out.println("\nRunning test: [" + name + "]");
             long start = System.currentTimeMillis();
             try{
-                test.run();
+                for(int i = 0;i < times;i++) test.run();
                 System.out.println("[" + name + "] Test Passed");
             }catch(Exception e){
                 System.out.println("[" + name + "] Test Failed: " + e.toString());

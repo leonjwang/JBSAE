@@ -43,8 +43,8 @@ public class IntMap<V>{
         if(key == 0) return setZero(value);
         int steps = (trailZeros(keys.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
-            int[] checks =  hash3(intBits(key), keys.length, Tmp.i3);
-            for(int i = 0;step == 0 && i < checks.length;i++) if(keys[checks[i]] == key) return set(checks[i], key, value);
+            int[] checks = hash3(key, keys.length, Tmp.i3);
+            for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return set(checks[i], key, value);
             for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
             int index = checks[randInt(0, checks.length - 1)];
             int displacedKey = keys[index];
@@ -54,8 +54,7 @@ public class IntMap<V>{
             key = displacedKey;
             value = displacedValue;
         }
-        resize(keys.length << 1);
-        return add(key, value);
+        return resize(keys.length << 1).add(key, value);
     }
 
     private IntMap<V> set(int i, int key, V value){

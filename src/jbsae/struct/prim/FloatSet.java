@@ -6,6 +6,7 @@ import jbsae.func.prim.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
+//TODO: This is broken
 public class FloatSet{
     public boolean zero = false;
     public float[] table;
@@ -43,7 +44,7 @@ public class FloatSet{
         int steps = (trailZeros(table.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
             int[] checks = hash3(intBits(value), table.length, Tmp.i3);
-            for(int i = 0;step == 0 && i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
+            for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
             for(int i = 0;i < checks.length;i++){
                 int index = checks[i];
                 if(table[index] == 0){

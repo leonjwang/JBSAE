@@ -6,6 +6,7 @@ import jbsae.func.prim.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
+//TODO: This is broken
 public class FloatMap<V>{
     public V zero;
     public float[] keys;
@@ -45,7 +46,7 @@ public class FloatMap<V>{
         int steps = (trailZeros(keys.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
             int[] checks =  hash3(intBits(key), keys.length, Tmp.i3);
-            for(int i = 0;step == 0 && i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return set(checks[i], key, value);
+            for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return set(checks[i], key, value);
             for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
             int index = checks[randInt(0, checks.length - 1)];
             float displacedKey = keys[index];
@@ -55,8 +56,7 @@ public class FloatMap<V>{
             key = displacedKey;
             value = displacedValue;
         }
-        resize(keys.length << 1);
-        return add(key, value);
+        return resize(keys.length << 1).add(key, value);
     }
 
     private FloatMap<V> set(int i, float key, V value){

@@ -43,7 +43,7 @@ public class IntSet{
         int steps = (trailZeros(table.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
             int[] checks = hash3(value, table.length, Tmp.i3);
-            for(int i = 0;step == 0 && i < checks.length;i++) if(table[checks[i]] == value) return this;
+            for(int i = 0;i < checks.length;i++) if(table[checks[i]] == value) return this;
             for(int i = 0;i < checks.length;i++){
                 int index = checks[i];
                 if(table[index] == 0){
