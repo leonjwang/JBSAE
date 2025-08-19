@@ -6,7 +6,7 @@ import jbsae.func.prim.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-//Important note: Floatmaps and Floatsets do not have the same behavior as a HashMap or HashSet due to how they use eqlf
+/** Important note: Floatmaps and Floatsets do not have the same behavior as a HashMap or HashSet due to how they use eqlf. */
 public class FloatMap<V>{
     public V zero;
     public float[] keys;

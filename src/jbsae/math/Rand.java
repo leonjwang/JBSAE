@@ -2,7 +2,7 @@ package jbsae.math;
 
 import java.util.*;
 
-/** Stolen from Anuken/Arc which in turn took this from LibGDX probably  */
+//TODO: Rewrite to understand myself
 public class Rand{
     public static final double NORM_DOUBLE = 1.0 / (1L << 53);
     public static final double NORM_FLOAT = 1.0 / (1L << 24);

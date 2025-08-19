@@ -6,7 +6,7 @@ import jbsae.func.prim.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-//Important note: Floatmaps and Floatsets do not have the same behavior as a HashMap or HashSet due to how they use eqlf
+/** Important note: Floatmaps and Floatsets do not have the same behavior as a HashMap or HashSet due to how they use eqlf. */
 public class FloatfMap{
     public float zero;
     public float[] keys;
@@ -51,7 +51,7 @@ public class FloatfMap{
         if(zero(key)) return setZero(value);
         int steps = (trailZeros(keys.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
-            int[] checks =  hash3(intBits(key), keys.length, Tmp.i3);
+            int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
             for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return set(checks[i], key, value);
             for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
             int index = checks[randInt(0, checks.length - 1)];
