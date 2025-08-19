@@ -19,8 +19,8 @@ public class FloatMap<V>{
     }
 
     public FloatMap(int size){
-        keys = new float[16];
-        values = (V[])new Object[16];
+        keys = new float[size];
+        values = (V[])new Object[size];
     }
 
 

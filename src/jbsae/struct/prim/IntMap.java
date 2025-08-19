@@ -18,7 +18,7 @@ public class IntMap<V>{
 
     public IntMap(int size){
         keys = new int[size];
-        values = (V[])new Object[16];
+        values = (V[])new Object[size];
     }
 
 

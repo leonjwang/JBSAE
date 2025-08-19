@@ -61,7 +61,7 @@ public class ShipBreakerTest extends Screen{
 
         public void draw(){
             Drawf.fill(Tmp.c1.set(color).a(0.2f));
-            for(int i = 0;i < 10;i++) Drawf.rectc(pos.x * scale + translate.x, pos.y * scale + translate.y, scale * i / 5f, scale * i / 5f);
+            for(int i = 0;i < 5;i++) Drawf.rectc(pos.x * scale + translate.x, pos.y * scale + translate.y, scale * i / 5f, scale * i / 5f);
         }
     }
 
@@ -87,18 +87,18 @@ public class ShipBreakerTest extends Screen{
 
     @Override
     public void draw(){
-        Drawf.layer(0f);
-        Drawf.fill(1f, 1f, 1f);
-        Drawf.rect(10f, 10f, 50f, 50f);
-
-        Drawf.layer(Mathf.sint(1000));
-        Drawf.fill(1f, 0f, 0f);
-        Drawf.rect(30f, 10f, 50f, 50f);
-//        box.bind();
+//        Drawf.layer(0f);
+//        Drawf.fill(1f, 1f, 1f);
+//        Drawf.rect(10f, 10f, 50f, 50f);
 //
-//        for(int x = 0;x < arr.length;x++){
-//            for(int y = 0;y < arr[x].length;y++) arr[x][y].draw();
-//        }
+//        Drawf.layer(Mathf.sint(1000));
+//        Drawf.fill(1f, 0f, 0f);
+//        Drawf.rect(30f, 10f, 50f, 50f);
+        box.bind();
+
+        for(int x = 0;x < arr.length;x++){
+            for(int y = 0;y < arr[x].length;y++) arr[x][y].draw();
+        }
     }
 
     public static void main(String[] args){
