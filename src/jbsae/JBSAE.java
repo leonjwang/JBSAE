@@ -3,13 +3,9 @@ package jbsae;
 import jbsae.audio.*;
 import jbsae.core.*;
 import jbsae.files.assets.*;
-import jbsae.graphics.*;
 import jbsae.graphics.draw.*;
 import jbsae.graphics.gl.*;
 import jbsae.input.*;
-import jbsae.math.*;
-import jbsae.struct.*;
-import jbsae.util.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -19,8 +15,11 @@ public class JBSAE{
     public static String programName = "JBSAE";
     public static String assetsFolder = "assets";
     public static int width = 600, height = 500;
-    public static int curWidth = 1, curHeight = 1;
     public static int fps = 60, ups = 60;
+
+    //Dynamically updated
+    public static int winWidth = 1, winHeight = 1;
+    public static int frameWidth = 1, frameHeight = 1;
 
     public static Time time = new Time();
     public static Window window = new Window();

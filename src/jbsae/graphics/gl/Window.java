@@ -52,12 +52,18 @@ public class Window{
     }
 
     public void update(){
-        glfwGetFramebufferSize(id, widthBuffer, heightBuffer);
-        curWidth = Mathf.max(widthBuffer.get(), 1);
-        curHeight = Mathf.max(heightBuffer.get(), 1);
+        glfwGetWindowSize(id, widthBuffer, heightBuffer);
+        winWidth = Mathf.max(widthBuffer.get(), 1);
+        winHeight = Mathf.max(heightBuffer.get(), 1);
         widthBuffer.rewind();
         heightBuffer.rewind();
-        glViewport(0, 0, curWidth, curHeight);
+
+        glfwGetFramebufferSize(id, widthBuffer, heightBuffer);
+        frameWidth = Mathf.max(widthBuffer.get(), 1);
+        frameHeight = Mathf.max(heightBuffer.get(), 1);
+        widthBuffer.rewind();
+        heightBuffer.rewind();
+        glViewport(0, 0, frameWidth, frameHeight);
     }
 
     public void dispose(){
