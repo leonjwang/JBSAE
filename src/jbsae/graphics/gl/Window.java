@@ -52,8 +52,7 @@ public class Window{
     }
 
     public void update(){
-        glfwGetWindowSize(id, widthBuffer, heightBuffer);
-//        glfwGetFramebufferSize(id, widthBuffer, heightBuffer);
+        glfwGetFramebufferSize(id, widthBuffer, heightBuffer);
         curWidth = Mathf.max(widthBuffer.get(), 1);
         curHeight = Mathf.max(heightBuffer.get(), 1);
         widthBuffer.rewind();
