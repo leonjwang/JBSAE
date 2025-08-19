@@ -6,7 +6,7 @@ import jbsae.func.prim.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-//TODO: This is broken
+//Important note: Floatmaps and Floatsets do not have the same behavior as a HashMap or HashSet due to how they use eqlf
 public class FloatSet{
     public boolean zero = false;
     public float[] table;

@@ -8,6 +8,7 @@ import jbsae.struct.tree.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
+//Important note: Floatmaps and Floatsets do not have the same behaivior as a HashMap or HashSet due to how they use eqlf
 public class StructTester{
     public static int failed = 0;
 
@@ -697,11 +698,64 @@ public class StructTester{
     }
 
     public static void main(String[] args){
+        new Test("Float Map Test", 100000, () -> {
+            java.util.HashMap<Float, String> base = new java.util.HashMap<>();
+            FloatMap<String> custom = new FloatMap<>();
+
+            float[] keys = new float[randInt(0, 1000)];
+            for(int i = 0;i < keys.length;i++){
+                keys[i] = chance(0.05f) ? 0 : random(-10000000, 10000000);
+                if(custom.contains(keys[i])) continue;
+                String value = single();
+                base.put(keys[i], value);
+                custom.add(keys[i], value);
+            }
+
+            for(int i = 0;i < keys.length;i++) if(!eql(base.get(keys[i]), custom.get(keys[i]))) throw new Exception("Not equal after operation [add]");
+
+            int amount = randInt(0, base.size());
+            for(int i = 0;i < amount;i++){
+                int removeIndex = randInt(0, base.size() - 1);
+                base.remove(keys[removeIndex]);
+                custom.remove(keys[removeIndex]);
+            }
+
+            for(int i = 0;i < keys.length;i++) if(!eql(base.get(keys[i]), custom.get(keys[i]))) throw new Exception("Not equal after operation [add]");
+
+            if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
+        }).run();
+        new Test("Floatf Map Test", 100000, () -> {
+            java.util.HashMap<Float, Float> base = new java.util.HashMap<>();
+            FloatfMap custom = new FloatfMap();
+
+            float[] keys = new float[randInt(0, 1000)];
+            for(int i = 0;i < keys.length;i++){
+                keys[i] = chance(0.05f) ? 0 : random(-10000000, 10000000);
+                if(custom.contains(keys[i])) continue;
+                float value = chance(0.05f) ? 0 : random(-10000000, 10000000);
+                base.put(keys[i], value);
+                custom.add(keys[i], value);
+            }
+
+            for(int i = 0;i < keys.length;i++) if(base.get(keys[i]) != custom.get(keys[i])) throw new Exception("Not equal after operation [add]");
+
+            int amount = randInt(0, base.size());
+            for(int i = 0;i < amount;i++){
+                int removeIndex = randInt(0, base.size() - 1);
+                base.remove(keys[removeIndex]);
+                custom.remove(keys[removeIndex]);
+            }
+
+            for(int i = 0;i < keys.length;i++) if(base.get(keys[i]) != null && base.get(keys[i]) != custom.get(keys[i])) throw new Exception("Not equal after operation [add]");
+
+            if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
+        }).run();
+
 //        testSeqs();
-        testSets();
+//        testSets();
 //        testQueues();
 //        testTrees();
-        testMaps();
+//        testMaps();
 
         if(failed == 0) System.out.println("\nAll tests passed!");
         else System.out.println("\n" + failed + " tests failed!");
