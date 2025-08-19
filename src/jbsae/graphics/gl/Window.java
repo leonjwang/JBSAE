@@ -53,11 +53,11 @@ public class Window{
 
     public void update(){
         glfwGetFramebufferSize(id, widthBuffer, heightBuffer);
-        curWidth = Mathf.max((widthBuffer.get() + 1) / 2, 1);
-        curHeight = Mathf.max((heightBuffer.get() + 1) / 2, 1);
+        curWidth = Mathf.max(widthBuffer.get(), 1);
+        curHeight = Mathf.max(heightBuffer.get(), 1);
         widthBuffer.rewind();
         heightBuffer.rewind();
-        glViewport(0, 0, curWidth * 2, curHeight * 2);
+        glViewport(0, 0, curWidth, curHeight);
     }
 
     public void dispose(){
