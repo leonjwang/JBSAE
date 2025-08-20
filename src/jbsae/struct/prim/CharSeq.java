@@ -4,6 +4,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
+//TODO: Change to custom backing array; char and int are of different sizes
 public class CharSeq extends IntSeq{
     public CharSeq(){
         super();
