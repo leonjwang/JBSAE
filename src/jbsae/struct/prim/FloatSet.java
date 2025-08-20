@@ -2,15 +2,19 @@ package jbsae.struct.prim;
 
 import jbsae.*;
 import jbsae.func.prim.*;
+import jbsae.util.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-/** Important note: Floatmaps and Floatsets do not have the same behavior as a HashMap or HashSet due to how they use eqlf. */
+/** Important note: Floatmaps and Floatsets may not have the same behavior as a HashMap or HashSet depending on exact field. */
 public class FloatSet{
     public boolean zero = false;
     public float[] table;
     public int size = 0;
+    /** If true, uses exact equality for keys, otherwise uses eqlf. */
+    public boolean exact = true;
+
 
     public FloatSet(){
         this(16);
@@ -28,13 +32,13 @@ public class FloatSet{
     public float[] list(){
         int i = 0;
         float[] values = new float[size];
-        for(int j = 0;j < table.length;j++) if(!zero(table[j])) values[i++] = table[j];
+        for(int j = 0;j < table.length;j++) if(!eqlf(table[j], 0)) values[i++] = table[j];
         if(zero) values[size - 1] = 0;
         return values;
     }
 
     public FloatSet add(float value){
-        if(zero(value)){
+        if(eqlf(value, 0)){
             if(!zero){
                 zero = true;
                 size++;
@@ -67,7 +71,7 @@ public class FloatSet{
     }
 
     public FloatSet remove(float value){
-        if(zero(value)){
+        if(eqlf(value, 0)){
             if(zero){
                 zero = false;
                 size--;
@@ -91,7 +95,7 @@ public class FloatSet{
     }
 
     public boolean contains(float value){
-        if(zero(value)) return zero;
+        if(eqlf(value, 0)) return zero;
         int[] checks = hash3(intBits(value), table.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return true;
         return false;
@@ -99,7 +103,7 @@ public class FloatSet{
 
     public FloatSet each(Floatc cons){
         if(zero) cons.get(0);
-        for(int j = 0;j < table.length;j++) if(!zero(table[j])) cons.get(table[j]);
+        for(int j = 0;j < table.length;j++) if(!eqlf(table[j], 0)) cons.get(table[j]);
         return this;
     }
 
@@ -117,5 +121,10 @@ public class FloatSet{
         this.table = new float[newSize];
         for(int j = 0;j < values.length;j++) add(values[j]);
         return this;
+    }
+
+
+    private boolean eqlf(float a, float b){
+        return exact ? a == b : Mathf.eqlf(a, b);
     }
 }

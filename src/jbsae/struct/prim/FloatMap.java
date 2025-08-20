@@ -2,16 +2,19 @@ package jbsae.struct.prim;
 
 import jbsae.*;
 import jbsae.func.prim.*;
+import jbsae.util.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-/** Important note: Floatmaps and Floatsets do not have the same behavior as a HashMap or HashSet due to how they use eqlf. */
+/** Important note: Floatmaps and Floatsets may not have the same behavior as a HashMap or HashSet depending on exact field. */
 public class FloatMap<V>{
     public V zero;
     public float[] keys;
     public V[] values;
     public int size = 0;
+    /** If true, uses exact equality for keys, otherwise uses eqlf. */
+    public boolean exact = true;
 
 
     public FloatMap(){
@@ -42,7 +45,7 @@ public class FloatMap<V>{
 
     public FloatMap<V> add(float key, V value){
         if(value == null) return this;
-        if(zero(key)) return setZero(value);
+        if(eqlf(key, 0)) return setZero(value);
         int steps = (trailZeros(keys.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
             int[] checks =  hash3(intBits(key), keys.length, Tmp.i3);
@@ -73,7 +76,7 @@ public class FloatMap<V>{
     }
 
     public FloatMap<V> remove(float key){
-        if(zero(key)){
+        if(eqlf(key, 0)){
             if(zero != null){
                 zero = null;
                 size--;
@@ -101,7 +104,7 @@ public class FloatMap<V>{
 
 
     public V get(float key){
-        if(zero(key)) return zero;
+        if(eqlf(key, 0)) return zero;
         int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return values[checks[i]];
         return null;
@@ -109,7 +112,7 @@ public class FloatMap<V>{
 
 
     public boolean contains(float key){
-        if(zero(key)) return zero != null;
+        if(eqlf(key, 0)) return zero != null;
         int[] checks = hash3(intBits(key), keys.length, Tmp.i3);
         for(int i = 0;i < checks.length;i++) if(eqlf(keys[checks[i]], key)) return true;
         return false;
@@ -137,5 +140,10 @@ public class FloatMap<V>{
         this.values = create(newSize, values);
         for(int j = 0;j < keys.length;j++) add(keys[j], values[j]);
         return this;
+    }
+
+
+    private boolean eqlf(float a, float b){
+        return exact ? a == b : Mathf.eqlf(a, b);
     }
 }

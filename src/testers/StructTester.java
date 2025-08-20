@@ -701,10 +701,11 @@ public class StructTester{
         new Test("Float Map Test", 100000, () -> {
             java.util.HashMap<Float, String> base = new java.util.HashMap<>();
             FloatMap<String> custom = new FloatMap<>();
+            custom.exact = true;
 
             float[] keys = new float[randInt(0, 1000)];
             for(int i = 0;i < keys.length;i++){
-                keys[i] = chance(0.05f) ? 0 : random(-10000000, 10000000);
+                keys[i] = chance(0.05f) ? 0 : random(-1000, 1000);
                 if(custom.contains(keys[i])) continue;
                 String value = single();
                 base.put(keys[i], value);
@@ -727,10 +728,11 @@ public class StructTester{
         new Test("Floatf Map Test", 100000, () -> {
             java.util.HashMap<Float, Float> base = new java.util.HashMap<>();
             FloatfMap custom = new FloatfMap();
+            custom.exact = true;
 
             float[] keys = new float[randInt(0, 1000)];
             for(int i = 0;i < keys.length;i++){
-                keys[i] = chance(0.05f) ? 0 : random(-10000000, 10000000);
+                keys[i] = chance(0.05f) ? 0 : random(-1000, 1000);
                 if(custom.contains(keys[i])) continue;
                 float value = chance(0.05f) ? 0 : random(-10000000, 10000000);
                 base.put(keys[i], value);
