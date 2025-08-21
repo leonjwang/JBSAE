@@ -9,6 +9,7 @@ import jbsae.struct.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
+import static jbsae.util.Mathf.zero;
 
 public class Draw{
     public Font font;
@@ -21,7 +22,8 @@ public class Draw{
     }
 
     public void draw(Region region, float x, float y, float w, float h, float r){
-        Tmp.r1.set(x, y, w, h).shape(Tmp.s14).rot(r);
+        Tmp.r1.set(x, y, w, h).shape(Tmp.s14);
+        if(!zero(r)) Tmp.s14.rot(r);
         drawi(region, Tmp.s14.v[0].x, Tmp.s14.v[0].y, Tmp.s14.v[1].x, Tmp.s14.v[1].y, Tmp.s14.v[2].x, Tmp.s14.v[2].y, Tmp.s14.v[3].x, Tmp.s14.v[3].y);
     }
 
