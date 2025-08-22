@@ -34,11 +34,11 @@ public class Read{ //Consider combining with write
     }
 
     public int i(){
-        return (int)(((int)s() << 16) | (u() << 8) | u());
+        return ((int)s() << 16) | (u() << 8) | u();
     }
 
     public long l(){
-        return (long)(((long)i() << 32) | ((long)u() << 24) | ((long)u() << 16) | ((long)u() << 8) | u());
+        return ((long)i() << 32) | ((long)u() << 24) | ((long)u() << 16) | ((long)u() << 8) | u();
     }
 
     public float f(){

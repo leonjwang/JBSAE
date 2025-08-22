@@ -2,8 +2,8 @@ package jbsae.util;
 
 import jbsae.func.*;
 import jbsae.func.prim.*;
-import jbsae.struct.List;
 import jbsae.struct.*;
+import jbsae.struct.List;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -407,7 +407,7 @@ public class Structf{
     }
 
     public static <T> void sortArr(T[] arr, Floatf<T> value){
-        Arrays.sort(arr, new Comparator<T>(){ //Maybe not create a new one every time something is sorted
+        Arrays.sort(arr, new Comparator<T>(){ // Maybe not create a new one every time something is sorted
             public int compare(T a, T b){
                 return value.get(a) > value.get(b) ? 1 : -1;
             }

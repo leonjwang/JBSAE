@@ -1,7 +1,6 @@
 package jbsae.struct;
 
 import jbsae.func.*;
-import jbsae.struct.Seq.*;
 
 import java.util.*;
 

@@ -36,7 +36,7 @@ public class AudioTest{
 
 //        ((TextureFi)AssetFi.all.get("square.png")).texture.bind();
 
-        Source song = new Source(Sound.all.get(0));
+        Source song = new Source(Sound.all.get(1));
         song.pitch(0.85f);
         song.relative(false);
         song.position(new Vec3(10, 0, 0));

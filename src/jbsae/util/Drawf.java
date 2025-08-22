@@ -144,7 +144,6 @@ public class Drawf{
     }
 
 
-
     /** Current setting manipulation. */
     public static void push(){
         draw.matrixes.addFirst(new DrawMatrix());

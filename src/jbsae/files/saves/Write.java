@@ -17,7 +17,7 @@ public class Write{
 
     public Write b(byte b){
         try{
-            stream.write((byte)b);
+            stream.write(b);
         }catch(Exception e){
             System.out.println("Failed reading file: " + file.path());
             e.printStackTrace();

@@ -17,7 +17,7 @@ public class JBSAE{
     public static int width = 600, height = 500;
     public static int fps = 60, ups = 60;
 
-    //Dynamically updated
+    // Dynamically updated
     public static int winWidth = 1, winHeight = 1;
     public static int frameWidth = 1, frameHeight = 1;
 

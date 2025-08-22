@@ -1,7 +1,6 @@
 package jbsae.graphics.gl;
 
 import jbsae.files.assets.*;
-import jbsae.graphics.*;
 import jbsae.math.*;
 import org.lwjgl.system.*;
 
@@ -31,7 +30,7 @@ public class Renderer{
 
         vertexArray = new VertexArray();
         vertexBuffer = new VertexBuffer();
-        vertexBuffer.data(GL_ARRAY_BUFFER, vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
+        vertexBuffer.data(GL_ARRAY_BUFFER, (long)vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
 
         vertexShader = ((ShaderFi)AssetFi.create(assetsFolder + "/shaders/shader.vert").load()).shader;
         fragmentShader = ((ShaderFi)AssetFi.create(assetsFolder + "/shaders/shader.frag").load()).shader;

@@ -1,11 +1,11 @@
 package jbsae.math;
 
 public interface Pos4{
-    public float x();
+    float x();
 
-    public float y();
+    float y();
 
-    public float w();
+    float w();
 
-    public float h();
+    float h();
 }

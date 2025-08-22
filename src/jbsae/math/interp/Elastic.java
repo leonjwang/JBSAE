@@ -10,7 +10,7 @@ public class Elastic implements Interp{
         this.value = value;
         this.power = power;
         this.scale = scale;
-        this.bounces = (float)(bounces * PI * (bounces % 2 == 0 ? 1 : -1));
+        this.bounces = bounces * PI * (bounces % 2 == 0 ? 1 : -1);
     }
 
     @Override

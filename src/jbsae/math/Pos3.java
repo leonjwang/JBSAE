@@ -1,9 +1,9 @@
 package jbsae.math;
 
 public interface Pos3{
-    public float x();
+    float x();
 
-    public float y();
+    float y();
 
-    public float z();
+    float z();
 }

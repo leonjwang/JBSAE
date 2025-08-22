@@ -1,7 +1,7 @@
 package jbsae.math;
 
 public interface Pos2{
-    public float x();
+    float x();
 
-    public float y();
+    float y();
 }

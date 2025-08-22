@@ -1,5 +1,5 @@
 package jbsae.func.prim;
 
 public interface Intfi{
-    public int get(int i);
+    int get(int i);
 }

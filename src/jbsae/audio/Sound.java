@@ -1,8 +1,6 @@
 package jbsae.audio;
 
 import jbsae.struct.*;
-import org.lwjgl.stb.*;
-import org.lwjgl.system.*;
 
 import javax.sound.sampled.*;
 import java.nio.*;

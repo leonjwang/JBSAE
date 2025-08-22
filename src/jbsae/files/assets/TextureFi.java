@@ -77,10 +77,10 @@ public class TextureFi extends AssetFi{
                 if(chunkLen <= 0 || chunkLen > 99998192)
                     break;
                 chunkType = in.readInt();
-                if(chunkType == (int)0x49454e44) // IEND
+                if(chunkType == 0x49454e44) // IEND
                     break; // last chunk reached..
-                if(chunkType != (int)0x49444154){ // IDAT
-                    if(chunkType == (int)0x49484452){ // IHDR
+                if(chunkType != 0x49444154){ // IDAT
+                    if(chunkType == 0x49484452){ // IHDR
                         w = in.readInt();
                         h = in.readInt();
                         cs = 4 * w * h;

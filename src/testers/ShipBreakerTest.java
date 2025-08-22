@@ -4,7 +4,6 @@ import jbsae.*;
 import jbsae.core.*;
 import jbsae.files.assets.*;
 import jbsae.graphics.*;
-import jbsae.graphics.draw.*;
 import jbsae.graphics.gl.*;
 import jbsae.math.*;
 import jbsae.util.*;
@@ -60,8 +59,9 @@ public class ShipBreakerTest extends Screen{
         }
 
         public void draw(){
+//            Drawf.layer(Mathf.random());
             Drawf.fill(Tmp.c1.set(color).a(0.2f));
-            for(int i = 0;i < 5;i++) Drawf.rectc(pos.x * scale + translate.x, pos.y * scale + translate.y, scale * i / 5f, scale * i / 5f);
+            for(int i = 0;i < 10;i++) Drawf.rectc(pos.x * scale + translate.x, pos.y * scale + translate.y, scale * i / 5f, scale * i / 5f);
         }
     }
 
@@ -75,7 +75,7 @@ public class ShipBreakerTest extends Screen{
             for(int y = 0;y < arr[x].length;y++) arr[x][y] = new Pixel(x, y);
         }
 
-        draw = new SortedDraw();
+//        draw = new SortedDraw();
     }
 
     @Override

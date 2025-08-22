@@ -5,8 +5,6 @@ import jbsae.struct.*;
 
 import java.io.*;
 
-import static org.lwjgl.opengl.GL20.*;
-
 public class AssetDir extends Fi{
     public AssetDir(String name){
         super(name);

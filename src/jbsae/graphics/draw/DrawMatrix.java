@@ -1,13 +1,10 @@
 package jbsae.graphics.draw;
 
-import jbsae.graphics.*;
-import jbsae.math.*;
 import jbsae.struct.*;
-import jbsae.util.*;
 
-import static jbsae.util.Colorf.*;
 import static jbsae.util.Mathf.*;
 
+//TODO: We shouldn't really be using the CPU to transform points, that's more of a shader + GPU thing
 public class DrawMatrix{
     public Queue<Transformation> transformations = new Queue<>();
 

@@ -3,19 +3,19 @@ package jbsae.struct;
 import jbsae.func.*;
 
 public interface List<T> extends Iterable<T>{
-    public Object[] list();
+    Object[] list();
 
 
-    public List<T> set(T value, int index);
+    List<T> set(T value, int index);
 
-    public List<T> set(Object... values);
+    List<T> set(Object... values);
 
-    public List<T> set(List<T> values);
+    List<T> set(List<T> values);
 
-    public List<T> each(Cons<T> values);
+    List<T> each(Cons<T> values);
 
 
-    public T get(int index);
+    T get(int index);
 
-    public int size();
+    int size();
 }

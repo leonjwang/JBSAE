@@ -2,7 +2,6 @@ package jbsae.struct.prim;
 
 import jbsae.*;
 import jbsae.func.*;
-import jbsae.func.prim.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;

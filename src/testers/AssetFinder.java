@@ -4,10 +4,6 @@ import jbsae.files.assets.*;
 import jbsae.struct.*;
 import jbsae.struct.prim.*;
 
-import java.io.*;
-
-import static jbsae.JBSAE.*;
-
 public class AssetFinder{
     public static String[] banned = {" ", "-", ".", "\"", "'", "\\", "/", "(", ")", "[", "]", "{", "}"};
 

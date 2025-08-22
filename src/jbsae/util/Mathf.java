@@ -210,7 +210,7 @@ public class Mathf{
         float a = n, b = n / d;
         while(abs(a - b) > THRESHHOLD){
             a = b;
-            b = (float)((d - 1) * b + n / pow(b, d - 1)) / d;
+            b = ((d - 1) * b + n / pow(b, d - 1)) / d;
         }
         return b;
     }
@@ -501,13 +501,13 @@ public class Mathf{
     /** Returns the difference in angle between a and b in degrees. */
     public static float diffa(float a, float b){
         if(a > b) return (b + 360 - a > a - b) ? (a - b) : -(b + 360 - a);
-        else return (a + 360 - b > b - a)  ? -(b - a) : (a + 360 - b);
+        else return (a + 360 - b > b - a) ? -(b - a) : (a + 360 - b);
     }
 
     /** Returns the difference in angle between a and b in radians. */
     public static float diffar(float a, float b){
         if(a > b) return (b + (2 * PI) - a > a - b) ? (a - b) : -(b + (2 * PI) - a);
-        else return (a + (2 * PI) - b > b - a)  ? -(b - a) : (a + (2 * PI) - b);
+        else return (a + (2 * PI) - b > b - a) ? -(b - a) : (a + (2 * PI) - b);
     }
 
 

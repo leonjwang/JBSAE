@@ -2,13 +2,18 @@ package testers;
 
 import jbsae.math.*;
 import jbsae.struct.*;
+import jbsae.struct.Map;
+import jbsae.struct.Queue;
+import jbsae.struct.Set;
 import jbsae.struct.prim.*;
 import jbsae.struct.tree.*;
+
+import java.util.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-//Important note: Floatmaps and Floatsets do not have the same behaivior as a HashMap or HashSet due to how they use eqlf
+// Important note: Floatmaps and Floatsets do not have the same behaivior as a HashMap or HashSet due to how they use eqlf
 public class StructTester{
     public static int failed = 0;
 
@@ -446,7 +451,7 @@ public class StructTester{
             for(int i = 0;i < randInt(3, 10);i++){
                 String[] added = generate();
                 current.addAll(added);
-                for(int j = 0;j < added.length;j++) values.add(added[j]);
+                Collections.addAll(values, added);
                 for(int j = 0;j < randInt(1, 4);j++) current.addBranch(new Tree<>());
                 if(chance(0.3f) && current.parent != null) current = current.parent;
                 else current = current.branches.get(randInt(0, current.branches.size - 1));
@@ -785,7 +790,7 @@ public class StructTester{
                 for(int i = 0;i < times;i++) test.run();
                 System.out.println("[" + name + "] Test Passed");
             }catch(Exception e){
-                System.out.println("[" + name + "] Test Failed: " + e.toString());
+                System.out.println("[" + name + "] Test Failed: " + e);
                 e.printStackTrace();
                 failed++;
             }
@@ -795,6 +800,6 @@ public class StructTester{
     }
 
     public interface TestRunnable{
-        public void run() throws Exception;
+        void run() throws Exception;
     }
 }

@@ -9,7 +9,7 @@ import jbsae.struct.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
-import static jbsae.util.Mathf.zero;
+import static jbsae.util.Mathf.*;
 
 public class Draw{
     public Font font;

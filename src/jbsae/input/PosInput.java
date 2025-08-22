@@ -4,7 +4,6 @@ package jbsae.input;
 import org.lwjgl.glfw.*;
 
 import static jbsae.JBSAE.*;
-import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
 
 public class PosInput extends GLFWCursorPosCallback{
     @Override
