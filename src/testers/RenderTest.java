@@ -10,7 +10,7 @@ import jbsae.util.*;
 
 import static jbsae.JBSAE.*;
 
-public class ShipBreakerTest extends Screen{
+public class RenderTest extends Screen{
     public Texture box;
 
     public Region region;
@@ -106,7 +106,7 @@ public class ShipBreakerTest extends Screen{
         JBSAE.debug = false;
 
         JBSAE.init();
-        JBSAE.screen(new ShipBreakerTest());
+        JBSAE.screen(new RenderTest());
         JBSAE.start();
         JBSAE.dispose();
     }
