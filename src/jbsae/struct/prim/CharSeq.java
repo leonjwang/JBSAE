@@ -1,18 +1,73 @@
 package jbsae.struct.prim;
 
+import jbsae.func.prim.*;
+
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-//TODO: Change to custom backing array; char and int are of different sizes
-public class CharSeq extends IntSeq{
+// TODO: Consider turning into circular queue
+public class CharSeq{
+    public char[] items;
+    public int size;
+
     public CharSeq(){
-        super();
+        this(4);
+    }
+
+    public CharSeq(int size){
+        items = new char[size];
+    }
+
+    public CharSeq(char... values){
+        this(values.length);
+        for(int i = 0;i < values.length;i++) add(values[i]);
     }
 
     public CharSeq(String str){
-        super(str.length());
+        this(str.length());
         add(str);
+    }
+
+    public char[] list(){
+        char[] values = new char[size];
+        copy(items, values, size);
+        return values;
+    }
+
+    public CharSeq set(char value, int index){
+        items[index] = value;
+        return this;
+    }
+
+    public CharSeq set(char... values){
+        clear();
+        for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
+    }
+
+    public CharSeq set(CharSeq values){
+        items = values.items;
+        size = values.size;
+        return this;
+    }
+
+    public CharSeq add(char value){
+        if(size >= items.length) resize(max(8, size * 2));
+        items[size++] = value;
+        return this;
+    }
+
+    public CharSeq add(char value, int index){
+        if(size >= items.length) resize(max(8, size * 2));
+        shift(items, index, size++, 1);
+        items[index] = value;
+        return this;
+    }
+
+    public CharSeq addAll(char... values){
+        for(int i = 0;i < values.length;i++) add(values[i]);
+        return this;
     }
 
     public CharSeq add(String str){
@@ -27,6 +82,34 @@ public class CharSeq extends IntSeq{
         return this;
     }
 
+
+    public CharSeq remove(int index){
+        shift(items, index + 1, size--, -1);
+        items[size] = 0;
+        return this;
+    }
+
+    public CharSeq removeValue(char value){
+        for(int i = 0;i < size;i++){
+            if(items[i] == value){
+                remove(i);
+                break;
+            }
+        }
+        return this;
+    }
+
+    public CharSeq remove(char... indexes){
+        for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
+        return this;
+    }
+
+    public CharSeq removeAll(char... values){
+        for(int i = 0;i < values.length;i++){
+            for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
+        }
+        return this;
+    }
     public CharSeq remove(int index, int range){
         shift(items, index + range, (size -= range) + range, -range);
         for(int i = 0;i < range;i++) items[size + i] = 0;
@@ -42,6 +125,44 @@ public class CharSeq extends IntSeq{
     public CharSeq removeAll(String str){
         int index;
         while((index = indexOf(str)) >= 0) remove(index, str.length());
+        return this;
+    }
+
+    public char get(int index){
+        return items[index];
+    }
+
+    public boolean contains(char value){
+        for(int i = 0;i < size;i++) if(items[i] == value) return true;
+        return false;
+    }
+
+    public boolean contains(Boolfi condition){
+        for(int i = 0;i < size;i++) if(condition.get(items[i])) return true;
+        return false;
+    }
+
+    public CharSeq each(Intc cons){
+        for(int i = 0;i < size;i++) cons.get(items[i]);
+        return this;
+    }
+
+    public CharSeq sort(){
+        resize(size);
+        sortArr(items);
+        return this;
+    }
+
+    public CharSeq clear(){
+        fill(items, '\0');
+        size = 0;
+        return this;
+    }
+
+    public CharSeq resize(int newSize){
+        char[] items = new char[newSize];
+        copy(this.items, items, size);
+        this.items = items;
         return this;
     }
 
@@ -96,19 +217,13 @@ public class CharSeq extends IntSeq{
         return -1;
     }
 
-    @Override
-    public CharSeq clear(){
-        return (CharSeq)super.clear();
-    }
-
-    @Override
     public CharSeq trim(){
         int start, end;
         for(start = 0;start < size;start++) if(items[start] > ' ') break;
         for(end = size - 1;end >= 0;end--) if(items[end] > ' ') break;
         if(end >= start){
             shift(items, start, start + (size = end - start + 1), -start);
-            super.trim();
+            resize(size);
         }else clear();
         return this;
     }

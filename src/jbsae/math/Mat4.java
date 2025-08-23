@@ -6,7 +6,7 @@ import java.nio.*;
 
 
 public class Mat4{
-    public float[][] m = new float[4][4]; //Maybe change back to individual rectangles for each
+    public float[][] m = new float[4][4]; // TODO: Maybe change back to individual rectangles for each
 
     public Mat4(){
         id();

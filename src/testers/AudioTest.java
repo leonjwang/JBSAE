@@ -16,9 +16,6 @@ public class AudioTest{
         load();
 
         Drawf.font(Font.all.get(0));
-//        Vec2 center = new Vec2(width / 2, height / 2);
-
-//        ((TextureFi)AssetFi.all.get("square.png")).texture.bind();
 
         Source song = new Source(Sound.all.get(0));
         song.pitch(0.85f);
