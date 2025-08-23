@@ -16,9 +16,8 @@ public class ShaderFi extends AssetFi{
     @Override
     public ShaderFi gen(){
         StringBuilder builder = new StringBuilder();
-        try{
+        try(BufferedReader reader = reader()){
             String line;
-            BufferedReader reader = reader();
             while((line = reader.readLine()) != null) builder.append(line).append("\n");
         }catch(Exception e){
             System.out.println("Failed to load shader: " + path());

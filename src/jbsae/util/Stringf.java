@@ -2,6 +2,7 @@ package jbsae.util;
 
 import jbsae.struct.prim.*;
 
+// TODO: Some kind of logging system
 public class Stringf{
     public static char lowerCase(char ch){
         return Character.toLowerCase(ch);

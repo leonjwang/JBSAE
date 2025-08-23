@@ -22,7 +22,7 @@ public class SoundFi extends AssetFi{
     @Override
     public AudioInputStream input(){
         try{
-            URL url = Thread.currentThread().getContextClassLoader().getResource(path.substring(assetsFolder.length() + 1));
+            URL url = Thread.currentThread().getContextClassLoader().getResource(path.substring(assets.assetsFolder.length() + 1));
             if(url == null){
                 this.file = new File(path);
                 return AudioSystem.getAudioInputStream(this.file.toURL());
@@ -37,10 +37,8 @@ public class SoundFi extends AssetFi{
 
     @Override
     public SoundFi gen(){
-        try{
+        try(AudioInputStream stream = input()){
             final int MONO = 1, STEREO = 2;
-
-            AudioInputStream stream = input();
 
             AudioFormat format = stream.getFormat();
             if(format.isBigEndian()) throw new UnsupportedAudioFileException("Can't handle Big Endian formats yet");

@@ -15,9 +15,9 @@ public class TextureFi extends AssetFi{
 
     @Override
     public TextureFi gen(){
-        try{
+        try(InputStream stream = input()){
             LwjPNG reader = new LwjPNG();
-            reader.init(input(), true);
+            reader.init(stream, true);
             texture = new Texture(reader.w, reader.h, reader.decode());
         }catch(Exception e){
             System.out.println("Failed to load texture: " + path());

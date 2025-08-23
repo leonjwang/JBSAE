@@ -15,7 +15,7 @@ public class Assetf{
             buffer.flush();
             return buffer.toByteArray();
         }catch(IOException e){
-            System.out.println("Failed reading file: " + path());
+            System.out.println("Failed to convert input to bytes: " + input.toString());
             e.printStackTrace();
             return null;
         }

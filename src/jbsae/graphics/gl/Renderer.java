@@ -32,8 +32,9 @@ public class Renderer{
         vertexBuffer = new VertexBuffer();
         vertexBuffer.data(GL_ARRAY_BUFFER, (long)vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
 
-        vertexShader = ((ShaderFi)AssetFi.create(assetsFolder + "/shaders/shader.vert").load()).shader;
-        fragmentShader = ((ShaderFi)AssetFi.create(assetsFolder + "/shaders/shader.frag").load()).shader;
+        // TODO: Don't hardcode
+        vertexShader = ((ShaderFi)AssetFi.create(assets.assetsFolder + "/shaders/shader.vert").load()).shader;
+        fragmentShader = ((ShaderFi)AssetFi.create(assets.assetsFolder + "/shaders/shader.frag").load()).shader;
 
         program = new ShaderProgram(vertexShader, fragmentShader);
         program.bind("fragColor", 0);

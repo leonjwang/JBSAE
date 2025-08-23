@@ -5,7 +5,7 @@ import jbsae.struct.*;
 
 import static org.lwjgl.openal.AL10.*;
 
-// TODO: ogg files kinda ignore position right now
+// TODO: Sound files kinda ignore position right now
 public class Source{
     public static Seq<Source> all = new Seq<>();
 

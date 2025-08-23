@@ -40,7 +40,7 @@ public class AssetFi extends Fi{
     @Override
     public InputStream input(){
         try{
-            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path.substring(assetsFolder.length() + 1));
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path.substring(assets.assetsFolder.length() + 1));
             if(stream == null){
                 this.file = new File(path);
                 stream = super.input();

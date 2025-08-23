@@ -12,23 +12,7 @@ import static jbsae.JBSAE.*;
 
 public class AudioTest{
     public static void main(String[] args){
-
         init();
-//        AssetDir root = new AssetDir("assets");
-//        root.list(new Seq<AssetFi>());
-
-        AssetFi assets_sounds_Felys_wav = AssetFi.create("assets/sounds/Felys.wav");
-        AssetFi assets_sounds_Onefin___Nadir__tdPuUOSoatk__wav = AssetFi.create("assets/sounds/Onefin - Nadir [tdPuUOSoatk].wav");
-        AssetFi assets_shaders_shader_vert = AssetFi.create("assets/shaders/shader.vert");
-        AssetFi assets_shaders_shader_frag = AssetFi.create("assets/shaders/shader.frag");
-        AssetFi assets_sprites_effects_circle_png = AssetFi.create("assets/sprites/effects/circle.png");
-        AssetFi assets_sprites_effects_square_png = AssetFi.create("assets/sprites/effects/square.png");
-        AssetFi assets_JBSAE_png = AssetFi.create("assets/JBSAE.png");
-        AssetFi assets_fonts_Brandbe_font_fnt = AssetFi.create("assets/fonts/Brandbe/font.fnt");
-        AssetFi assets_fonts_Brandbe_qfUMs2lDXZLHOCcP4QSEfsZJ_ttf_0_png = AssetFi.create("assets/fonts/Brandbe/qfUMs2lDXZLHOCcP4QSEfsZJ.ttf_0.png");
-        AssetFi assets_fonts_Roboto_ylJJ_tsk1KIAihFAhRCwiojb_ttf_0_png = AssetFi.create("assets/fonts/Roboto/ylJJ_tsk1KIAihFAhRCwiojb.ttf_0.png");
-        AssetFi assets_fonts_Roboto_font_fnt = AssetFi.create("assets/fonts/Roboto/font.fnt");
-
         load();
 
         Drawf.font(Font.all.get(0));
@@ -36,7 +20,7 @@ public class AudioTest{
 
 //        ((TextureFi)AssetFi.all.get("square.png")).texture.bind();
 
-        Source song = new Source(Sound.all.get(1));
+        Source song = new Source(Sound.all.get(0));
         song.pitch(0.85f);
         song.relative(false);
         song.position(new Vec3(10, 0, 0));

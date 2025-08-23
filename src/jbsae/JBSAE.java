@@ -13,7 +13,6 @@ public class JBSAE{
     public static boolean debug = true;
 
     public static String programName = "JBSAE";
-    public static String assetsFolder = "assets";
     public static int width = 600, height = 500;
     public static int fps = 60, ups = 60;
 
@@ -21,6 +20,7 @@ public class JBSAE{
     public static int winWidth = 1, winHeight = 1;
     public static int frameWidth = 1, frameHeight = 1;
 
+    public static Assets assets = new Assets();
     public static Time time = new Time();
     public static Window window = new Window();
     public static Renderer renderer = new Renderer();
@@ -32,6 +32,7 @@ public class JBSAE{
 
     public static void init(){
         glfwInit();
+        assets.init();
         time.init();
         window.init();
         renderer.init();
@@ -41,7 +42,7 @@ public class JBSAE{
     }
 
     public static void load(){
-        for(String assetName : AssetFi.all) AssetFi.all.get(assetName).load();
+        assets.load();
     }
 
     public static void start(){
@@ -57,11 +58,7 @@ public class JBSAE{
         window.dispose();
         renderer.dispose();
         sounds.dispose();
-
-        for(Shader shader : Shader.all) shader.dispose();
-        for(Sound sound : Sound.all) sound.dispose();
-        for(Source source : Source.all) source.dispose();
-        for(Texture texture : Texture.all) texture.dispose();
+        assets.load();
 
         glfwTerminate();
     }

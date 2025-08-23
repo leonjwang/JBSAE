@@ -42,7 +42,7 @@ public class Window{
         glfwMakeContextCurrent(id);
         GL.createCapabilities();
 
-        TextureFi icon = (TextureFi)AssetFi.create(assetsFolder + "/" + programName + ".png");
+        TextureFi icon = (TextureFi)AssetFi.create(assets.assetsFolder + "/" + programName + ".png");
         if(icon != null && icon.texture != null){
             icon.load();
             GLFWImage image = GLFWImage.malloc();

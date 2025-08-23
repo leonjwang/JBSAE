@@ -15,9 +15,8 @@ public class FontFi extends AssetFi{
 
     @Override
     public FontFi gen(){
-        try{
+        try(BufferedReader reader = reader()){
             font = new Font();
-            BufferedReader reader = reader();
             StringTokenizer info = new StringTokenizer(reader.readLine());
             if(!info.nextToken().equals("info")) throw new IOException("No font info");
 

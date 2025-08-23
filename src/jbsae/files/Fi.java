@@ -20,10 +20,6 @@ public class Fi{
         return file.exists();
     }
 
-    public boolean directory(){
-        return file.isDirectory();
-    }
-
     public String name(){
         return file.getName();
     }
@@ -58,6 +54,10 @@ public class Fi{
 
     public BufferedReader reader(){
         return new BufferedReader(new InputStreamReader(input()));
+    }
+
+    public BufferedWriter writer(){
+        return new BufferedWriter(new OutputStreamWriter(output()));
     }
 
 
