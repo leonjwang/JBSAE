@@ -36,7 +36,7 @@ public class AudioTest{
 
 
                 Drawf.fill(Tmp.c1.hsv(a, 1f, v.len() / height * 2));
-                Drawf.line(((TextureFi)AssetFi.all.get("assets/sprites/effects/square.png")).texture.full, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
+                Drawf.line(((TextureFi)assets.files.get("assets/sprites/effects/square.png")).texture.full, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
 
                 Drawf.fill(Tmp.c1.hsv(a + 180, 1f, 1f));
                 Drawf.text("" + a, 10, 10, 30);
@@ -51,22 +51,6 @@ public class AudioTest{
                 song.gain(gain);
 
                 if(!song.playing()) song.play();
-
-//                Drawf.line(((TextureFi)AssetFi.all.get("square.png")).texture.full, 1f, 1f, 2f, 2f, 0.1f);
-//
-//                for(int i = 0;i < 2000;i++){
-//                    Drawf.fill(Tmp.c1.hsv(i, 1f, 1f));
-//                    Drawf.text("safk\njhsd", 12 + i, 130, 100);
-//                }
-//                for(int i = 0;i < 8;i++){
-//                    Tmp.v1.setr(100 + (i % 2 == 0 ? 1 : -1) * Mathf.cos((time.frames / 180f) * 360f / 2f) * 25f, (Interpf.spow3.get(Mathf.mod(time.frames / 180f, 1f)) + i / 8f) * 360f).add(center);
-//                    Drawf.fill(Tmp.c1.hsv((time.frames / 180f + (i < 4 ? i : 8 - i) / 8f) * 360f / 3f, 1f, 1f));
-//                    Drawf.rectc(Tmp.v1.x, Tmp.v1.y, 20, 20);
-//                }
-//
-//                Drawf.line(width / 2, height / 2, input.mouse.x, input.mouse.y);
-//
-//                float a = Tmp.v1.set(0, -1).ang();
             }
         });
         start();

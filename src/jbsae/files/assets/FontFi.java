@@ -6,6 +6,8 @@ import jbsae.graphics.gl.*;
 import java.io.*;
 import java.util.*;
 
+import static jbsae.JBSAE.*;
+
 public class FontFi extends AssetFi{
     public Font font;
 
@@ -68,7 +70,7 @@ public class FontFi extends AssetFi{
                     else if(split[0].equals("file")) name = split[1].substring(1, split[1].length() - 1);
                 }
 
-                font.page[id] = ((TextureFi)AssetFi.create(parent() + "/" + name).load()).texture;
+                font.page[id] = ((TextureFi)assets.create(parent() + "/" + name).load()).texture;
             }
 
             // Parse glyphs

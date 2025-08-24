@@ -18,6 +18,7 @@ import static jbsae.util.Colorf.*;
 import static jbsae.util.Drawf.*;
 import static jbsae.util.Mathf.*;
 
+// TODO: Fix all examples
 public class InterpDisplay extends Screen{
     public static float displaySize = 150;
     public static float exampleSize = 5;
@@ -32,7 +33,6 @@ public class InterpDisplay extends Screen{
     public Seq<Interp> interpSeq = new Seq<>();
     public Seq<String> nameSeq = new Seq<>();
     public Color boxColor = new Color();
-    public Texture box;
     public Vec2 tmp = new Vec2();
     public Range2 tmp2 = new Range2();
     public String lastOver = "";
@@ -40,10 +40,6 @@ public class InterpDisplay extends Screen{
 
     @Override
     public void init(){
-        box = ((TextureFi)AssetFi.create("assets/sprites/effects/square.png").load()).texture;
-        FontFi font = (FontFi)AssetFi.create("assets/fonts/Roboto/font.fnt").load();
-        Drawf.font(font.font);
-
         Interpf tmp = new Interpf();
         try{
             for(Field f : Interpf.class.getDeclaredFields()){
@@ -56,7 +52,9 @@ public class InterpDisplay extends Screen{
 
     @Override
     public void draw(){
-        box.bind();
+        Drawf.font(Font.all.get(0));
+
+        ((TextureFi)assets.files.get("assets/sprites/effects/square.png")).texture.bind(); // TODO: Replace
         fill(BLACK);
         rect(0, 0, width, height);
         int max = (int)(width / boxSpacing);
@@ -92,7 +90,7 @@ public class InterpDisplay extends Screen{
             if(tmp2.contains(input.mouse)){
                 fill(boxColor);
                 text(nameSeq.get(i), -0.5f, 0.56f, 11f / boxSize);
-                box.bind();
+                ((TextureFi)assets.files.get("assets/sprites/effects/square.png")).texture.bind(); // TODO: Replace
             }
             pop();
         }
@@ -134,6 +132,7 @@ public class InterpDisplay extends Screen{
         JBSAE.debug = false;
 
         JBSAE.init();
+        JBSAE.load();
         JBSAE.screen(new InterpDisplay());
         JBSAE.start();
         JBSAE.dispose();

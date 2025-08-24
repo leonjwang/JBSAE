@@ -9,8 +9,6 @@ import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class AssetFi extends Fi{
-    public static Map<String, AssetFi> all = new Map<>();
-
     public String path, name, parent;
 
     public boolean loaded = false;
@@ -19,7 +17,7 @@ public class AssetFi extends Fi{
         this.path = path;
         this.name = path.substring(path.lastIndexOf("/") + 1);
         this.parent = path.substring(0, path.lastIndexOf("/"));
-        all.add(path(), this);
+        assets.files.add(path(), this);
     }
 
     @Override
@@ -60,18 +58,5 @@ public class AssetFi extends Fi{
     public AssetFi gen(){
         this.loaded = true;
         return this;
-    }
-
-    public static AssetFi create(String path){
-        if(all.contains(path)) return all.get(path);
-        if(path.endsWith(".fnt")) return new FontFi(path);
-        if(path.endsWith(".frag")) return new ShaderFi(path, GL_FRAGMENT_SHADER);
-        if(path.endsWith(".vert")) return new ShaderFi(path, GL_VERTEX_SHADER);
-        if(path.endsWith(".au")) return new SoundFi(path);
-        if(path.endsWith(".mp3")) return new SoundFi(path);
-        if(path.endsWith(".ogg")) return new SoundFi(path);
-        if(path.endsWith(".wav")) return new SoundFi(path);
-        if(path.endsWith(".png")) return new TextureFi(path);
-        return null;
     }
 }

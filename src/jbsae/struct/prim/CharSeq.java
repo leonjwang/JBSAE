@@ -6,7 +6,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-// TODO: Consider turning into circular queue
+
 public class CharSeq{
     public char[] items;
     public int size;

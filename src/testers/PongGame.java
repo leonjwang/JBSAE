@@ -7,6 +7,7 @@ import jbsae.math.*;
 import jbsae.struct.*;
 import jbsae.util.*;
 
+import static jbsae.JBSAE.*;
 import static jbsae.util.Mathf.*;
 
 public class PongGame extends Screen{
@@ -106,8 +107,8 @@ public class PongGame extends Screen{
 
     @Override
     public void init(){
-        box = ((TextureFi)AssetFi.create("assets/sprites/effects/square.png").load());
-        FontFi font = (FontFi)AssetFi.create("assets/fonts/Roboto/font.fnt").load();
+        box = ((TextureFi)assets.create("assets/sprites/effects/square.png").load());
+        FontFi font = (FontFi)assets.create("assets/fonts/Roboto/font.fnt").load();
         Drawf.font(font.font);
 
         JBSAE.load();

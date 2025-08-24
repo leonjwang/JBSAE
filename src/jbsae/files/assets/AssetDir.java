@@ -5,6 +5,8 @@ import jbsae.struct.*;
 
 import java.io.*;
 
+import static jbsae.JBSAE.*;
+
 public class AssetDir extends Fi{
     public AssetDir(String name){
         super(name);
@@ -18,7 +20,7 @@ public class AssetDir extends Fi{
         File[] contents = file.listFiles();
         for(File file : contents){
             if(file.isDirectory()) new AssetDir(file).list(arr);
-            else arr.add(AssetFi.create(file.getPath()));
+            else arr.add(assets.create(file.getPath()));
         }
         return arr;
     }

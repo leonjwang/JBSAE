@@ -67,7 +67,7 @@ public class RenderTest extends Screen{
 
     @Override
     public void init(){
-        box = ((TextureFi)AssetFi.create("assets/sprites/effects/circle.png").gen()).texture;
+        box = ((TextureFi)assets.create("assets/sprites/effects/circle.png").gen()).texture;
         region = new Region(box);
 
         arr = new Pixel[50][50];
@@ -87,13 +87,6 @@ public class RenderTest extends Screen{
 
     @Override
     public void draw(){
-//        Drawf.layer(0f);
-//        Drawf.fill(1f, 1f, 1f);
-//        Drawf.rect(10f, 10f, 50f, 50f);
-//
-//        Drawf.layer(Mathf.sint(1000));
-//        Drawf.fill(1f, 0f, 0f);
-//        Drawf.rect(30f, 10f, 50f, 50f);
         box.bind();
 
         for(int x = 0;x < arr.length;x++){

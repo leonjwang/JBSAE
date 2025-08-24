@@ -13,7 +13,6 @@ import java.util.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-// Important note: Floatmaps and Floatsets do not have the same behaivior as a HashMap or HashSet due to how they use eqlf
 public class StructTester{
     public static int failed = 0;
 

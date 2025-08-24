@@ -8,6 +8,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
+// I think I am realizing that a Dequeue is in most ways literally just a superior Seq
 public class Queue<T> implements List<T>{
     public QueueIterator i1, i2;
     public T[] items;
