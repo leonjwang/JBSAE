@@ -43,6 +43,9 @@ public class JBSAE{
 
     public static void load(){
         assets.load();
+
+        Texture icon = assets.textures.get(programName + ".png");
+        window.icon(icon);
     }
 
     public static void start(){
@@ -58,7 +61,7 @@ public class JBSAE{
         window.dispose();
         renderer.dispose();
         sounds.dispose();
-        assets.load();
+        assets.dispose();
 
         glfwTerminate();
     }

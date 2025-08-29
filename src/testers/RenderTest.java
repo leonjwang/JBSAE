@@ -11,10 +11,6 @@ import jbsae.util.*;
 import static jbsae.JBSAE.*;
 
 public class RenderTest extends Screen{
-    public Texture box;
-
-    public Region region;
-
     public Pixel[][] arr;
 
     public Vec2 translate = new Vec2(200, 200);
@@ -67,9 +63,6 @@ public class RenderTest extends Screen{
 
     @Override
     public void init(){
-        box = ((TextureFi)assets.create("assets/sprites/effects/circle.png").gen()).texture;
-        region = new Region(box);
-
         arr = new Pixel[50][50];
         for(int x = 0;x < arr.length;x++){
             for(int y = 0;y < arr[x].length;y++) arr[x][y] = new Pixel(x, y);
@@ -87,7 +80,7 @@ public class RenderTest extends Screen{
 
     @Override
     public void draw(){
-        box.bind();
+        assets.textures.get("circle.png").bind();
 
         for(int x = 0;x < arr.length;x++){
             for(int y = 0;y < arr[x].length;y++) arr[x][y].draw();
@@ -99,6 +92,7 @@ public class RenderTest extends Screen{
         JBSAE.debug = false;
 
         JBSAE.init();
+        JBSAE.load();
         JBSAE.screen(new RenderTest());
         JBSAE.start();
         JBSAE.dispose();

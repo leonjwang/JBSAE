@@ -31,6 +31,6 @@ public class Stringf{
     public static <T> String itrToString(Iterable<T> arr){
         CharSeq str = (CharSeq)new CharSeq().add('[');
         for(T o : arr) str.add(o.toString()).add(", ");
-        return str.substring(0, str.size - 2).add(']').toString();
+        return str.size == 1 ? "[]" : str.substring(0, str.size - 2).add(']').toString();
     }
 }

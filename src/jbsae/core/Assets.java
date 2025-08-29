@@ -9,17 +9,15 @@ import jbsae.struct.*;
 
 import java.io.*;
 
-import static org.lwjgl.opengl.GL20.*;
-
 // TODO: Sound.all, Texture.all, Shader.all are somewhat redundent, but Font.all and Source.all are the odd ones out.
-//       (Fonts don't need to be disposed of, and sources don't necessarily have a file). What do I do?
 public class Assets{
     public static Map<String, AssetFi> files = new Map<>();
 
-    public Map<String, Font> fonts;
-    public Map<String, Shader> shaders;
-    public Map<String, Sound> sounds;
-    public Map<String, Texture> textures;
+    // TODO: Replace with one map?
+    public Map<String, Font> fonts = new Map<>();
+    public Map<String, Shader> shaders = new Map<>();
+    public Map<String, Sound> sounds = new Map<>();
+    public Map<String, Texture> textures = new Map<>();
 
     public String assetsFolder = "assets";
     public String assetList = "assetlist.lst";
@@ -74,15 +72,14 @@ public class Assets{
     public void dispose(){
         for(Shader shader : Shader.all) shader.dispose();
         for(Sound sound : Sound.all) sound.dispose();
-        for(Source source : Source.all) source.dispose();
         for(Texture texture : Texture.all) texture.dispose();
     }
 
     public AssetFi create(String path){
         if(files.contains(path)) return files.get(path);
         if(path.endsWith(".fnt")) return new FontFi(path);
-        if(path.endsWith(".frag")) return new ShaderFi(path, GL_FRAGMENT_SHADER);
-        if(path.endsWith(".vert")) return new ShaderFi(path, GL_VERTEX_SHADER);
+        if(path.endsWith(".frag")) return new ShaderFi(path);
+        if(path.endsWith(".vert")) return new ShaderFi(path);
         if(path.endsWith(".au")) return new SoundFi(path);
         if(path.endsWith(".mp3")) return new SoundFi(path);
         if(path.endsWith(".ogg")) return new SoundFi(path);

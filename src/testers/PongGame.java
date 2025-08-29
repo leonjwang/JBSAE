@@ -39,8 +39,6 @@ public class PongGame extends Screen{
     private int score1;
     private int score2;
 
-    TextureFi box;
-
     private class Ball{
         Vec2 position;
         Vec2 velocity;
@@ -107,12 +105,10 @@ public class PongGame extends Screen{
 
     @Override
     public void init(){
-        box = ((TextureFi)assets.create("assets/sprites/effects/square.png").load());
-        FontFi font = (FontFi)assets.create("assets/fonts/Roboto/font.fnt").load();
-        Drawf.font(font.font);
 
         JBSAE.load();
-        box.texture.bind();
+
+        Drawf.font(assets.fonts.get("brandbe.fnt"));
 
         paddle1 = new Range2(20, HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT);
         paddle2 = new Range2(WIDTH - 30, HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -189,7 +185,7 @@ public class PongGame extends Screen{
 
     @Override
     public void draw(){
-        box.texture.bind();
+        assets.textures.get("square.png").bind();
 
         Drawf.fill(0.1f, 0.1f, 0.1f);
         Drawf.rect(0, 0, WIDTH, HEIGHT);

@@ -6,11 +6,13 @@ import java.io.*;
 import java.nio.*;
 import java.util.zip.*;
 
+import static jbsae.JBSAE.*;
+
 public class TextureFi extends AssetFi{
     public Texture texture;
 
-    public TextureFi(String name){
-        super(name);
+    public TextureFi(String path){
+        super(path);
     }
 
     @Override
@@ -19,6 +21,7 @@ public class TextureFi extends AssetFi{
             LwjPNG reader = new LwjPNG();
             reader.init(stream, true);
             texture = new Texture(reader.w, reader.h, reader.decode());
+            assets.textures.add(name, texture);
         }catch(Exception e){
             System.out.println("Failed to load texture: " + path());
             e.printStackTrace();

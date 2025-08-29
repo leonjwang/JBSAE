@@ -15,16 +15,16 @@ public class AudioTest{
         init();
         load();
 
-        Drawf.font(Font.all.get(0));
+        Drawf.font(assets.fonts.get("brandbe.fnt"));
 
-        Source song = new Source(Sound.all.get(0));
+        Source song = new Source(assets.sounds.get("mix.wav"));
         song.pitch(0.85f);
         song.relative(false);
         song.position(new Vec3(10, 0, 0));
 
         screen(new Screen(){
-            public float la = 0f;
-            public float a = 0f;
+            public float la = 360f;
+            public float a = 360f;
 
             @Override
             public void draw(){
@@ -36,7 +36,7 @@ public class AudioTest{
 
 
                 Drawf.fill(Tmp.c1.hsv(a, 1f, v.len() / height * 2));
-                Drawf.line(((TextureFi)assets.files.get("assets/sprites/effects/square.png")).texture.full, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
+                Drawf.line(assets.textures.get("square.png").full, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
 
                 Drawf.fill(Tmp.c1.hsv(a + 180, 1f, 1f));
                 Drawf.text("" + a, 10, 10, 30);

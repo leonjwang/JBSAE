@@ -11,8 +11,8 @@ import static jbsae.JBSAE.*;
 public class FontFi extends AssetFi{
     public Font font;
 
-    public FontFi(String name){
-        super(name);
+    public FontFi(String path){
+        super(path);
     }
 
     @Override
@@ -100,6 +100,8 @@ public class FontFi extends AssetFi{
             }
 
             font.none = new Glyph(font);
+
+            assets.fonts.add(name, font);
         }catch(Exception e){
             System.out.println("Failed loading font: " + path());
             e.printStackTrace();

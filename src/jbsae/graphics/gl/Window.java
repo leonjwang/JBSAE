@@ -1,6 +1,5 @@
 package jbsae.graphics.gl;
 
-import jbsae.files.assets.*;
 import jbsae.util.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -41,14 +40,12 @@ public class Window{
 
         glfwMakeContextCurrent(id);
         GL.createCapabilities();
+    }
 
-        TextureFi icon = (TextureFi)assets.create(assets.assetsFolder + "/" + programName + ".png");
-        if(icon != null && icon.texture != null){
-            icon.load();
-            GLFWImage image = GLFWImage.malloc();
-            image.set(icon.texture.width, icon.texture.height, icon.texture.image);
-            glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));
-        }
+    public void icon(Texture icon){
+        GLFWImage image = GLFWImage.malloc();
+        image.set(icon.width, icon.height, icon.image);
+        glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));
     }
 
     public void update(){

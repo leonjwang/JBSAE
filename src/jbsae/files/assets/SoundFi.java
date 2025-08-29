@@ -16,8 +16,8 @@ import static jbsae.util.Assetf.*;
 public class SoundFi extends AssetFi{
     public Sound sound;
 
-    public SoundFi(String name){
-        super(name);
+    public SoundFi(String path){
+        super(path);
     }
 
     @Override
@@ -73,6 +73,7 @@ public class SoundFi extends AssetFi{
             data.flip();
 
             sound = new Sound(data, openALFormat, format);
+            assets.sounds.add(name, sound);
         }catch(Exception e){
             System.out.println("Failed to load sound: " + path());
             e.printStackTrace();

@@ -20,6 +20,10 @@ public class Shader{
         init();
     }
 
+    public boolean frag(){
+        return type == GL_FRAGMENT_SHADER;
+    }
+
     public Shader init(){
         glShaderSource(id, data);
         glCompileShader(id);
