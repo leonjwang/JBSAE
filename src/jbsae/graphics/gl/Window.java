@@ -17,6 +17,10 @@ public class Window{
     public long id;
     public IntBuffer widthBuffer, heightBuffer;
 
+    // Dynamically updated
+    public static int winWidth = 1, winHeight = 1;
+    public static int frameWidth = 1, frameHeight = 1;
+
     public static GLFWErrorCallback errorCallback;
 
     public Window(){

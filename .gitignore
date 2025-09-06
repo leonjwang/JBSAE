@@ -7,3 +7,4 @@
 *.xml
 *.DS_Store
 *.MF
+/assets/assetlist.lst

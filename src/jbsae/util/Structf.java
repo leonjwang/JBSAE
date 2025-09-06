@@ -11,7 +11,6 @@ import java.util.*;
 import static jbsae.util.Mathf.*;
 
 
-//TODO: Some of this code is really stupidly written. This is true for all of the util classes. Take advantage of function nesting please. It barely causes any overhead
 @SuppressWarnings("all")
 public class Structf{
     public static final int prime1 = 0xbe1f14b1;

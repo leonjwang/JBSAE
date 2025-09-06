@@ -30,7 +30,7 @@ public class TextureFi extends AssetFi{
         return (TextureFi)super.gen();
     }
 
-    /** Mike-C/lwjPNG **/ // TODO: Check license
+    /** Mike-C/lwjPNG */ // TODO: Write my own version, as this is under the GPL license
     public class LwjPNG{
         public int w, h, dataLen, cs; // cs: chunk size
         public byte[] imgData = null, header = new byte[5];
@@ -41,17 +41,14 @@ public class TextureFi extends AssetFi{
         }
 
         public ByteBuffer scale(int fw, int fh){
-            if(buf != null)
-                buf.clear();
+            if(buf != null) buf.clear();
             ByteBuffer bb = ByteBuffer.allocateDirect(cs);
             getImage(bb);
             int i = 0, bpx = 4;
             float dx = w / (float)fw, dy = h / (float)fh;
             buf = ByteBuffer.allocateDirect(4 * fw * fh);
             for(float y = 0;y < h;y += dy){
-                for(float x = 0;x < w;x += dx){
-                    buf.putInt(bb.getInt((i + (int)x) * bpx));
-                }
+                for(float x = 0;x < w;x += dx) buf.putInt(bb.getInt((i + (int)x) * bpx));
                 i = w * (int)y;
             }
             bb.clear();
@@ -77,11 +74,9 @@ public class TextureFi extends AssetFi{
             int chunkType = 0;
             do{
                 int chunkLen = in.readInt(); // Read the chunk length.
-                if(chunkLen <= 0 || chunkLen > 99998192)
-                    break;
+                if(chunkLen <= 0 || chunkLen > 99998192) break;
                 chunkType = in.readInt();
-                if(chunkType == 0x49454e44) // IEND
-                    break; // last chunk reached..
+                if(chunkType == 0x49454e44) break; // IEND; last chunk reached..
                 if(chunkType != 0x49444154){ // IDAT
                     if(chunkType == 0x49484452){ // IHDR
                         w = in.readInt();

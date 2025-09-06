@@ -5,8 +5,12 @@ import org.lwjgl.system.*;
 import java.nio.*;
 
 
+// TODO: Complete
 public class Mat4{
-    public float[][] m = new float[4][4]; // TODO: Maybe change back to individual rectangles for each
+    public float m00, m01, m02, m03;
+    public float m10, m11, m12, m13;
+    public float m20, m21, m22, m23;
+    public float m30, m31, m32, m33;
 
     public Mat4(){
         id();
@@ -14,9 +18,24 @@ public class Mat4{
 
 
     public Mat4 id(){
-        for(int x = 0;x < 4;x++){
-            for(int y = 0;y < 4;y++) m[x][y] = x == y ? 1 : 0;
-        }
+        m00 = 1f;
+        m11 = 1f;
+        m22 = 1f;
+        m33 = 1f;
+
+        m01 = 0f;
+        m02 = 0f;
+        m03 = 0f;
+        m10 = 0f;
+        m12 = 0f;
+        m13 = 0f;
+        m20 = 0f;
+        m21 = 0f;
+        m23 = 0f;
+        m30 = 0f;
+        m31 = 0f;
+        m32 = 0f;
+
         return this;
     }
 
@@ -27,46 +46,47 @@ public class Mat4{
         float ty = -(t + b) / (t - b);
         float tz = -(f + n) / (f - n);
 
-        m[0][0] = 2f / (r - l);
-        m[1][1] = 2f / (t - b);
-        m[2][2] = -2f / (f - n);
-        m[0][3] = tx;
-        m[1][3] = ty;
-        m[2][3] = tz;
+        m00 = 2f / (r - l);
+        m11 = 2f / (t - b);
+        m22 = -2f / (f - n);
+        m03 = tx;
+        m13 = ty;
+        m23 = tz;
 
         return this;
     }
 
-    public Mat4 add(Mat4 o){
-        for(int x = 0;x < 4;x++){
-            for(int y = 0;y < 4;y++) m[x][y] += o.m[x][y];
-        }
-        return this;
-    }
-
-    public Mat4 scl(float v){
-        for(int x = 0;x < 4;x++){
-            for(int y = 0;y < 4;y++) m[x][y] *= v;
-        }
-        return this;
-    }
-
-    public Mat4 transpose(){
-        float[][] r = new float[4][4];
-        for(int x = 0;x < 4;x++){
-            for(int y = 0;y < 4;y++) r[x][y] = m[y][x];
-        }
-        m = r;
-        return this;
-    }
+//    public Mat4 add(Mat4 o){
+//        for(int x = 0;x < 4;x++){
+//            for(int y = 0;y < 4;y++) m[x][y] += o.m[x][y];
+//        }
+//        return this;
+//    }
+//
+//    public Mat4 scl(float v){
+//        for(int x = 0;x < 4;x++){
+//            for(int y = 0;y < 4;y++) m[x][y] *= v;
+//        }
+//        return this;
+//    }
+//
+//    public Mat4 transpose(){
+//        float[][] r = new float[4][4];
+//        for(int x = 0;x < 4;x++){
+//            for(int y = 0;y < 4;y++) r[x][y] = m[y][x];
+//        }
+//        m = r;
+//        return this;
+//    }
 
 
     public FloatBuffer buffer(){
         MemoryStack stack = MemoryStack.stackPush();
         FloatBuffer buffer = stack.mallocFloat(4 * 4);
-        for(int y = 0;y < 4;y++){
-            for(int x = 0;x < 4;x++) buffer.put(m[x][y]);
-        }
+        buffer.put(m00).put(m10).put(m20).put(m30);
+        buffer.put(m01).put(m11).put(m21).put(m31);
+        buffer.put(m02).put(m12).put(m22).put(m32);
+        buffer.put(m03).put(m13).put(m23).put(m33);
         buffer.flip();
         return buffer;
     }

@@ -10,15 +10,9 @@ import jbsae.input.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class JBSAE{
-    public static boolean debug = true;
-
     public static String programName = "JBSAE";
     public static int width = 600, height = 500;
     public static int fps = 60, ups = 60;
-
-    // Dynamically updated
-    public static int winWidth = 1, winHeight = 1;
-    public static int frameWidth = 1, frameHeight = 1;
 
     public static Assets assets = new Assets();
     public static Time time = new Time();
@@ -28,6 +22,7 @@ public class JBSAE{
     public static GameLoop loop = new GameLoop();
     public static Sounds sounds = new Sounds();
 
+    public static Log log = new Log();
     public static Draw draw = new Draw();
 
     public static void init(){

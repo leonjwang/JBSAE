@@ -9,11 +9,10 @@ import jbsae.struct.*;
 
 import java.io.*;
 
-// TODO: Sound.all, Texture.all, Shader.all are somewhat redundent, but Font.all and Source.all are the odd ones out.
+// TODO: static .all Seqs are somewhat scuffed
 public class Assets{
     public static Map<String, AssetFi> files = new Map<>();
 
-    // TODO: Replace with one map?
     public Map<String, Font> fonts = new Map<>();
     public Map<String, Shader> shaders = new Map<>();
     public Map<String, Sound> sounds = new Map<>();
@@ -48,7 +47,7 @@ public class Assets{
         }
     }
 
-    // TODO: This is scuffed; It dynamically loads the assets and also generated the assets list.
+    /** Generate and load assets/list file from assets folder. */
     private void gen(){
         String assetListFile = assetsFolder + "/" + assetList;
         Fi file = new Fi(assetListFile);

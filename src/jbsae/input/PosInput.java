@@ -7,12 +7,12 @@ import static jbsae.JBSAE.*;
 
 public class PosInput extends GLFWCursorPosCallback{
     @Override
-    public void invoke(long window, double x, double y){
+    public void invoke(long id, double x, double y){
         input.pmouse.set(input.mouse);
 
-        double mouseX = x * ((double)frameWidth / winWidth);
-        double mouseY = (winHeight - y) * ((double)frameHeight / winHeight);
+        double mouseX = x * ((double)window.frameWidth / window.winWidth);
+        double mouseY = (window.winHeight - y) * ((double)window.frameHeight / window.winHeight);
 
-        input.mouse.set((float)mouseX, (float)mouseY).scl((float)width / frameWidth, (float)height / frameHeight);
+        input.mouse.set((float)mouseX, (float)mouseY).scl((float)width / window.frameWidth, (float)height / window.frameHeight);
     }
 }
