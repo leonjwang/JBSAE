@@ -1,6 +1,10 @@
 package jbsae.files;
 
+import jbsae.*;
+
 import java.io.*;
+
+import static jbsae.util.Stringf.*;
 
 public class Fi{
     public File file;
@@ -36,8 +40,8 @@ public class Fi{
         try{
             return new FileInputStream(path());
         }catch(IOException e){
-            System.out.println("Failed reading file: " + path());
-            e.printStackTrace();
+            Log.error("Failed creating input stream to file: " + path());
+            Log.error(getStackTrace(e));
             return null;
         }
     }
@@ -46,8 +50,8 @@ public class Fi{
         try{
             return new FileOutputStream(path());
         }catch(IOException e){
-            System.out.println("Failed reading file: " + path());
-            e.printStackTrace();
+            Log.error("Failed creating output stream to file: " + path());
+            Log.error(getStackTrace(e));
             return null;
         }
     }
@@ -65,8 +69,8 @@ public class Fi{
         try{
             file.createNewFile();
         }catch(IOException e){
-            System.out.println("Failed creating file: " + path());
-            e.printStackTrace();
+            Log.error("Failed creating file: " + path());
+            Log.error(getStackTrace(e));
         }
         return this;
     }

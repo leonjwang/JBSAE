@@ -1,11 +1,13 @@
 package jbsae.files.assets;
 
+import jbsae.*;
 import jbsae.files.*;
 import jbsae.struct.*;
 
 import java.io.*;
 
 import static jbsae.JBSAE.*;
+import static jbsae.util.Stringf.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class AssetFi extends Fi{
@@ -45,8 +47,8 @@ public class AssetFi extends Fi{
             }
             return stream;
         }catch(NullPointerException e){
-            System.out.println("Failed reading file: " + path);
-            e.printStackTrace();
+            Log.error("Failed getting input stream to asset: " + path);
+            Log.error(getStackTrace(e));
             return null;
         }
     }

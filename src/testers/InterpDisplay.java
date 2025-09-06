@@ -128,9 +128,9 @@ public class InterpDisplay extends Screen{
 
     public static void main(String[] args){
         JBSAE.width = 400;
-        JBSAE.debug = false;
 
         JBSAE.init();
+        JBSAE.load();
         JBSAE.screen(new InterpDisplay());
         JBSAE.start();
         JBSAE.dispose();

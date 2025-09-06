@@ -1,5 +1,6 @@
 package jbsae.files.assets;
 
+import jbsae.*;
 import jbsae.graphics.*;
 import jbsae.graphics.gl.*;
 
@@ -7,6 +8,7 @@ import java.io.*;
 import java.util.*;
 
 import static jbsae.JBSAE.*;
+import static jbsae.util.Stringf.*;
 
 public class FontFi extends AssetFi{
     public Font font;
@@ -103,8 +105,8 @@ public class FontFi extends AssetFi{
 
             assets.fonts.add(name, font);
         }catch(Exception e){
-            System.out.println("Failed loading font: " + path());
-            e.printStackTrace();
+            Log.error("Failed loading font: " + path());
+            Log.error(getStackTrace(e));
         }
         return (FontFi)super.gen();
     }

@@ -22,7 +22,6 @@ public class JBSAE{
     public static GameLoop loop = new GameLoop();
     public static Sounds sounds = new Sounds();
 
-    public static Log log = new Log();
     public static Draw draw = new Draw();
 
     public static void init(){

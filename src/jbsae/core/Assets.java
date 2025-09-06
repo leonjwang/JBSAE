@@ -1,5 +1,6 @@
 package jbsae.core;
 
+import jbsae.*;
 import jbsae.audio.*;
 import jbsae.files.*;
 import jbsae.files.assets.*;
@@ -8,6 +9,8 @@ import jbsae.graphics.gl.*;
 import jbsae.struct.*;
 
 import java.io.*;
+
+import static jbsae.util.Stringf.*;
 
 // TODO: static .all Seqs are somewhat scuffed
 public class Assets{
@@ -41,8 +44,8 @@ public class Assets{
                 String line;
                 while((line = reader.readLine()) != null && line.length() > 0) create(line);
             }catch(IOException e){
-                System.out.println("Failed read asset list file: " + assetListFile);
-                e.printStackTrace();
+                Log.error("Failed read asset list file: " + assetListFile);
+                Log.error(getStackTrace(e));
             }
         }
     }
@@ -59,8 +62,8 @@ public class Assets{
                 writer.append(asset.path()).append('\n');
             }
         }catch(IOException e){
-            System.out.println("Failed to create asset list file: " + assetListFile);
-            e.printStackTrace();
+            Log.error("Failed to create asset list file: " + assetListFile);
+            Log.error(getStackTrace(e));
         }
     }
 

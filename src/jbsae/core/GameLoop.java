@@ -1,5 +1,8 @@
 package jbsae.core;
 
+import jbsae.*;
+import jbsae.Log.*;
+
 import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -50,7 +53,7 @@ public class GameLoop{
                 time.cups = time.updates - lastUpdates;
                 lastFrames = time.frames;
                 lastUpdates = time.updates;
-                System.out.println("FPS: " + time.cfps + "UPS: " + time.cups);
+                Log.info("FPS: " + time.cfps + " UPS: " + time.cups);
             }
             window.poll();
         }

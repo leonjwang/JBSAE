@@ -1,10 +1,12 @@
 package jbsae.files.assets;
 
+import jbsae.*;
 import jbsae.graphics.gl.*;
 
 import java.io.*;
 
 import static jbsae.JBSAE.*;
+import static jbsae.util.Stringf.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public class ShaderFi extends AssetFi{
@@ -24,8 +26,8 @@ public class ShaderFi extends AssetFi{
             int type = path.endsWith(".frag") ? GL_FRAGMENT_SHADER : path.endsWith(".vert") ? GL_VERTEX_SHADER : -1;
             shader = new Shader(builder.toString(), type);
         }catch(Exception e){
-            System.out.println("Failed to load shader: " + path());
-            e.printStackTrace();
+            Log.error("Failed to load shader: " + path());
+            Log.error(getStackTrace(e));
         }
         return (ShaderFi)super.gen();
     }

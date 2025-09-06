@@ -1,8 +1,12 @@
 package jbsae.util;
 
+import jbsae.*;
+
 import java.io.*;
 
-public class Assetf{
+import static jbsae.util.Stringf.*;
+
+public class Filef{
     public static byte[] bytes(InputStream input){
         try{
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -15,8 +19,8 @@ public class Assetf{
             buffer.flush();
             return buffer.toByteArray();
         }catch(IOException e){
-            System.out.println("Failed to convert input to bytes: " + input.toString());
-            e.printStackTrace();
+            Log.error("Failed to convert input to bytes: " + input.toString());
+            Log.error(getStackTrace(e));
             return null;
         }
     }

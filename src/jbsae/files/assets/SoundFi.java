@@ -1,5 +1,6 @@
 package jbsae.files.assets;
 
+import jbsae.*;
 import jbsae.audio.*;
 import org.lwjgl.*;
 import org.lwjgl.openal.*;
@@ -10,7 +11,8 @@ import java.net.*;
 import java.nio.*;
 
 import static jbsae.JBSAE.*;
-import static jbsae.util.Assetf.*;
+import static jbsae.util.Filef.*;
+import static jbsae.util.Stringf.*;
 
 // TODO: So we don't support ogg or mp3 files anymore? When did that happen?
 public class SoundFi extends AssetFi{
@@ -30,8 +32,8 @@ public class SoundFi extends AssetFi{
             }
             return AudioSystem.getAudioInputStream(url);
         }catch(Exception e){
-            System.out.println("Failed reading file: " + path);
-            e.printStackTrace();
+            Log.error("SoundFi failed to load: " + path);
+            Log.error(getStackTrace(e));
             return null;
         }
     }
@@ -75,8 +77,8 @@ public class SoundFi extends AssetFi{
             sound = new Sound(data, openALFormat, format);
             assets.sounds.add(name, sound);
         }catch(Exception e){
-            System.out.println("Failed to load sound: " + path());
-            e.printStackTrace();
+            Log.error("Failed to load sound: " + path());
+            Log.error(getStackTrace(e));
         }
 
         return (SoundFi)super.gen();

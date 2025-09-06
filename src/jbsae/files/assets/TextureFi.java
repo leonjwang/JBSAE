@@ -1,5 +1,6 @@
 package jbsae.files.assets;
 
+import jbsae.*;
 import jbsae.graphics.gl.*;
 
 import java.io.*;
@@ -7,6 +8,7 @@ import java.nio.*;
 import java.util.zip.*;
 
 import static jbsae.JBSAE.*;
+import static jbsae.util.Stringf.*;
 
 public class TextureFi extends AssetFi{
     public Texture texture;
@@ -23,8 +25,8 @@ public class TextureFi extends AssetFi{
             texture = new Texture(reader.w, reader.h, reader.decode());
             assets.textures.add(name, texture);
         }catch(Exception e){
-            System.out.println("Failed to load texture: " + path());
-            e.printStackTrace();
+            Log.error("Failed to load texture: " + path());
+            Log.error(getStackTrace(e));
         }
 
         return (TextureFi)super.gen();
@@ -156,7 +158,7 @@ public class TextureFi extends AssetFi{
                     try{
                         inflater.inflate(row, 0, v);
                     }catch(DataFormatException e){
-                        e.printStackTrace();
+                        Log.error(getStackTrace(e));
                     }
                     if(row[0] != 0){ // apply filters
                         if(row[0] == 1) for(i += bPx;i < v;i++) row[i] += row[i - bPx];

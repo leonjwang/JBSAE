@@ -52,6 +52,10 @@ public class CharSeq{
         return this;
     }
 
+    public CharSeq add(int value){
+        return add(String.valueOf(value));
+    }
+
     public CharSeq add(char value){
         if(size >= items.length) resize(max(8, size * 2));
         items[size++] = value;

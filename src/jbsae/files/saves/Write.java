@@ -1,10 +1,12 @@
 package jbsae.files.saves;
 
+import jbsae.*;
 import jbsae.files.*;
 
 import java.io.*;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 
 public class Write{
     public Fi file;
@@ -18,15 +20,19 @@ public class Write{
     public Write b(byte b){
         try{
             stream.write(b);
-        }catch(Exception e){
-            System.out.println("Failed reading file: " + file.path());
-            e.printStackTrace();
+        }catch(IOException e){
+            Log.error("Failed reading byte from file: " + file.path());
+            Log.error(getStackTrace(e));
         }
         return this;
     }
 
     public Write s(short s){
         return b((byte)(s >> 8)).b((byte)s);
+    }
+
+    public Write c(char c){
+        return s((short)c);
     }
 
     public Write i(int i){
@@ -45,12 +51,24 @@ public class Write{
         return l(longBits(d));
     }
 
+    public Write str(String str){
+        byte[] bytes = str.getBytes();
+        i(bytes.length);
+        try{
+            stream.write(bytes);
+        }catch(IOException e){
+            Log.error("Failed writing string to file: " + file.path());
+            Log.error(getStackTrace(e));
+        }
+        return this;
+    }
+
     public void close(){
         try{
             stream.close();
         }catch(IOException e){
-            System.out.println("Failed reading file: " + file.path());
-            e.printStackTrace();
+            Log.error("Failed closing output stream to file: " + file.path());
+            Log.error(getStackTrace(e));
         }
     }
 }
