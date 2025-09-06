@@ -1,4 +1,4 @@
-package testers;
+package examples;
 
 import jbsae.*;
 import jbsae.audio.*;

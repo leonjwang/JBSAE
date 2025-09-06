@@ -1,5 +1,6 @@
 package jbsae.input;
 
+import jbsae.*;
 import org.lwjgl.glfw.*;
 
 import static jbsae.JBSAE.*;
@@ -7,6 +8,8 @@ import static jbsae.JBSAE.*;
 public class ButtonInput extends GLFWMouseButtonCallback{
     @Override
     public void invoke(long id, int button, int pressed, int arg){
+        Log.trace("Mouse button " + button + (pressed == 1 ? " pressed" : " released"));
+
         if(pressed == 1){
             if(button == 0) input.clicking[0] = true;
             else if(button == 1) input.clicking[1] = true;

@@ -15,7 +15,7 @@ public class Log{
     public static int maxLogs = 1000; // -1 for unlimited
     public static Queue<LogInfo> logs;
 
-    public static LogLevel level = LogLevel.INFO;
+    public static LogLevel level = LogLevel.TRACE;
 
     public static long startTime = 0;
 

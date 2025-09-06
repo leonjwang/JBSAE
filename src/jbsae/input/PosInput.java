@@ -1,6 +1,7 @@
 package jbsae.input;
 
 
+import jbsae.*;
 import org.lwjgl.glfw.*;
 
 import static jbsae.JBSAE.*;
@@ -8,6 +9,8 @@ import static jbsae.JBSAE.*;
 public class PosInput extends GLFWCursorPosCallback{
     @Override
     public void invoke(long id, double x, double y){
+        Log.trace("Mouse moved to " + x + ", " + y);
+
         input.pmouse.set(input.mouse);
 
         double mouseX = x * ((double)window.frameWidth / window.winWidth);
