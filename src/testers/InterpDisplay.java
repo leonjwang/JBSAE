@@ -84,11 +84,9 @@ public class InterpDisplay extends Screen{
                 lasty = interpSeq.get(i).get(x);
             }
 
-            if(tmp2.contains(input.mouse)){
-                fill(boxColor);
-                text(nameSeq.get(i), -0.5f, 0.56f, 11f / boxSize);
-                assets.textures.get("square.png").bind(); // TODO: Replace
-            }
+            fill(boxColor);
+            text(nameSeq.get(i), -0.5f, 0.56f, 12f / boxSize);
+            assets.textures.get("square.png").bind();
             pop();
         }
 
@@ -125,6 +123,8 @@ public class InterpDisplay extends Screen{
     }
 
     public static void main(String[] args){
+        Log.init();
+
         JBSAE.width = 400;
 
         JBSAE.init();
