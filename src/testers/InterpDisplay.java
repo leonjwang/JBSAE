@@ -123,14 +123,7 @@ public class InterpDisplay extends Screen{
     }
 
     public static void main(String[] args){
-        Log.init();
-
         JBSAE.width = 400;
-
-        JBSAE.init();
-        JBSAE.load();
-        JBSAE.screen(new InterpDisplay());
-        JBSAE.start();
-        JBSAE.dispose();
+        jbsae(new InterpDisplay());
     }
 }

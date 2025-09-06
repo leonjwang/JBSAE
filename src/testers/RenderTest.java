@@ -87,11 +87,6 @@ public class RenderTest extends Screen{
 
     public static void main(String[] args){
         JBSAE.width = 400;
-
-        JBSAE.init();
-        JBSAE.load();
-        JBSAE.screen(new RenderTest());
-        JBSAE.start();
-        JBSAE.dispose();
+        jbsae(new RenderTest());
     }
 }

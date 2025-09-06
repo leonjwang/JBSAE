@@ -2,10 +2,12 @@ package jbsae;
 
 import jbsae.audio.*;
 import jbsae.core.*;
+import jbsae.func.*;
 import jbsae.graphics.draw.*;
 import jbsae.graphics.gl.*;
 import jbsae.input.*;
 
+import static jbsae.util.Stringf.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class JBSAE{
@@ -61,5 +63,24 @@ public class JBSAE{
 
     public static void screen(Screen s){
         loop.screen = s;
+    }
+
+    public static void jbsae(Screen s){
+        jbsae(() -> screen(s));
+    }
+
+    public static void jbsae(Prog prog){
+        Log.init();
+        try{
+            init();
+            load();
+            prog.run();
+            start();
+            dispose();
+        }catch(Exception e){
+            Log.error(getStackTrace(e));
+        }finally{
+            Log.writeToFile("log" + System.currentTimeMillis() + ".log"); // TODO: Dynamic log dump also don't always dump logs
+        }
     }
 }

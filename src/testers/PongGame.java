@@ -205,14 +205,8 @@ public class PongGame extends Screen{
     }
 
     public static void main(String[] args){
-        Log.init();
-
         JBSAE.width = WIDTH;
         JBSAE.height = HEIGHT;
-
-        JBSAE.init();
-        JBSAE.screen(new PongGame());
-        JBSAE.start();
-        JBSAE.dispose();
+        jbsae(new PongGame());
     }
 }

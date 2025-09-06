@@ -5,12 +5,14 @@ import jbsae.files.saves.*;
 import jbsae.struct.*;
 import jbsae.struct.prim.*;
 
+import java.io.*;
+
 import static jbsae.util.Stringf.*;
 
 public class Log{
     public static String envar = "JBSAE_LOG_LEVEL";
 
-    public static int maxLogs = 10000; // -1 for unlimited
+    public static int maxLogs = 1000; // -1 for unlimited
     public static Queue<LogInfo> logs;
 
     public static LogLevel level = LogLevel.INFO;
@@ -60,12 +62,12 @@ public class Log{
         }
     }
 
-    // TODO: Implement
     public static void writeToFile(String path){
-        Fi file = new Fi(path);
-        Write write = new Write(file);
-        for(LogInfo log : logs) write.str(log.toString());
-        write.close();
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(path))){
+            for(LogInfo log : logs) writer.append(log.toString()).append('\n');
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
 
