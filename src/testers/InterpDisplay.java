@@ -3,9 +3,7 @@ package testers;
 
 import jbsae.*;
 import jbsae.core.*;
-import jbsae.files.assets.*;
 import jbsae.graphics.*;
-import jbsae.graphics.gl.*;
 import jbsae.math.*;
 import jbsae.math.interp.*;
 import jbsae.struct.*;

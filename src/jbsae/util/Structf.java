@@ -630,7 +630,6 @@ public class Structf{
     }
 
 
-
     /** Utility methods. */
     public static boolean contains(Object[] arr, Object value){
         for(int i = 0;i < arr.length;i++) if(eql(arr[i], value)) return true;
@@ -656,7 +655,6 @@ public class Structf{
         for(int i = 0;i < arr.length;i++) if(arr[i] == value) return true;
         return false;
     }
-
 
 
     public static boolean inside(Object[] arr, int i){

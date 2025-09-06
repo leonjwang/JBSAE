@@ -114,6 +114,7 @@ public class CharSeq{
         }
         return this;
     }
+
     public CharSeq remove(int index, int range){
         shift(items, index + range, (size -= range) + range, -range);
         for(int i = 0;i < range;i++) items[size + i] = 0;

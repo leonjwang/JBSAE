@@ -2,7 +2,6 @@ package testers;
 
 import jbsae.*;
 import jbsae.core.*;
-import jbsae.files.assets.*;
 import jbsae.math.*;
 import jbsae.struct.*;
 import jbsae.util.*;

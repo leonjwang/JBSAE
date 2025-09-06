@@ -3,8 +3,6 @@ package testers;
 import jbsae.*;
 import jbsae.audio.*;
 import jbsae.core.*;
-import jbsae.files.assets.*;
-import jbsae.graphics.*;
 import jbsae.math.*;
 import jbsae.util.*;
 

@@ -2,7 +2,6 @@ package jbsae;
 
 import jbsae.audio.*;
 import jbsae.core.*;
-import jbsae.files.assets.*;
 import jbsae.graphics.draw.*;
 import jbsae.graphics.gl.*;
 import jbsae.input.*;

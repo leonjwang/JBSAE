@@ -80,7 +80,7 @@ public class Stringf{
         return result.toString();
     }
 
-    public static String getStackTrace(Throwable error) {
+    public static String getStackTrace(Throwable error){
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         error.printStackTrace(pw);

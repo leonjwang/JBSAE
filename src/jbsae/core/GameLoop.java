@@ -1,7 +1,6 @@
 package jbsae.core;
 
 import jbsae.*;
-import jbsae.Log.*;
 
 import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL11.*;

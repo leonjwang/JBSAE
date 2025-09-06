@@ -2,13 +2,11 @@ package jbsae.files.assets;
 
 import jbsae.*;
 import jbsae.files.*;
-import jbsae.struct.*;
 
 import java.io.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Stringf.*;
-import static org.lwjgl.opengl.GL20.*;
 
 public class AssetFi extends Fi{
     public String path, name, parent;
