@@ -32,7 +32,7 @@ public class TextureFi extends AssetFi{
         return (TextureFi)super.gen();
     }
 
-    /** Mike-C/lwjPNG */ // TODO: Write my own version, as this is under the GPL license
+    /** Mike-C/lwjPNG */ // TODO: Write my own version, as this is under the GPL license (illegal rn)
     public class LwjPNG{
         public int w, h, dataLen, cs; // cs: chunk size
         public byte[] imgData = null, header = new byte[5];
