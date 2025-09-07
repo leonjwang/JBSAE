@@ -14,7 +14,6 @@ import static jbsae.JBSAE.*;
 import static jbsae.util.Filef.*;
 import static jbsae.util.Stringf.*;
 
-// TODO: So we don't support ogg or mp3 files anymore? When did that happen?
 public class SoundFi extends AssetFi{
     public Sound sound;
 

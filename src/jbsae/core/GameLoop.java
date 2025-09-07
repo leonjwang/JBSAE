@@ -23,6 +23,7 @@ public class GameLoop{
 
         screen.init();
         while(window.keep()){
+            Log.span("loop");
             time.update();
             frameTimer += time.time - lastLoop;
             updateTimer += time.time - lastLoop;
@@ -55,6 +56,7 @@ public class GameLoop{
                 Log.info("FPS: " + time.cfps + " UPS: " + time.cups);
             }
             window.poll();
+            Log.end();
         }
     }
 }

@@ -1,7 +1,5 @@
 package jbsae;
 
-import jbsae.files.*;
-import jbsae.files.saves.*;
 import jbsae.struct.*;
 import jbsae.struct.prim.*;
 
@@ -12,10 +10,11 @@ import static jbsae.util.Stringf.*;
 public class Log{
     public static String envar = "JBSAE_LOG_LEVEL";
 
-    public static int maxLogs = 1000; // -1 for unlimited
+    public static int maxLogs = 10000; // -1 for unlimited
     public static Queue<LogInfo> logs;
+    public static Queue<String> spans = new Queue<>();
 
-    public static LogLevel level = LogLevel.TRACE;
+    public static LogLevel level = LogLevel.INFO;
 
     public static long startTime = 0;
 
@@ -51,6 +50,10 @@ public class Log{
         log(LogLevel.ERROR, msg);
     }
 
+    public static void log(Object msg){
+        log(LogLevel.NONE, msg);
+    }
+
     public static void log(LogLevel level, Object msg){
         if(logs == null) return;
 
@@ -70,13 +73,22 @@ public class Log{
         }
     }
 
+    public static void span(String name){
+        spans.addLast(name);
+    }
+
+    public static void end(){
+        spans.popLast();
+    }
+
 
     public static enum LogLevel{
         TRACE,
         DEBUG,
         INFO,
         WARN,
-        ERROR
+        ERROR,
+        NONE,
     }
 
     public static class LogInfo{
@@ -95,7 +107,10 @@ public class Log{
             CharSeq result = new CharSeq(msg.length() + 40);
             result.add(formatMillisCompact(time - startTime)).add(' ');
             if(level.name().length() == 4) result.add(' ');
-            result.add(level.name()).add(' ').add(msg);
+            result.add(level.name()).add(' ');
+            for(String s : spans) result.add(s).add(":");
+            if(spans.size > 0) result.remove(result.size - 1).add(' ');
+            result.add(msg);
             return result.toString();
         }
     }
