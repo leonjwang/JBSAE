@@ -24,4 +24,12 @@ public class Filef{
             return null;
         }
     }
+
+    public static byte left(byte value){
+        return (byte)((value >> 4) & (byte)0x0F);
+    }
+
+    public static byte right(byte value){
+        return (byte)(value & 0x0F);
+    }
 }
