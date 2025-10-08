@@ -12,7 +12,6 @@ public class Log{
 
     public static int maxLogs = 10000; // -1 for unlimited
     public static Queue<LogInfo> logs;
-    public static Queue<String> spans = new Queue<>();
 
     public static LogLevel level = LogLevel.INFO;
 
@@ -57,11 +56,7 @@ public class Log{
     public static void log(LogLevel level, Object msg){
         if(logs == null) return;
 
-        CharSeq result = new CharSeq(spans.size() * 10);
-        for(String s : spans) result.add(s).add(":");
-        if(spans.size > 0) result.remove(result.size - 1).add(' ');
-
-        LogInfo info = new LogInfo(level, result.toString(), msg.toString());
+        LogInfo info = new LogInfo(level, msg.toString());
         if(level.ordinal() >= Log.level.ordinal()){
             logs.addLast(info);
             System.out.println(info.toString());
@@ -75,14 +70,6 @@ public class Log{
         }catch(IOException e){
             e.printStackTrace();
         }
-    }
-
-    public static void span(String name){
-        spans.addLast(name);
-    }
-
-    public static void end(){
-        spans.popLast();
     }
 
 
@@ -99,12 +86,10 @@ public class Log{
         public LogLevel level;
         public long time;
 
-        public String spans; // TODO: Prefix sum based span system
         public String msg;
 
-        public LogInfo(LogLevel level, String spans, String msg){
+        public LogInfo(LogLevel level, String msg){
             this.level = level;
-            this.spans = spans;
             this.msg = msg;
             this.time = System.currentTimeMillis();
         }
@@ -114,7 +99,6 @@ public class Log{
             result.add(formatMillisCompact(time - startTime)).add(' ');
             if(level.name().length() == 4) result.add(' ');
             result.add(level.name()).add(' ');
-            result.add(spans);
             result.add(msg);
             return result.toString();
         }
