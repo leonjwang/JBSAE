@@ -18,6 +18,7 @@ public class ShaderFi extends AssetFi{
 
     @Override
     public ShaderFi gen(){
+        Log.info("Generating shader: " + path());
         try(BufferedReader reader = reader()){
             StringBuilder builder = new StringBuilder();
             String line;

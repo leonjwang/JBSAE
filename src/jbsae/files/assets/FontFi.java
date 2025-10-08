@@ -19,6 +19,7 @@ public class FontFi extends AssetFi{
 
     @Override
     public FontFi gen(){
+        Log.info("Generating font: " + path());
         try(BufferedReader reader = reader()){
             font = new Font();
             StringTokenizer info = new StringTokenizer(reader.readLine());

@@ -1,5 +1,6 @@
 package jbsae.graphics.gl;
 
+import jbsae.*;
 import jbsae.util.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -47,9 +48,12 @@ public class Window{
     }
 
     public void icon(Texture icon){
-        GLFWImage image = GLFWImage.malloc();
-        image.set(icon.width, icon.height, icon.image);
-        glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));
+        if(Platform.get() != Platform.MACOSX){
+            Log.info("Setting window icon");
+            GLFWImage image = GLFWImage.malloc();
+            image.set(icon.width, icon.height, icon.image);
+            glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));
+        }else Log.error("MacOS icons should be managed outside of the program");
     }
 
     public void update(){

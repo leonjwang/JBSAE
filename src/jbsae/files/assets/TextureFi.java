@@ -20,6 +20,7 @@ public class TextureFi extends AssetFi{
 
     @Override
     public TextureFi gen(){
+        Log.info("Generating texture: " + path());
         try(InputStream stream = input()){
             PngReader reader = new PngReader();
             ByteBuffer buffer = reader.read(stream);

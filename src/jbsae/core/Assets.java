@@ -38,6 +38,7 @@ public class Assets{
 
         if(!jar) gen();
         else{
+            Log.info("Loading assets from list...");
             String assetListFile = assetsFolder + "/" + assetList;
             AssetFi file = new AssetFi(assetListFile);
             try(BufferedReader reader = file.reader()){
@@ -52,6 +53,7 @@ public class Assets{
 
     /** Generate and load assets/list file from assets folder. */
     private void gen(){
+        Log.info("Generating asset list...");
         String assetListFile = assetsFolder + "/" + assetList;
         Fi file = new Fi(assetListFile);
         file.create();
@@ -78,6 +80,7 @@ public class Assets{
     }
 
     public AssetFi create(String path){
+        Log.info("Creating asset: " + path);
         if(files.contains(path)) return files.get(path);
         if(path.endsWith(".fnt")) return new FontFi(path);
         if(path.endsWith(".frag")) return new ShaderFi(path);

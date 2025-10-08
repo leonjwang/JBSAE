@@ -14,7 +14,7 @@ public class AudioTest{
         jbsae(() -> {
             Drawf.font(assets.fonts.get("brandbe.fnt"));
 
-            Source song = new Source(assets.sounds.get("mix.wav"));
+            Source song = sounds.play("mix.wav");
             song.pitch(1f);
             song.relative(false);
             song.position(new Vec3(10, 0, 0));

@@ -77,9 +77,9 @@ public class JBSAE{
             prog.run();
             start();
             dispose();
-        }catch(Exception e){
+        }catch(Throwable e){
             Log.error(getStackTrace(e));
-            Log.writeToFile("log" + System.currentTimeMillis() + ".log"); // TODO: Dynamic log dump also don't always dump logs
+            Log.writeToFile("log" + System.currentTimeMillis() + ".log"); // TODO: Dynamic log dump location
         }
     }
 }

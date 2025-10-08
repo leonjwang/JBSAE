@@ -3,6 +3,7 @@ package jbsae.audio;
 import jbsae.struct.*;
 import org.lwjgl.openal.*;
 
+import static jbsae.JBSAE.*;
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.AL11.*;
 import static org.lwjgl.openal.ALC10.*;
@@ -29,6 +30,10 @@ public class Sounds{
         alDistanceModel(AL_EXPONENT_DISTANCE);
 
         listener = new Listener();
+    }
+
+    public Source play(String name){
+        return new Source(assets.sounds.get(name));
     }
 
     public void dispose(){
