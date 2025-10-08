@@ -1,5 +1,6 @@
 package jbsae;
 
+import jbsae.func.*;
 import jbsae.struct.*;
 import jbsae.struct.prim.*;
 
@@ -8,11 +9,12 @@ import java.io.*;
 import static jbsae.util.Stringf.*;
 
 public class Log{
-    public static String envar = "JBSAE_LOG_LEVEL";
+    public static String ENVAR = "JBSAE_LOG_LEVEL";
 
     public static int maxLogs = 10000; // -1 for unlimited
     public static Queue<LogInfo> logs;
     public static Queue<String> spans = new Queue<>();
+    public static String current = "";
 
     public static LogLevel level = LogLevel.INFO;
 
@@ -22,7 +24,7 @@ public class Log{
         logs = new Queue<>(maxLogs == -1 ? 1000 : maxLogs + 1);
         startTime = System.currentTimeMillis();
 
-        String env = System.getenv(envar);
+        String env = System.getenv(ENVAR);
         if(env != null){
             String setting = env.toUpperCase();
             LogLevel[] levels = LogLevel.values();
@@ -57,11 +59,7 @@ public class Log{
     public static void log(LogLevel level, Object msg){
         if(logs == null) return;
 
-        CharSeq result = new CharSeq(spans.size() * 10);
-        for(String s : spans) result.add(s).add(":");
-        if(spans.size > 0) result.remove(result.size - 1).add(' ');
-
-        LogInfo info = new LogInfo(level, result.toString(), msg.toString());
+        LogInfo info = new LogInfo(level, current, msg.toString());
         if(level.ordinal() >= Log.level.ordinal()){
             logs.addLast(info);
             System.out.println(info.toString());
@@ -77,12 +75,34 @@ public class Log{
         }
     }
 
+    public static void update(){
+        CharSeq result = new CharSeq(spans.size() * 10);
+        for(String s : spans) result.add(s).add(":");
+        if(spans.size > 0) result.remove(result.size - 1).add(' ');
+
+        current = result.toString();
+    }
+
     public static void span(String name){
         spans.addLast(name);
+        update();
+    }
+
+    public static void span(String name, Prog run){
+        try{
+            span(name);
+            run.run();
+        }catch(Throwable e){
+            Log.error(getStackTrace(e));
+            end();
+            throw new LogException(e);
+        }
+        end();
     }
 
     public static void end(){
         spans.popLast();
+        update();
     }
 
 
@@ -117,6 +137,15 @@ public class Log{
             result.add(spans);
             result.add(msg);
             return result.toString();
+        }
+    }
+
+    public static class LogException extends RuntimeException{
+        public Throwable throwable;
+
+        public LogException(Throwable throwable){
+            super();
+            this.throwable = throwable;
         }
     }
 }

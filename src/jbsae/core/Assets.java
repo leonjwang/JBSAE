@@ -32,26 +32,30 @@ public class Assets{
     }
 
     public void init(){
-        root = new AssetDir(assetsFolder);
+        Log.span("assets", () -> {
+            root = new AssetDir(assetsFolder);
 
-        if(root.file.exists() && root.file.isDirectory()) jar = false;
+            if(root.file.exists() && root.file.isDirectory()) jar = false;
 
-        if(!jar) gen();
-        else{
-            String assetListFile = assetsFolder + "/" + assetList;
-            AssetFi file = new AssetFi(assetListFile);
-            try(BufferedReader reader = file.reader()){
-                String line;
-                while((line = reader.readLine()) != null && line.length() > 0) create(line);
-            }catch(IOException e){
-                Log.error("Failed read asset list file: " + assetListFile);
-                Log.error(getStackTrace(e));
+            if(!jar) gen();
+            else{
+                Log.info("Reading asset list");
+                String assetListFile = assetsFolder + "/" + assetList;
+                AssetFi file = new AssetFi(assetListFile);
+                try(BufferedReader reader = file.reader()){
+                    String line;
+                    while((line = reader.readLine()) != null && line.length() > 0) create(line);
+                }catch(IOException e){
+                    Log.error("Failed read asset list file: " + assetListFile);
+                    Log.error(getStackTrace(e));
+                }
             }
-        }
+        });
     }
 
     /** Generate and load assets/list file from assets folder. */
     private void gen(){
+        Log.info("Generating asset list...");
         String assetListFile = assetsFolder + "/" + assetList;
         Fi file = new Fi(assetListFile);
         file.create();
@@ -78,6 +82,7 @@ public class Assets{
     }
 
     public AssetFi create(String path){
+        Log.info("Creating asset: " + path);
         if(files.contains(path)) return files.get(path);
         if(path.endsWith(".fnt")) return new FontFi(path);
         if(path.endsWith(".frag")) return new ShaderFi(path);

@@ -26,21 +26,24 @@ public class JBSAE{
     public static Draw draw = new Draw();
 
     public static void init(){
-        glfwInit();
-        assets.init();
-        time.init();
-        window.init();
-        renderer.init();
-        input.init();
-        loop.init();
-        sounds.init();
+        Log.span("init", () -> {
+            glfwInit();
+            assets.init();
+            time.init();
+            window.init();
+            renderer.init();
+            input.init();
+            loop.init();
+            sounds.init();
+        });
     }
 
     public static void load(){
-        assets.load();
-
-        Texture icon = assets.textures.get(programName + ".png");
-        window.icon(icon);
+        Log.span("load", () -> {
+            assets.load();
+            Texture icon = assets.textures.get(programName + ".png");
+            window.icon(icon);
+        });
     }
 
     public static void start(){
@@ -52,13 +55,15 @@ public class JBSAE{
     }
 
     public static void dispose(){
-        input.dispose();
-        window.dispose();
-        renderer.dispose();
-        sounds.dispose();
-        assets.dispose();
+        Log.span("dispose", () -> {
+            input.dispose();
+            window.dispose();
+            renderer.dispose();
+            sounds.dispose();
+            assets.dispose();
 
-        glfwTerminate();
+            glfwTerminate();
+        });
     }
 
     public static void screen(Screen s){
@@ -77,7 +82,7 @@ public class JBSAE{
             prog.run();
             start();
             dispose();
-        }catch(Exception e){
+        }catch(Throwable e){
             Log.error(getStackTrace(e));
             Log.writeToFile("log" + System.currentTimeMillis() + ".log"); // TODO: Dynamic log dump also don't always dump logs
         }

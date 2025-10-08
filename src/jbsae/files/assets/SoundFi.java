@@ -39,6 +39,7 @@ public class SoundFi extends AssetFi{
 
     @Override
     public SoundFi gen(){
+        Log.info("Loading sound: " + path());
         try(AudioInputStream stream = input()){
             final int MONO = 1, STEREO = 2;
 
