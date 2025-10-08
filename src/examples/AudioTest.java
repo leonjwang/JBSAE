@@ -3,6 +3,7 @@ package examples;
 import jbsae.*;
 import jbsae.audio.*;
 import jbsae.core.*;
+import jbsae.graphics.*;
 import jbsae.math.*;
 import jbsae.util.*;
 
@@ -14,7 +15,7 @@ public class AudioTest{
             Drawf.font(assets.fonts.get("brandbe.fnt"));
 
             Source song = new Source(assets.sounds.get("mix.wav"));
-            song.pitch(0.85f);
+            song.pitch(1f);
             song.relative(false);
             song.position(new Vec3(10, 0, 0));
 
@@ -30,9 +31,17 @@ public class AudioTest{
                     la = v.ang();
                     a = Math.max(a, 0);
 
+                    Region square = assets.textures.get("square.png").full;
+
+                    for(int i = 0;i < 3600;i++){
+                        float ang = i / 10f;
+                        Drawf.fill(Tmp.c1.hsv(ang, 1f, 1f).a(0.01f));
+                        Tmp.v1.set(width + height, 0).rot(ang).add(width / 2f, height / 2f);
+                        Drawf.line(square, width / 2f, height / 2f, Tmp.v1.x, Tmp.v1.y, 5f);
+                    }
 
                     Drawf.fill(Tmp.c1.hsv(a, 1f, v.len() / height * 2));
-                    Drawf.line(assets.textures.get("square.png").full, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
+                    Drawf.line(square, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
 
                     Drawf.fill(Tmp.c1.hsv(a + 180, 1f, 1f));
                     Drawf.text("" + a, 10, 10, 30);

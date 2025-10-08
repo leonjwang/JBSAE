@@ -22,6 +22,11 @@ public class Sound{
         alBufferData(id, openALFormat, data, (int)format.getSampleRate());
     }
 
+    public void play(){
+        Source source = new Source(this);
+        source.play();
+    }
+
     public void dispose(){
         all.remove(this);
         alDeleteBuffers(id);

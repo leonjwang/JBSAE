@@ -1,5 +1,6 @@
 package jbsae.audio;
 
+import jbsae.struct.*;
 import org.lwjgl.openal.*;
 
 import static org.lwjgl.openal.AL10.*;
@@ -11,6 +12,8 @@ public class Sounds{
     public long device, context;
 
     public Listener listener;
+
+    public Seq<Source> sources = new Seq<>();
 
 //    public Mat4 cameraMatrix;
 
@@ -29,7 +32,7 @@ public class Sounds{
     }
 
     public void dispose(){
-        for(Source source : Source.all) source.dispose();
+        for(Source source : sources) source.dispose();
 
         if(context != NULL) alcDestroyContext(context);
         if(device != NULL) alcCloseDevice(device);

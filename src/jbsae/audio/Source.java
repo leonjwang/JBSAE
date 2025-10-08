@@ -3,16 +3,15 @@ package jbsae.audio;
 import jbsae.math.*;
 import jbsae.struct.*;
 
+import static jbsae.JBSAE.*;
 import static org.lwjgl.openal.AL10.*;
 
 // TODO: Sound files kinda ignore position right now
 public class Source{
-    public static Seq<Source> all = new Seq<>();
-
     public int id;
 
     public Source(Sound sound){
-        all.add(this);
+        sounds.sources.add(this);
 
         id = alGenSources();
         set(sound);

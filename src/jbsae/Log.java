@@ -57,7 +57,11 @@ public class Log{
     public static void log(LogLevel level, Object msg){
         if(logs == null) return;
 
-        LogInfo info = new LogInfo(level, msg.toString());
+        CharSeq result = new CharSeq(spans.size() * 10);
+        for(String s : spans) result.add(s).add(":");
+        if(spans.size > 0) result.remove(result.size - 1).add(' ');
+
+        LogInfo info = new LogInfo(level, result.toString(), msg.toString());
         if(level.ordinal() >= Log.level.ordinal()){
             logs.addLast(info);
             System.out.println(info.toString());
@@ -95,10 +99,12 @@ public class Log{
         public LogLevel level;
         public long time;
 
+        public String spans; // TODO: Prefix sum based span system
         public String msg;
 
-        public LogInfo(LogLevel level, String msg){
+        public LogInfo(LogLevel level, String spans, String msg){
             this.level = level;
+            this.spans = spans;
             this.msg = msg;
             this.time = System.currentTimeMillis();
         }
@@ -108,8 +114,7 @@ public class Log{
             result.add(formatMillisCompact(time - startTime)).add(' ');
             if(level.name().length() == 4) result.add(' ');
             result.add(level.name()).add(' ');
-            for(String s : spans) result.add(s).add(":");
-            if(spans.size > 0) result.remove(result.size - 1).add(' ');
+            result.add(spans);
             result.add(msg);
             return result.toString();
         }
