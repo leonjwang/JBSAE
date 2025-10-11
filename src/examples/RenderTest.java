@@ -40,22 +40,25 @@ public class RenderTest extends Screen{
                 vel.add(Tmp.v1.set(real).sub(pos).nor().scl(0.1f));
             }
 
-//            if(!Tmp.r1.set(-size, -size, size * 2, size * 2).contains(pos)){
-//                Tmp.r1.set(-size, -size, size * 2, size * 2).constrain(pos);
-////                vel.inv();
-//            }
-            if(!Tmp.e1.set(0, 0, size * 2).contains(pos)){
-                Tmp.e1.set(0, 0, size * 2).constrain(pos);
+            if(!Tmp.r1.set(-size, -size, size * 2, size * 2).contains(pos)){
+                Tmp.r1.set(-size, -size, size * 2, size * 2).constrain(pos);
                 vel.inv();
             }
+//            if(!Tmp.e1.set(0, 0, size * 2).contains(pos)){
+//                Tmp.e1.set(0, 0, size * 2).constrain(pos);
+//                vel.inv();
+//            }
 
             vel.scl(0.99f);
         }
 
         public void draw(){
 //            Drawf.layer(Mathf.random());
-            Drawf.fill(Tmp.c1.set(color).a(0.2f));
-            for(int i = 0;i < 10;i++) Drawf.rectc(pos.x * scale + translate.x, pos.y * scale + translate.y, scale * i / 5f, scale * i / 5f);
+            Drawf.fill(Tmp.c1.set(color).a(0.1f));
+            for(int i = 9;i < 10;i++){
+                float mult = i * i * i;
+                Drawf.rectc(pos.x * scale + translate.x, pos.y * scale + translate.y, scale * mult / 50f, scale * mult / 50f);
+            }
         }
     }
 
@@ -78,7 +81,7 @@ public class RenderTest extends Screen{
 
     @Override
     public void draw(){
-        assets.textures.get("circle.png").bind();
+        assets.textures.get("glow.png").bind();
 
         for(int x = 0;x < arr.length;x++){
             for(int y = 0;y < arr[x].length;y++) arr[x][y].draw();

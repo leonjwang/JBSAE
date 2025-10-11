@@ -53,7 +53,7 @@ public class Window{
             GLFWImage image = GLFWImage.malloc();
             image.set(icon.width, icon.height, icon.image);
             glfwSetWindowIcon(id, GLFWImage.malloc(1).put(0, image));
-        }else Log.error("MacOS icons should be managed outside of the program");
+        }else Log.warn("MacOS icons should be managed outside of the program");
     }
 
     public void update(){

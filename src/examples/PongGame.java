@@ -18,7 +18,7 @@ public class PongGame extends Screen{
     public static final float PADDLE_MAX_SPEED = 8;
     public static final float PADDLE_ACCELERATION = 1;
     public static final float PADDLE_FRICTION = 0.9f;
-    public static final int BALL_SIZE = 10;
+    public static final float BALL_SIZE = 10;
     public static final int BALL_SPEED = 5;
     public static final int TRAIL_LENGTH = 20;  // Length of the trail
     public static final int BALL_COUNT = 3;     // Number of balls
@@ -93,7 +93,7 @@ public class PongGame extends Screen{
             for(int i = 0;i < trail.size;i++){
                 Vec2 pos = trail.get(i);
                 Drawf.fill(1f, 1f, 1f, (alphaStep * (TRAIL_LENGTH - i)) / 255f);
-                Drawf.rect(pos.x, pos.y, BALL_SIZE, BALL_SIZE);
+                Drawf.rect(pos.x, pos.y, BALL_SIZE * (TRAIL_LENGTH - i / 2f) / TRAIL_LENGTH, BALL_SIZE * (TRAIL_LENGTH - i / 2f) / TRAIL_LENGTH);
             }
 
             // Draw ball
@@ -195,6 +195,7 @@ public class PongGame extends Screen{
         Drawf.rect(paddle2.x, paddle2.y, paddle2.w, paddle2.h);
 
         // Draw balls
+        assets.textures.get("circle.png").bind();
         for(Ball ball : balls){
             ball.draw();
         }

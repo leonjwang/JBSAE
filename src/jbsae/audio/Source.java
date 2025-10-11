@@ -1,8 +1,6 @@
 package jbsae.audio;
 
-import jbsae.*;
 import jbsae.math.*;
-import jbsae.struct.*;
 
 import static jbsae.JBSAE.*;
 import static org.lwjgl.openal.AL10.*;

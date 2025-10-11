@@ -131,6 +131,14 @@ public class Color{
         return this;
     }
 
+    public Color lerp(Color c, float t){
+        r += (c.r - r) * t;
+        g += (c.g - g) * t;
+        b += (c.b - b) * t;
+        a += (c.a - a) * t;
+        return this;
+    }
+
     public Color scl(float v){
         r *= v;
         g *= v;
