@@ -2,6 +2,7 @@ package jbsae;
 
 import jbsae.audio.*;
 import jbsae.core.*;
+import jbsae.core.loop.*;
 import jbsae.func.*;
 import jbsae.graphics.draw.*;
 import jbsae.graphics.gl.*;
@@ -13,14 +14,14 @@ import static org.lwjgl.glfw.GLFW.*;
 public class JBSAE{
     public static String programName = "JBSAE";
     public static int width = 600, height = 500;
-    public static int fps = 60;
+    public static int ups = 60, fps = 60;
 
     public static Assets assets = new Assets();
     public static Time time = new Time();
     public static Window window = new Window();
     public static Renderer renderer = new Renderer();
     public static Input input = new Input();
-    public static GameLoop loop = new GameLoop();
+    public static GameLoop loop = new FixedGameLoop();
     public static Sounds sounds = new Sounds();
 
     public static Draw draw = new Draw();

@@ -15,6 +15,7 @@ public class AudioTest{
             Drawf.font(assets.fonts.get("brandbe.fnt"));
 
             Source song = sounds.play("mix.wav");
+            song.loop(true);
             song.pitch(1f);
             song.relative(false);
             song.position(new Vec3(10, 0, 0));

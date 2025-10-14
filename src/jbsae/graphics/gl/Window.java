@@ -1,6 +1,7 @@
 package jbsae.graphics.gl;
 
 import jbsae.*;
+import jbsae.core.*;
 import jbsae.util.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;

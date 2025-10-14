@@ -69,6 +69,7 @@ public class SoundFi extends AssetFi{
                     }
                     break;
             }
+            if(openALFormat == -1) throw new UnsupportedAudioFileException("Unsupported audio format");
 
             byte[] b = bytes(stream, format.getFrameSize());
             ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
