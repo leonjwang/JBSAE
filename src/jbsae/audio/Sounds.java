@@ -1,5 +1,6 @@
 package jbsae.audio;
 
+import jbsae.*;
 import jbsae.struct.*;
 import org.lwjgl.openal.*;
 
@@ -14,6 +15,7 @@ public class Sounds{
 
     public Listener listener;
 
+    public Seq<Source> buffer = new Seq<>();
     public Seq<Source> sources = new Seq<>();
 
 //    public Mat4 cameraMatrix;
@@ -32,8 +34,19 @@ public class Sounds{
         listener = new Listener();
     }
 
+    public void update(){
+        buffer.clear();
+        for(Source source : sources){
+            if(source.playing()) buffer.add(source);
+            else source.dispose();
+        }
+        Seq<Source> tmp = sources;
+        sources = buffer;
+        buffer = tmp;
+    }
+
     public Source play(String name){
-        return new Source(assets.sounds.get(name));
+        return assets.sounds.get(name).play();
     }
 
     public void dispose(){

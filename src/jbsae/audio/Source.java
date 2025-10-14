@@ -1,5 +1,6 @@
 package jbsae.audio;
 
+import jbsae.*;
 import jbsae.math.*;
 
 import static jbsae.JBSAE.*;

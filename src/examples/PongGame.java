@@ -24,6 +24,8 @@ public class PongGame extends Screen{
     public static final int BALL_COUNT = 3;     // Number of balls
     public static final float ADD_BALL_INTERVAL = 10; // Time interval to add new balls (in seconds)
 
+    public static final float[] PITCHES = {1f, 1.3f, 1.5f, 2f};
+
     // Game objects
     private Range2 paddle1;
     private Range2 paddle2;
@@ -61,6 +63,7 @@ public class PongGame extends Screen{
 
             // Check collision with paddles
             if(paddle1.contains(position) || paddle2.contains(position)){
+                sounds.play("bop.wav").pitch(Structf.choose(PITCHES));
                 float currentSpeed = velocity.len();
                 velocity.x *= -1;
                 velocity.nor().scl(currentSpeed + 0.5f);  // Increase speed slightly
@@ -68,6 +71,7 @@ public class PongGame extends Screen{
 
             // Check collision with top and bottom walls
             if(position.y <= 0 || position.y + BALL_SIZE >= HEIGHT){
+                sounds.play("bop.wav").pitch(Structf.choose(PITCHES));
                 velocity.y *= -1;
             }
 
@@ -104,7 +108,6 @@ public class PongGame extends Screen{
 
     @Override
     public void init(){
-
         JBSAE.load();
 
         Drawf.font(assets.fonts.get("brandbe.fnt"));
@@ -202,7 +205,7 @@ public class PongGame extends Screen{
 
         // Draw scores
         Drawf.fill(0.8f, 0.8f, 0.8f);
-        Drawf.text(score1 + " - " + score2, WIDTH / 2, 50);
+        Drawf.text(score1 + " - " + score2, WIDTH / 2, 50, 30);
     }
 
     public static void main(String[] args){

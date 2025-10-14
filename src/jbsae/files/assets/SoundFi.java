@@ -70,7 +70,7 @@ public class SoundFi extends AssetFi{
                     break;
             }
 
-            byte[] b = bytes(stream);
+            byte[] b = bytes(stream, format.getFrameSize());
             ByteBuffer data = BufferUtils.createByteBuffer(b.length).put(b);
             data.flip();
 

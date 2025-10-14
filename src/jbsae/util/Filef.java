@@ -7,14 +7,17 @@ import java.io.*;
 import static jbsae.util.Stringf.*;
 
 public class Filef{
-    public static byte[] bytes(InputStream input){
+    public static byte[] bytes(InputStream input, int frameSize){
         try{
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
             int read;
-            byte[] data = new byte[4];
+            byte[] data = new byte[frameSize];
 
-            while((read = input.read(data, 0, data.length)) != -1) buffer.write(data, 0, read);
+            while((read = input.read(data, 0, frameSize)) != -1){
+                if(read == 0 && (read = input.read(data, 0, frameSize)) <= 0) return null;
+                buffer.write(data, 0, read);
+            }
 
             buffer.flush();
             return buffer.toByteArray();

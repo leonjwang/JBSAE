@@ -13,7 +13,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class JBSAE{
     public static String programName = "JBSAE";
     public static int width = 600, height = 500;
-    public static int fps = 60, ups = 60;
+    public static int fps = 60;
 
     public static Assets assets = new Assets();
     public static Time time = new Time();

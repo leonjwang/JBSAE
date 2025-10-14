@@ -13,9 +13,9 @@ import static jbsae.util.Mathf.*;
 
 @SuppressWarnings("all")
 public class Structf{
-    public static final int prime1 = 0xbe1f14b1;
-    public static final int prime2 = 0xb4b82e39;
-    public static final int prime3 = 0xced1c241;
+    public static final int PRIME1 = 0xbe1f14b1;
+    public static final int PRIME2 = 0xb4b82e39;
+    public static final int PRIME3 = 0xced1c241;
 
 
     /** Generic array creation. */
@@ -755,9 +755,9 @@ public class Structf{
     }
 
     public static int[] hash3(int h, int n, int[] arr){
-        arr[0] = hash(h, prime1, n);
-        arr[1] = hash(h, prime2, n);
-        arr[2] = hash(h, prime3, n);
+        arr[0] = hash(h, PRIME1, n);
+        arr[1] = hash(h, PRIME2, n);
+        arr[2] = hash(h, PRIME3, n);
         return arr;
     }
 

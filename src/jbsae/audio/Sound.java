@@ -22,9 +22,10 @@ public class Sound{
         alBufferData(id, openALFormat, data, (int)format.getSampleRate());
     }
 
-    public void play(){
+    public Source play(){
         Source source = new Source(this);
         source.play();
+        return source;
     }
 
     public void dispose(){
