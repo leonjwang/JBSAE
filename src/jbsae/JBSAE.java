@@ -7,6 +7,7 @@ import jbsae.func.*;
 import jbsae.graphics.draw.*;
 import jbsae.graphics.gl.*;
 import jbsae.input.*;
+import jbsae.time.*;
 
 import static jbsae.util.Stringf.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -21,7 +22,7 @@ public class JBSAE{
     public static Window window = new Window();
     public static Renderer renderer = new Renderer();
     public static Input input = new Input();
-    public static GameLoop loop = new FixedGameLoop();
+    public static GameLoop loop = new FixedLoop();
     public static Sounds sounds = new Sounds();
 
     public static Draw draw = new Draw();

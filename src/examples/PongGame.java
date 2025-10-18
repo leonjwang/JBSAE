@@ -2,6 +2,7 @@ package examples;
 
 import jbsae.*;
 import jbsae.core.*;
+import jbsae.core.loop.*;
 import jbsae.math.*;
 import jbsae.struct.*;
 import jbsae.util.*;
@@ -20,8 +21,8 @@ public class PongGame extends Screen{
     public static final float PADDLE_FRICTION = 0.9f;
     public static final float BALL_SIZE = 10;
     public static final int BALL_SPEED = 5;
-    public static final int TRAIL_LENGTH = 20;  // Length of the trail
-    public static final int BALL_COUNT = 3;     // Number of balls
+    public static int TRAIL_LENGTH = 20;  // Length of the trail
+    public static final int BALL_COUNT = 3000;     // Number of balls
     public static final float ADD_BALL_INTERVAL = 10; // Time interval to add new balls (in seconds)
 
     public static final float[] PITCHES = {1f, 1.3f, 1.5f, 2f};
@@ -52,8 +53,8 @@ public class PongGame extends Screen{
         }
 
         void update(){
-            position.x += velocity.x;
-            position.y += velocity.y;
+            position.x += velocity.x * time.delta;
+            position.y += velocity.y * time.delta;
 
             // Add current ball position to trail
             trail.addFirst(position.cpy());
@@ -63,7 +64,7 @@ public class PongGame extends Screen{
 
             // Check collision with paddles
             if(paddle1.contains(position) || paddle2.contains(position)){
-                sounds.play("bop.wav").pitch(Structf.choose(PITCHES));
+//                sounds.play("bop.wav").pitch(Structf.choose(PITCHES));
                 float currentSpeed = velocity.len();
                 velocity.x *= -1;
                 velocity.nor().scl(currentSpeed + 0.5f);  // Increase speed slightly
@@ -71,7 +72,7 @@ public class PongGame extends Screen{
 
             // Check collision with top and bottom walls
             if(position.y <= 0 || position.y + BALL_SIZE >= HEIGHT){
-                sounds.play("bop.wav").pitch(Structf.choose(PITCHES));
+//                sounds.play("bop.wav").pitch(Structf.choose(PITCHES));
                 velocity.y *= -1;
             }
 
@@ -128,24 +129,25 @@ public class PongGame extends Screen{
 
     @Override
     public void update(){
+        TRAIL_LENGTH = (int)(20 / time.delta);
         // Apply acceleration to paddle1
         if(JBSAE.input.pressed.contains('W')){
-            paddle1Velocity += PADDLE_ACCELERATION;
+            paddle1Velocity += PADDLE_ACCELERATION * time.delta;
         }else if(JBSAE.input.pressed.contains('S')){
-            paddle1Velocity -= PADDLE_ACCELERATION;
+            paddle1Velocity -= PADDLE_ACCELERATION * time.delta;
         }else{
             // Apply friction to paddle1
-            paddle1Velocity *= PADDLE_FRICTION;
+            paddle1Velocity *= pow(PADDLE_FRICTION, time.delta);
         }
 
         // Apply acceleration to paddle2 (AI controlled)
         if(ball().y > paddle2.y + PADDLE_HEIGHT / 2){
-            paddle2Velocity += PADDLE_ACCELERATION;
+            paddle2Velocity += PADDLE_ACCELERATION * time.delta;
         }else if(ball().y < paddle2.y + PADDLE_HEIGHT / 2){
-            paddle2Velocity -= PADDLE_ACCELERATION;
+            paddle2Velocity -= PADDLE_ACCELERATION * time.delta;
         }else{
             // Apply friction to paddle2
-            paddle2Velocity *= PADDLE_FRICTION;
+            paddle2Velocity *= pow(PADDLE_FRICTION, time.delta);
         }
 
         // Clamp velocities
@@ -153,8 +155,8 @@ public class PongGame extends Screen{
         paddle2Velocity = clamp(paddle2Velocity, -PADDLE_MAX_SPEED, PADDLE_MAX_SPEED);
 
         // Update paddle positions
-        paddle1.y += paddle1Velocity;
-        paddle2.y += paddle2Velocity;
+        paddle1.y += paddle1Velocity * time.delta;
+        paddle2.y += paddle2Velocity * time.delta;
 
         // Ensure paddles stay within bounds
         paddle1.y = clamp(paddle1.y, 0, HEIGHT - PADDLE_HEIGHT);
@@ -205,12 +207,15 @@ public class PongGame extends Screen{
 
         // Draw scores
         Drawf.fill(0.8f, 0.8f, 0.8f);
-        Drawf.text(score1 + " - " + score2, WIDTH / 2, 50, 30);
+        Drawf.text(score1 + " - " + score2, WIDTH / 2f, 50, 30);
+
+        Drawf.text("Delta: " + time.delta, 30, 50, 30);
     }
 
     public static void main(String[] args){
         JBSAE.width = WIDTH;
         JBSAE.height = HEIGHT;
+        JBSAE.loop = new DynamicLoop();
         jbsae(new PongGame());
     }
 }

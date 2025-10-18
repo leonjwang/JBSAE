@@ -11,6 +11,8 @@ import static org.lwjgl.opengl.GL30.*;
 
 
 public class Renderer{
+    public String vertexShaderPath = "/shaders/shader.vert", fragmentShaderPath = "/shaders/shader.frag";
+
     public Shader vertexShader, fragmentShader;
     public VertexArray vertexArray;
     public VertexBuffer vertexBuffer;
@@ -32,15 +34,16 @@ public class Renderer{
         vertexBuffer = new VertexBuffer();
         vertexBuffer.data(GL_ARRAY_BUFFER, (long)vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
 
-        // TODO: Don't hardcode
-        vertexShader = ((ShaderFi)assets.create(assets.assetsFolder + "/shaders/shader.vert").load()).shader;
-        fragmentShader = ((ShaderFi)assets.create(assets.assetsFolder + "/shaders/shader.frag").load()).shader;
+        // TODO: Dynamically loaded shaders?
+        vertexShader = ((ShaderFi)assets.create(assets.assetsFolder + vertexShaderPath).load()).shader;
+        fragmentShader = ((ShaderFi)assets.create(assets.assetsFolder + fragmentShaderPath).load()).shader;
 
         program = new ShaderProgram(vertexShader, fragmentShader);
         program.bind("fragColor", 0);
         program.link();
         program.use();
 
+        // TODO: Expand shader capabilities
         program.setVertex("position", 2, 8 * Float.BYTES, 0);
         program.setVertex("color", 4, 8 * Float.BYTES, 2 * Float.BYTES);
         program.setVertex("texCoord", 2, 8 * Float.BYTES, 6 * Float.BYTES);

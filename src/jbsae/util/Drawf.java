@@ -75,9 +75,14 @@ public class Drawf{
         line(region, x1, y1, x2, y2, 1);
     }
 
+    // TODO: Line tweaks sometimes?
     public static void line(Region region, float x1, float y1, float x2, float y2, float w){
-        float len = Tmp.v1.set(x2, y2).sub(x1, y1).len(), ang = Tmp.v1.ang();
-        drawc(region, (x1 + x2) / 2, (y1 + y2) / 2, len, w, ang);
+        Tmp.v1.setr(Mathf.angle(x2 - x1, y2 - y1) + 90, w / 2f);
+        draw.draw(region,
+        x1 + Tmp.v1.x, y1 + Tmp.v1.y,
+        x1 - Tmp.v1.x, y1 - Tmp.v1.y,
+        x2 + Tmp.v1.x, y2 + Tmp.v1.y,
+        x2 - Tmp.v1.x, y2 - Tmp.v1.y);
     }
 
 
@@ -98,6 +103,7 @@ public class Drawf{
         draw.draw(region, x, y, w, h, r);
     }
 
+    // TODO: Draw quad
 
     /** Set the font. */
     public static void font(Font font){
@@ -152,20 +158,4 @@ public class Drawf{
     public static void pop(){
         draw.matrixes.removeFirst();
     }
-
-//
-//
-//    /** Push everything to the screen. */
-//    public static void flush(){
-//        requests.sort(r -> r.z);
-//        for(DrawRequest r : requests){
-//            if(renderer.binded != r.texture) r.texture.bind();
-//            Tmp.s14.set(0, r.x1, r.y1).set(1, r.x2, r.y2).set(2, r.x3, r.y3).set(3, r.x4, r.y4);
-//            Tmp.s24.set(0, r.rx1, r.ry1).set(1, r.rx2, r.ry2).set(2, r.rx3, r.ry3).set(3, r.rx4, r.ry4);
-//            renderer.draw(Tmp.s14, Tmp.s24, Tmp.c1.set(r.r, r.g, r.b, r.a));
-//        }
-//        requests.clear();
-//    }
-//
-//
 }

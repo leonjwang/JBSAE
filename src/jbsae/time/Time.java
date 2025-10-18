@@ -1,4 +1,4 @@
-package jbsae.core;
+package jbsae.time;
 
 import static org.lwjgl.glfw.GLFW.*;
 
