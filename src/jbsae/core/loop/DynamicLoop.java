@@ -4,7 +4,6 @@ import jbsae.*;
 import jbsae.time.*;
 
 import static jbsae.JBSAE.*;
-import static jbsae.util.Mathf.*;
 
 public class DynamicLoop extends GameLoop{
     @Override

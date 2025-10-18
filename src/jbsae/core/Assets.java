@@ -12,7 +12,6 @@ import java.io.*;
 
 import static jbsae.util.Stringf.*;
 
-// TODO: static .all Seqs are somewhat scuffed
 public class Assets{
     public static Map<String, AssetFi> files = new Map<>();
 
@@ -20,6 +19,11 @@ public class Assets{
     public Map<String, Shader> shaders = new Map<>();
     public Map<String, Sound> sounds = new Map<>();
     public Map<String, Texture> textures = new Map<>();
+
+    public Seq<Font> fontList = new Seq<>();
+    public Seq<Shader> shaderList = new Seq<>();
+    public Seq<Sound> soundList = new Seq<>();
+    public Seq<Texture> textureList = new Seq<>();
 
     public String assetsFolder = "assets";
     public String assetList = "assetlist.lst";
@@ -74,9 +78,9 @@ public class Assets{
     }
 
     public void dispose(){
-        for(Shader shader : Shader.all) shader.dispose();
-        for(Sound sound : Sound.all) sound.dispose();
-        for(Texture texture : Texture.all) texture.dispose();
+        for(Shader shader : shaderList) shader.dispose();
+        for(Sound sound : soundList) sound.dispose();
+        for(Texture texture : textureList) texture.dispose();
     }
 
     public AssetFi create(String path){

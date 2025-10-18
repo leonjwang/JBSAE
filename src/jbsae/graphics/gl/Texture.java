@@ -11,15 +11,13 @@ import static org.lwjgl.opengl.GL13.*;
 
 
 public class Texture{
-    public static Seq<Texture> all = new Seq<>();
-
     public int id;
     public int width, height;
     public ByteBuffer image; //It might not be a good idea to keep this on reference
     public Region full;
 
     public Texture(int width, int height, ByteBuffer image){
-        all.add(this);
+        assets.textureList.add(this);
 
         id = glGenTextures();
         this.width = width;

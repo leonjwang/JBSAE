@@ -4,9 +4,9 @@ import jbsae.graphics.gl.*;
 import jbsae.struct.*;
 import jbsae.struct.prim.*;
 
-public class Font{
-    public static Seq<Font> all = new Seq<>();
+import static jbsae.JBSAE.*;
 
+public class Font{
     public String name;
 
     public Glyph none;
@@ -18,6 +18,6 @@ public class Font{
     public String charset;
 
     public Font(){
-        all.add(this);
+        assets.fontList.add(this);
     }
 }

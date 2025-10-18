@@ -5,17 +5,16 @@ import jbsae.struct.*;
 import javax.sound.sampled.*;
 import java.nio.*;
 
+import static jbsae.JBSAE.*;
 import static org.lwjgl.openal.AL10.*;
 
 public class Sound{
-    public static Seq<Sound> all = new Seq<>();
-
     public int id;
 
     public ByteBuffer data;
 
     public Sound(ByteBuffer data, int openALFormat, AudioFormat format){
-        all.add(this);
+        assets.soundList.add(this);
 
         id = alGenBuffers();
         this.data = data;

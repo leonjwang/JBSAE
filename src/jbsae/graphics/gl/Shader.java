@@ -2,17 +2,16 @@ package jbsae.graphics.gl;
 
 import jbsae.struct.*;
 
+import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL20.*;
 
 
 public class Shader{
-    public static Seq<Shader> all = new Seq<>();
-
     public int id, type;
     public String data;
 
     public Shader(String data, int type){
-        all.add(this);
+        assets.shaderList.add(this);
 
         id = glCreateShader(type);
         this.type = type;
