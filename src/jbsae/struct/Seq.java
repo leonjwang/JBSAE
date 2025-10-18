@@ -1,6 +1,5 @@
 package jbsae.struct;
 
-import jbsae.*;
 import jbsae.func.*;
 import jbsae.func.prim.*;
 
