@@ -414,7 +414,7 @@ public class Mathf{
 
     /** Returns the sine of the current time in milliseconds divided by i. */
     public static float sint(float i){
-        return sin((float)time.millis() / i * 360f);
+        return sin((float)(time.millis() % i) / i * 360f);
     }
 
     /** Returns the absolute sine of the current time in milliseconds divided by i. */
@@ -424,7 +424,7 @@ public class Mathf{
 
     /** Returns the absolute sine of the current time in milliseconds divided by i. */
     public static float absint(float i){
-        return absin((float)time.millis() / i * 360f);
+        return absin((float)(time.millis() % i) / i * 360f);
     }
 
     /** Returns the cosine of the current time in milliseconds divided by i. */
@@ -434,7 +434,7 @@ public class Mathf{
 
     /** Returns the cosine of the current time in milliseconds divided by i. */
     public static float cost(float i){
-        return cos((float)time.millis() / i * 360f);
+        return cos((float)(time.millis() % i) / i * 360f);
     }
 
     /** Returns the absolute cosine of the current time in milliseconds divided by i. */
@@ -444,7 +444,7 @@ public class Mathf{
 
     /** Returns the absolute cosine of the current time in milliseconds divided by i. */
     public static float abcost(float i){
-        return abcos((float)time.millis() / i * 360f);
+        return abcos((float)(time.millis() % i) / i * 360f);
     }
 
 

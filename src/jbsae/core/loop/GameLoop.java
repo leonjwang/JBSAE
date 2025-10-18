@@ -8,7 +8,7 @@ import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL11C.*;
 
 
-public class GameLoop{ // TODO: The loops are scuffed, but I don't know how to make clean
+public class GameLoop{
     public Screen screen;
 
     public GameLoop(){

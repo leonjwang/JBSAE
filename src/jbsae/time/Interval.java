@@ -1,5 +1,7 @@
 package jbsae.time;
 
+import static jbsae.JBSAE.*;
+
 public class Interval{
     public long lastTick, interval;
 
@@ -23,5 +25,9 @@ public class Interval{
             return true;
         }
         return false;
+    }
+
+    public boolean tick(){
+        return tick(time.millis());
     }
 }

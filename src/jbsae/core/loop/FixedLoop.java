@@ -8,7 +8,7 @@ import static jbsae.JBSAE.*;
 public class FixedLoop extends GameLoop{
     @Override
     public void start(){
-        screen.init(); // TODO: is screen.init here scuffed?
+        screen.init();
 
         long now = System.nanoTime();
         Interval frameInterval = new Interval(1_000_000_000L / fps, now);

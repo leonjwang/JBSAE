@@ -129,7 +129,7 @@ public class PongGame extends Screen{
 
     @Override
     public void update(){
-        TRAIL_LENGTH = (int)(20 / time.delta);
+        TRAIL_LENGTH = max(1, (int)(20 / time.delta));
         // Apply acceleration to paddle1
         if(JBSAE.input.pressed.contains('W')){
             paddle1Velocity += PADDLE_ACCELERATION * time.delta;
