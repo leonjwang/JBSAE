@@ -2,4 +2,4 @@
 
 🐸
 
-<small>Inspired by Anuken/Arc + SilverTiger/lwjgl3-tutorial</small>
+<smallThank you SilverTiger/lwjgl3-tutorial</small>
