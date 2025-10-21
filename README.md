@@ -2,4 +2,4 @@
 
 🐸
 
-<smallThank you SilverTiger/lwjgl3-tutorial</small>
+<small>Thank you SilverTiger/lwjgl3-tutorial</small>
