@@ -28,7 +28,6 @@ public class Sound{
     }
 
     public void dispose(){
-        all.remove(this);
         alDeleteBuffers(id);
     }
 }

@@ -49,7 +49,7 @@ public class InterpDisplay extends Screen{
 
     @Override
     public void draw(){
-        Drawf.font(Font.all.get(0));
+        Drawf.font(assets.fontList.get(0));
 
         assets.textures.get("square.png").bind();
         fill(BLACK);
