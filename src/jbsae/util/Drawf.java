@@ -81,8 +81,8 @@ public class Drawf{
         draw.draw(region,
         x1 + Tmp.v1.x, y1 + Tmp.v1.y,
         x1 - Tmp.v1.x, y1 - Tmp.v1.y,
-        x2 + Tmp.v1.x, y2 + Tmp.v1.y,
-        x2 - Tmp.v1.x, y2 - Tmp.v1.y);
+        x2 - Tmp.v1.x, y2 - Tmp.v1.y,
+        x2 + Tmp.v1.x, y2 + Tmp.v1.y);
     }
 
 
