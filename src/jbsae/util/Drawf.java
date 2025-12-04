@@ -75,7 +75,6 @@ public class Drawf{
         line(region, x1, y1, x2, y2, 1);
     }
 
-    // TODO: Line tweaks sometimes?
     public static void line(Region region, float x1, float y1, float x2, float y2, float w){
         Tmp.v1.setr(Mathf.angle(x2 - x1, y2 - y1) + 90, w / 2f);
         draw.draw(region,

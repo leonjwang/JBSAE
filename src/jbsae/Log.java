@@ -56,8 +56,8 @@ public class Log{
     public static void log(LogLevel level, Object msg){
         if(logs == null) return;
 
-        LogInfo info = new LogInfo(level, msg.toString());
         if(level.ordinal() >= Log.level.ordinal()){
+            LogInfo info = new LogInfo(level, msg.toString());
             logs.addLast(info);
             System.out.println(info);
             if(maxLogs != -1 && logs.size > maxLogs) logs.removeFirst();

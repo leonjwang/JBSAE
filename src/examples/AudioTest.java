@@ -34,13 +34,13 @@ public class AudioTest{
 
                     Region square = assets.textures.get("square.png").full;
 
-                    for(int i = 0;i < 3600;i++){
-                        float ang = i / 10f;
-                        Drawf.fill(Tmp.c1.hsv(ang, 1f, 1f).a(0.01f));
-                        Tmp.v1.set(width + height, 0).rot(ang).add(width / 2f, height / 2f);
-                        Tmp.v2.set(Tmp.v1).nor().scl(-2);
-                        Drawf.line(square, width / 2f + Tmp.v2.x, height / 2f + Tmp.v2.y, Tmp.v1.x, Tmp.v1.y, 5f);
-                    }
+//                    for(int i = 0;i < 3600;i++){
+//                        float ang = i / 10f;
+//                        Drawf.fill(Tmp.c1.hsv(ang, 1f, 1f).a(0.01f));
+//                        Tmp.v1.set(width + height, 0).rot(ang).add(width / 2f, height / 2f);
+//                        Tmp.v2.set(Tmp.v1).nor().scl(-2);
+//                        Drawf.line(square, width / 2f + Tmp.v2.x, height / 2f + Tmp.v2.y, Tmp.v1.x, Tmp.v1.y, 5f);
+//                    }
 
                     Drawf.fill(Tmp.c1.hsv(a, 1f, 1f).a(v.len() / height * 2));
                     Drawf.line(square, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
