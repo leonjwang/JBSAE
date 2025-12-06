@@ -19,10 +19,10 @@ public class Window{
     public IntBuffer widthBuffer, heightBuffer;
 
     // Dynamically updated
-    public static int winWidth = 1, winHeight = 1;
-    public static int frameWidth = 1, frameHeight = 1;
+    public int winWidth = width, winHeight = height; //TODO: Fix Glitching (current working solution removes the mouse :/)
+    public int frameWidth = width, frameHeight = height;
 
-    public static GLFWErrorCallback errorCallback;
+    public GLFWErrorCallback errorCallback;
 
     public Window(){
     }
