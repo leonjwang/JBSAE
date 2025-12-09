@@ -46,7 +46,7 @@ public class Seq<T> implements List<T>{
     }
 
 
-    @Override
+    @Override //TODO: Consider changing to index, value
     public Seq<T> set(T value, int index){
         items[index] = value;
         return this;

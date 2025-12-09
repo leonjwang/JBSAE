@@ -22,6 +22,11 @@ public class MinHeap<T>{
         return values.get(index);
     }
 
+    public MinHeap<T> set(T value, int index){
+        values.set(value, index);
+        return update(index);
+    }
+
     public MinHeap<T> insert(T value){
         values.add(value);
         return swim(values.size() - 1);

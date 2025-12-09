@@ -3,7 +3,7 @@ package jbsae.math;
 import static jbsae.util.Mathf.*;
 
 public class Ang2 implements Pos2{
-    public float a, l;
+    public float a, l; //TODO: Polar coordinates go length, angle. Should that be reflected here?
 
     public Ang2(){
     }
