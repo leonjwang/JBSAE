@@ -32,7 +32,10 @@ public class MinHeap<T>{
         swap(index, n);
         values.remove(n);
         if(index == n) return this;
+        return update(index);
+    }
 
+    public MinHeap<T> update(int index){
         int parent = (index - 1) / 2;
         if(index > 0 && comparator.get(values.get(index)) < comparator.get(values.get(parent))) swim(index);
         else sink(index);
