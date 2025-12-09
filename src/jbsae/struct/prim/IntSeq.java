@@ -79,18 +79,6 @@ public class IntSeq{
         return this;
     }
 
-    public IntSeq remove(int... indexes){
-        for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
-        return this;
-    }
-
-    public IntSeq removeAll(int... values){
-        for(int i = 0;i < values.length;i++){
-            for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
-        }
-        return this;
-    }
-
     public int get(int index){
         return items[index];
     }

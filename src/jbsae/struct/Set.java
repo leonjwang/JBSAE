@@ -83,11 +83,6 @@ public class Set<T> implements Iterable<T>{
         return this;
     }
 
-    public Set<T> removeAll(T... values){
-        for(T value : values) remove(value);
-        return this;
-    }
-
 
     public boolean contains(T value){
         int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);

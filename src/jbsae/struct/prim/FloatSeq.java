@@ -79,18 +79,6 @@ public class FloatSeq{
         return this;
     }
 
-    public FloatSeq remove(int... indexes){
-        for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
-        return this;
-    }
-
-    public FloatSeq removeAll(float... values){
-        for(int i = 0;i < values.length;i++){
-            for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
-        }
-        return this;
-    }
-
     public float get(int index){
         return items[index];
     }

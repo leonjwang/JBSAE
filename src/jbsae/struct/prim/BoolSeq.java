@@ -69,18 +69,6 @@ public class BoolSeq{
         return this;
     }
 
-    public BoolSeq remove(int... indexes){
-        for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
-        return this;
-    }
-
-    public BoolSeq removeAll(boolean... values){
-        for(int i = 0;i < values.length;i++){
-            for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
-        }
-        return this;
-    }
-
     public boolean get(int index){
         return items[index];
     }

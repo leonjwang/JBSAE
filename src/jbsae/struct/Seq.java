@@ -93,7 +93,7 @@ public class Seq<T> implements List<T>{
         return this;
     }
 
-    public Seq<T> addAll(Seq<T> values){
+    public Seq<T> addAll(List<T> values){
         for(T value : values) add(value);
         return this;
     }
@@ -110,18 +110,6 @@ public class Seq<T> implements List<T>{
                 remove(i);
                 break;
             }
-        }
-        return this;
-    }
-
-    public Seq<T> remove(int... indexes){
-        for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
-        return this;
-    }
-
-    public Seq<T> removeAll(T... values){
-        for(T value : values){
-            for(int i = 0;i < size;i++) if(eql(items[i], value)) remove(i--);
         }
         return this;
     }

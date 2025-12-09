@@ -103,18 +103,6 @@ public class CharSeq{
         return this;
     }
 
-    public CharSeq remove(char... indexes){
-        for(int i = 0;i < indexes.length;i++) remove(indexes[i]);
-        return this;
-    }
-
-    public CharSeq removeAll(char... values){
-        for(int i = 0;i < values.length;i++){
-            for(int j = 0;j < size;j++) if(items[j] == values[i]) remove(j--);
-        }
-        return this;
-    }
-
     public CharSeq remove(int index, int range){
         shift(items, index + range, (size -= range) + range, -range);
         for(int i = 0;i < range;i++) items[size + i] = 0;

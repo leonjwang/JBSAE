@@ -4,6 +4,7 @@ import java.util.*;
 
 import static jbsae.util.Structf.*;
 
+// TODO: This and the quad/rangetrees might have to be rewritten
 public class Tree<T> implements Iterable<T>{
     public Seq<T> values;
     public Tree parent;
@@ -45,11 +46,6 @@ public class Tree<T> implements Iterable<T>{
 
     public Tree<T> remove(T value){
         values.remove(value);
-        return this;
-    }
-
-    public Tree<T> removeAll(T... values){
-        this.values.removeAll(values);
         return this;
     }
 

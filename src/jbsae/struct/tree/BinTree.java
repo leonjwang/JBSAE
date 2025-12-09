@@ -5,6 +5,7 @@ import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
 
+// TODO: Optimize with 3-4 tree
 public class BinTree<T> extends Tree<T>{
     public Floatf<T> comparator;
     public boolean formatted;
