@@ -36,12 +36,6 @@ public class BinTree<T> extends Tree<T>{
         return this;
     }
 
-    @Override
-    public BinTree<T> removeAll(T... values){
-        for(int i = 0;i < values.length;i++) remove(values[i]);
-        return this;
-    }
-
     public T key(){
         return values.size == 0 ? null : values.get(values.size / 2);
     }

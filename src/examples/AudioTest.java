@@ -8,6 +8,7 @@ import jbsae.math.*;
 import jbsae.util.*;
 
 import static jbsae.JBSAE.*;
+import static jbsae.util.Mathf.*;
 
 public class AudioTest{
     public static void main(String[] args){
@@ -32,15 +33,22 @@ public class AudioTest{
                     la = v.ang();
                     a = Math.max(a, 0);
 
+                    Region circle = assets.textures.get("circle.png").full;
                     Region square = assets.textures.get("square.png").full;
 
-//                    for(int i = 0;i < 3600;i++){
-//                        float ang = i / 10f;
-//                        Drawf.fill(Tmp.c1.hsv(ang, 1f, 1f).a(0.01f));
-//                        Tmp.v1.set(width + height, 0).rot(ang).add(width / 2f, height / 2f);
-//                        Tmp.v2.set(Tmp.v1).nor().scl(-2);
-//                        Drawf.line(square, width / 2f + Tmp.v2.x, height / 2f + Tmp.v2.y, Tmp.v1.x, Tmp.v1.y, 5f);
-//                    }
+                    for(int i = 0;i < 3600;i++){
+                        float ang = i / 10f;
+                        Drawf.fill(Tmp.c1.hsv(ang, 1f, 1f));
+                        Tmp.v1.set(width + height, 0).rot(ang).add(width / 2f, height / 2f);
+                        Tmp.v2.set(Tmp.v1).nor().scl(-2);
+                        Drawf.line(square, width / 2f + Tmp.v2.x, height / 2f + Tmp.v2.y, Tmp.v1.x, Tmp.v1.y, 5f);
+                    }
+
+                    for(float i = 0;i < 70;i += 0.5f){
+                        Drawf.fill(Tmp.c1.set(Colorf.BLACK).a(max(0, (70 - i) / 1000f) + 0.005f));
+                        Drawf.drawc(circle, width / 2f, height / 2f, i * i / 5f, i * i / 5f);
+                    }
+
 
                     Drawf.fill(Tmp.c1.hsv(a, 1f, 1f).a(v.len() / height * 2));
                     Drawf.line(square, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
@@ -51,7 +59,7 @@ public class AudioTest{
                     Drawf.fill(Tmp.c1.hsv(0f, 0f, v.len()));
                     Drawf.text("" + v.len(), 10, 40, 20);
 
-                    float pitch = Mathf.max(1, a) / 360;
+                    float pitch = max(1, a) / 360;
                     song.pitch(pitch);
 
                     float gain = (v.len() / height) * 4f;
