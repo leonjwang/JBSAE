@@ -37,7 +37,7 @@ public class Circle2{
 
     public Vec2 constrain(Vec2 pos){
         if(contains(pos)) return pos;
-        return pos.setr(pos.sub(x, y).ang(), r);
+        return pos.set(pos.sub(x, y).nor().scl(r).add(x, y));
     }
 
 

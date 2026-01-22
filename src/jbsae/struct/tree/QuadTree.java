@@ -39,8 +39,10 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
 
     public QuadTree<T> find(Pos2 value){
         if(branches.size <= 0) return this;
-        for(Tree<T> branch : branches) if(((QuadTree<T>)branch).range.contains(value)) return ((QuadTree<T>)branch).find(value);
-        return this;
+        int index = 0;
+        if(value.x() >= (range.x + range.w / 2)) index = (value.y() >= (range.y + range.h / 2) ? 0 : 3);
+        else index = (value.y() >= (range.y + range.h / 2) ? 1 : 2);
+        return ((QuadTree<T>)branches.get(index)).find(value);
     }
 
     public Seq<T> query(Seq<T> arr, Range2 range){

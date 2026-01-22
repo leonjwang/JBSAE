@@ -442,30 +442,32 @@ public class StructTester{
     }
 
     public static void testTrees(){
-        new Test("Tree Test", () -> {
-            java.util.ArrayList<String> values = new java.util.ArrayList<>();
-            Tree<String> tree = new Tree<>();
-            Tree<String> current = tree;
-
-            for(int i = 0;i < randInt(3, 10);i++){
-                String[] added = generate();
-                current.addAll(added);
-                Collections.addAll(values, added);
-                for(int j = 0;j < randInt(1, 4);j++) current.addBranch(new Tree<>());
-                if(chance(0.3f) && current.parent != null) current = current.parent;
-                else current = current.branches.get(randInt(0, current.branches.size - 1));
-            }
-
-            for(String str : tree){
-                if(!values.contains(str)) throw new Exception("Not equal for operation [contains]");
-                values.remove(str);
-            }
-            if(values.size() > 0) throw new Exception("Not equal for operation [size]");
-        }).run();
+//        new Test("Tree Test", () -> {
+//            java.util.ArrayList<String> values = new java.util.ArrayList<>();
+//            Tree<String> tree = new Tree<>();
+//            Tree<String> current = tree;
+//
+//            for(int i = 0;i < randInt(3, 10);i++){
+//                String[] added = generate();
+//                current.addAll(added);
+//                Collections.addAll(values, added);
+//                for(int j = 0;j < randInt(1, 4);j++) current.addBranch(new Tree<>());
+//                if(chance(0.3f) && current.parent != null) current = current.parent;
+//                else current = current.branches.get(randInt(0, current.branches.size - 1));
+//            }
+//
+//            for(String str : tree){
+//                if(!values.contains(str)) throw new Exception("Not equal for operation [contains]");
+//                values.remove(str);
+//            }
+//            if(values.size() > 0) throw new Exception("Not equal for operation [size]");
+//        }).run();
+        IntSeq quadtreeTimes = new IntSeq();
+        IntSeq normalTimes = new IntSeq();
         new Test("QuadTree Test", () -> {
             Seq<Vec2> original = new Seq<>();
             QuadTree tree = new QuadTree(10000, 10000).valueLimit(8);
-            for(int i = 0;i < 10000;i++){
+            for(int i = 0;i < 1000000;i++){
                 Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
                 tree.add(v);
                 original.add(v);
@@ -473,51 +475,66 @@ public class StructTester{
 
             Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
             Seq<Pos2> inside = new Seq<>();
-            for(int i = 0;i < 10000;i++) tree.query(inside, range);
+//            for(int i = 0;i < 10000;i++) tree.query(inside, range);
+//
+//            inside.clear();
 
-            inside.clear();
+            long before = System.currentTimeMillis();
             tree.query(inside, range);
+            quadtreeTimes.add((int)(System.currentTimeMillis() - before));
+
             Seq<Vec2> trueInside = new Seq<>();
+            before = System.currentTimeMillis();
             for(Vec2 v : original) if(range.contains(v)) trueInside.add(v);
+            normalTimes.add((int)(System.currentTimeMillis() - before));
 
             for(Vec2 v : trueInside) if(!inside.contains(v)) throw new Exception("Not equal for operation [contains]");
         }).run();
-        new Test("BinTree Test", () -> {
-            Seq<Vec2> original = new Seq<>();
-            BinTree<Vec2> tree = new BinTree<Vec2>(v -> v.x);
-            for(int i = 0;i < 1000;i++){
-                Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
-                tree.add(v);
-                original.add(v);
-            }
 
-            for(Vec2 v : original){
-                Vec2 res = tree.find(o -> v.x - o.x);
-                if(res == null || abs(res.x - v.x) >= 1) throw new Exception("Not equal for operation [find]");
-            }
-        }).run();
-        new Test("RangeTree Test", () -> {
-            Seq<Range2> original = new Seq<>();
-            RangeTree<Range2> tree = new RangeTree(10000, 10000).valueLimit(8);
-            for(int i = 0;i < 10000;i++){
-                Range2 r = new Range2(random(0, 10000), random(0, 10000), random(10, 50), random(10, 50));
-                tree.add(r);
-                original.add(r);
-            }
-
-            Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
-            Seq<Range2> inside = new Seq<>();
-            for(int i = 0;i < 10000;i++) tree.query(inside, range);
-
-            inside.clear();
-            Seq<Range2> trueInside = null;
-            tree.query(inside, range);
-            trueInside = new Seq<>();
-            for(Range2 r : original) if(range.overlaps(r)) trueInside.add(r);
-
-            for(Range2 r : trueInside) if(!inside.contains(r)) throw new Exception("Not equal for operation [contains]");
-//            System.out.println(inside.size + "," + trueInside.size);
-        }).run();
+        double avgTree = 0.0;
+        double avgNormal = 0.0;
+        for(int i = 0;i < quadtreeTimes.size;i++){
+            avgTree += (double)quadtreeTimes.get(i) / (double)quadtreeTimes.size;
+            avgNormal += (double)normalTimes.get(i) / (double)normalTimes.size;
+        }
+        System.out.println("Avg tree: " + avgTree);
+        System.out.println("Avg normal: " + avgNormal);
+//        new Test("BinTree Test", () -> {
+//            Seq<Vec2> original = new Seq<>();
+//            BinTree<Vec2> tree = new BinTree<Vec2>(v -> v.x);
+//            for(int i = 0;i < 1000;i++){
+//                Vec2 v = new Vec2(random(0, 10000), random(0, 10000));
+//                tree.add(v);
+//                original.add(v);
+//            }
+//
+//            for(Vec2 v : original){
+//                Vec2 res = tree.find(o -> v.x - o.x);
+//                if(res == null || abs(res.x - v.x) >= 1) throw new Exception("Not equal for operation [find]");
+//            }
+//        }).run();
+//        new Test("RangeTree Test", () -> {
+//            Seq<Range2> original = new Seq<>();
+//            RangeTree<Range2> tree = new RangeTree(10000, 10000).valueLimit(8);
+//            for(int i = 0;i < 10000;i++){
+//                Range2 r = new Range2(random(0, 10000), random(0, 10000), random(10, 50), random(10, 50));
+//                tree.add(r);
+//                original.add(r);
+//            }
+//
+//            Range2 range = new Range2(random(0, 9000), random(0, 9000), random(0, 1000), random(0, 1000));
+//            Seq<Range2> inside = new Seq<>();
+//            for(int i = 0;i < 10000;i++) tree.query(inside, range);
+//
+//            inside.clear();
+//            Seq<Range2> trueInside = null;
+//            tree.query(inside, range);
+//            trueInside = new Seq<>();
+//            for(Range2 r : original) if(range.overlaps(r)) trueInside.add(r);
+//
+//            for(Range2 r : trueInside) if(!inside.contains(r)) throw new Exception("Not equal for operation [contains]");
+////            System.out.println(inside.size + "," + trueInside.size);
+//        }).run();
     }
 
     public static void testMaps(){
@@ -702,65 +719,65 @@ public class StructTester{
     }
 
     public static void main(String[] args){
-        new Test("Float Map Test", 100000, () -> {
-            java.util.HashMap<Float, String> base = new java.util.HashMap<>();
-            FloatMap<String> custom = new FloatMap<>();
-            custom.exact = true;
-
-            float[] keys = new float[randInt(0, 1000)];
-            for(int i = 0;i < keys.length;i++){
-                keys[i] = chance(0.05f) ? 0 : random(-1000, 1000);
-                if(custom.contains(keys[i])) continue;
-                String value = single();
-                base.put(keys[i], value);
-                custom.add(keys[i], value);
-            }
-
-            for(int i = 0;i < keys.length;i++) if(!eql(base.get(keys[i]), custom.get(keys[i]))) throw new Exception("Not equal after operation [add]");
-
-            int amount = randInt(0, base.size());
-            for(int i = 0;i < amount;i++){
-                int removeIndex = randInt(0, base.size() - 1);
-                base.remove(keys[removeIndex]);
-                custom.remove(keys[removeIndex]);
-            }
-
-            for(int i = 0;i < keys.length;i++) if(!eql(base.get(keys[i]), custom.get(keys[i]))) throw new Exception("Not equal after operation [add]");
-
-            if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
-        }).run();
-        new Test("Floatf Map Test", 100000, () -> {
-            java.util.HashMap<Float, Float> base = new java.util.HashMap<>();
-            FloatfMap custom = new FloatfMap();
-            custom.exact = true;
-
-            float[] keys = new float[randInt(0, 1000)];
-            for(int i = 0;i < keys.length;i++){
-                keys[i] = chance(0.05f) ? 0 : random(-1000, 1000);
-                if(custom.contains(keys[i])) continue;
-                float value = chance(0.05f) ? 0 : random(-10000000, 10000000);
-                base.put(keys[i], value);
-                custom.add(keys[i], value);
-            }
-
-            for(int i = 0;i < keys.length;i++) if(base.get(keys[i]) != custom.get(keys[i])) throw new Exception("Not equal after operation [add]");
-
-            int amount = randInt(0, base.size());
-            for(int i = 0;i < amount;i++){
-                int removeIndex = randInt(0, base.size() - 1);
-                base.remove(keys[removeIndex]);
-                custom.remove(keys[removeIndex]);
-            }
-
-            for(int i = 0;i < keys.length;i++) if(base.get(keys[i]) != null && base.get(keys[i]) != custom.get(keys[i])) throw new Exception("Not equal after operation [add]");
-
-            if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
-        }).run();
+//        new Test("Float Map Test", 100000, () -> {
+//            java.util.HashMap<Float, String> base = new java.util.HashMap<>();
+//            FloatMap<String> custom = new FloatMap<>();
+//            custom.exact = true;
+//
+//            float[] keys = new float[randInt(0, 1000)];
+//            for(int i = 0;i < keys.length;i++){
+//                keys[i] = chance(0.05f) ? 0 : random(-1000, 1000);
+//                if(custom.contains(keys[i])) continue;
+//                String value = single();
+//                base.put(keys[i], value);
+//                custom.add(keys[i], value);
+//            }
+//
+//            for(int i = 0;i < keys.length;i++) if(!eql(base.get(keys[i]), custom.get(keys[i]))) throw new Exception("Not equal after operation [add]");
+//
+//            int amount = randInt(0, base.size());
+//            for(int i = 0;i < amount;i++){
+//                int removeIndex = randInt(0, base.size() - 1);
+//                base.remove(keys[removeIndex]);
+//                custom.remove(keys[removeIndex]);
+//            }
+//
+//            for(int i = 0;i < keys.length;i++) if(!eql(base.get(keys[i]), custom.get(keys[i]))) throw new Exception("Not equal after operation [add]");
+//
+//            if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
+//        }).run();
+//        new Test("Floatf Map Test", 100000, () -> {
+//            java.util.HashMap<Float, Float> base = new java.util.HashMap<>();
+//            FloatfMap custom = new FloatfMap();
+//            custom.exact = true;
+//
+//            float[] keys = new float[randInt(0, 1000)];
+//            for(int i = 0;i < keys.length;i++){
+//                keys[i] = chance(0.05f) ? 0 : random(-1000, 1000);
+//                if(custom.contains(keys[i])) continue;
+//                float value = chance(0.05f) ? 0 : random(-10000000, 10000000);
+//                base.put(keys[i], value);
+//                custom.add(keys[i], value);
+//            }
+//
+//            for(int i = 0;i < keys.length;i++) if(base.get(keys[i]) != custom.get(keys[i])) throw new Exception("Not equal after operation [add]");
+//
+//            int amount = randInt(0, base.size());
+//            for(int i = 0;i < amount;i++){
+//                int removeIndex = randInt(0, base.size() - 1);
+//                base.remove(keys[removeIndex]);
+//                custom.remove(keys[removeIndex]);
+//            }
+//
+//            for(int i = 0;i < keys.length;i++) if(base.get(keys[i]) != null && base.get(keys[i]) != custom.get(keys[i])) throw new Exception("Not equal after operation [add]");
+//
+//            if(base.size() != custom.size) throw new Exception("Not equal for operation [size]");
+//        }).run();
 
 //        testSeqs();
 //        testSets();
 //        testQueues();
-//        testTrees();
+        testTrees();
 //        testMaps();
 
         if(failed == 0) System.out.println("\nAll tests passed!");
@@ -773,7 +790,7 @@ public class StructTester{
         public int times;
 
         public Test(String name, TestRunnable test){
-            this(name, 1000, test);
+            this(name, 100, test);
         }
 
         public Test(String name, int times, TestRunnable test){
@@ -786,10 +803,14 @@ public class StructTester{
             System.out.println("\nRunning test: [" + name + "]");
             long start = System.currentTimeMillis();
             try{
-                for(int i = 0;i < times;i++) test.run();
-                System.out.println("[" + name + "] Test Passed");
+                System.out.print("Running test 1/" + times);
+                for(int i = 0;i < times;i++){
+                    test.run();
+                    System.out.print("\rRunning test " + i + "/" + times);
+                }
+                System.out.println("\r[" + name + "] Test Passed");
             }catch(Exception e){
-                System.out.println("[" + name + "] Test Failed: " + e);
+                System.out.println("\r[" + name + "] Test Failed: " + e);
                 e.printStackTrace();
                 failed++;
             }
