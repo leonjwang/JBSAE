@@ -27,7 +27,7 @@ public class Renderer{
     }
 
     public void init(){
-        vertices = MemoryUtil.memAllocFloat(4096);
+        vertices = MemoryUtil.memAllocFloat(16 * 1024); // TODO: Dynamic allocation?
         verticesNum = 0;
 
         vertexArray = new VertexArray();
@@ -90,11 +90,11 @@ public class Renderer{
         x4 *= 2;
         y4 *= 2;
 
-        float c = (ry1 + ry2 + ry3 + ry4) / 4;
-        ry1 = 2 * c - ry1;
-        ry2 = 2 * c - ry2;
-        ry3 = 2 * c - ry3;
-        ry4 = 2 * c - ry4;
+        float c = (ry1 + ry2 + ry3 + ry4) / 2;
+        ry1 = c - ry1;
+        ry2 = c - ry2;
+        ry3 = c - ry3;
+        ry4 = c - ry4;
 
 
         vertex(x1, y1, rx1, ry1, r, g, b, a);

@@ -12,7 +12,7 @@ import jbsae.util.*;
 import static jbsae.JBSAE.*;
 import static jbsae.util.Mathf.*;
 
-// Baseline: 14 fps
+// Baseline: 55 fps
 public class RenderTest{
     public static final float pixSize = 2f;
 

@@ -59,8 +59,10 @@ public class InterpDisplay extends Screen{
             float tx = (i % max + 0.5f) * boxSpacing, ty = (i / max + 0.5f) * boxSpacing + input.scroll * -30;
             boxColor.hsv(time.millis() / 10 + tx / 20 + ty / 10, 1, 1);
 
-            push();
-            translate(tx, ty);
+//            push();
+//            translate(tx, ty);
+
+            // TODO: fix
 
             tmp2.set(tx - boxSize / 2, ty - boxSize / 2, boxSize, boxSize);
             if(tmp2.contains(input.mouse)){
@@ -68,7 +70,7 @@ public class InterpDisplay extends Screen{
                     lastOver = nameSeq.get(i);
                     lastExamplePos = interpSeq.get(i).get(time.millis() % exampleTime / exampleTime) - 0.5f;
                 }
-                scale(hoverSize);
+//                scale(hoverSize);
             }
 
             fill(boxColor);
@@ -77,7 +79,7 @@ public class InterpDisplay extends Screen{
             rectc(0, 0, boxSize - boxOutline * 2, boxSize - boxOutline * 2);
             fill(boxColor);
 
-            scale(0.9f * boxSize);
+//            scale(0.9f * boxSize);
             float lasty = interpSeq.get(i).get(0);
             for(float x = linePrecision;x < 1;x += linePrecision){
                 line(x - 0.5f, interpSeq.get(i).get(x) - 0.5f, x - linePrecision - 0.5f, lasty - 0.5f, lineSize / boxSize);
@@ -87,7 +89,7 @@ public class InterpDisplay extends Screen{
             fill(boxColor);
             text(nameSeq.get(i), -0.5f, 0.56f, 12f / boxSize);
             assets.textures.get("square.png").bind();
-            pop();
+//            pop();
         }
 
         for(int i = 0;i < interpSeq.size;i++){
@@ -96,14 +98,14 @@ public class InterpDisplay extends Screen{
 
             tmp2.set(tx - boxSize / 2, ty - boxSize / 2, boxSize, boxSize);
             if(tmp2.contains(input.mouse)){
-                push();
+//                push();
                 float rx = clamp(input.mouse.x, displaySize / 2f, width - displaySize / 2f);
-                translate(rx, input.mouse.y + displaySize / 10f);
+//                translate(rx, input.mouse.y + displaySize / 10f);
                 fill(boxColor);
                 rectc(0, 0, displaySize, displaySize / 5f);
                 fill(BLACK);
                 rectc(0, 0, displaySize - boxOutline * 2, displaySize / 5f - boxOutline * 2);
-                scale(0.9f * displaySize);
+//                scale(0.9f * displaySize);
 
                 fill(boxColor);
                 float curPos = interpSeq.get(i).get(time.millis() % exampleTime / exampleTime) - 0.5f;
@@ -112,7 +114,7 @@ public class InterpDisplay extends Screen{
                 rectc(curPos, 0f, exampleSize / displaySize, exampleSize / displaySize);
                 lastExamplePos = interpSeq.get(i).get(time.millis() % exampleTime / exampleTime) - 0.5f;
 
-                pop();
+//                pop();
             }
         }
     }

@@ -129,32 +129,4 @@ public class Drawf{
             tx += glyph.xAdvance * scl;
         }
     }
-
-
-    /** Translation functions. */
-    public static void rotate(float r){
-        draw.matrixes.first().rotate(r);
-    }
-
-    public static void scale(float s){
-        scale(s, s);
-    }
-
-    public static void scale(float x, float y){
-        draw.matrixes.first().scale(x, y);
-    }
-
-    public static void translate(float x, float y){
-        draw.matrixes.first().translate(x, y);
-    }
-
-
-    /** Current setting manipulation. */
-    public static void push(){
-        draw.matrixes.addFirst(new DrawMatrix());
-    }
-
-    public static void pop(){
-        draw.matrixes.removeFirst();
-    }
 }
