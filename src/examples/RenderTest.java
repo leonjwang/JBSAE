@@ -1,95 +1,42 @@
 package examples;
 
 import jbsae.*;
+import jbsae.Log.*;
 import jbsae.core.*;
-import jbsae.graphics.*;
+import jbsae.core.loop.*;
 import jbsae.math.*;
+import jbsae.struct.*;
+import jbsae.struct.tree.*;
 import jbsae.util.*;
 
 import static jbsae.JBSAE.*;
+import static jbsae.util.Mathf.*;
 
-public class RenderTest extends Screen{
-    public Pixel[][] arr;
-
-    public Vec2 translate = new Vec2(200, 200);
-    public float scale = 5;
-
-    public float dist = 2;
-
-    public int size = 20;
-
-    public class Pixel{
-        public Vec2 pos = new Vec2();
-        public Vec2 vel = new Vec2();
-        public Color color;
-
-        public Pixel(int x, int y){
-            pos.set(x, y);
-            color = new Color().hsv(pos.x * 10 + pos.y * 10, 1f, 1f);
-        }
-
-        public void update(){
-            pos.add(vel);
-
-            Vec2 real = new Vec2(input.mouse).sub(translate).scl(1 / scale);
-//            if(Tmp.e1.set(pos.x, pos.y, dist).contains(real)){
-//                vel.add(Tmp.v1.set(pos).sub(real).nor().scl(0.25f));
-//            }
-
-            if(input.clicking[0]){
-                vel.add(Tmp.v1.set(real).sub(pos).nor().scl(0.1f));
-            }
-
-            if(!Tmp.r1.set(-size, -size, size * 2, size * 2).contains(pos)){
-                Tmp.r1.set(-size, -size, size * 2, size * 2).constrain(pos);
-                vel.inv();
-            }
-//            if(!Tmp.e1.set(0, 0, size * 2).contains(pos)){
-//                Tmp.e1.set(0, 0, size * 2).constrain(pos);
-//                vel.inv();
-//            }
-
-            vel.scl(0.99f);
-        }
-
-        public void draw(){
-//            Drawf.layer(Mathf.random());
-            Drawf.fill(Tmp.c1.set(color).a(0.1f));
-            for(int i = 9;i < 10;i++){
-                float mult = i * i * i;
-                Drawf.rectc(pos.x * scale + translate.x, pos.y * scale + translate.y, scale * mult / 50f, scale * mult / 50f);
-            }
-        }
-    }
-
-    @Override
-    public void init(){
-        arr = new Pixel[50][50];
-        for(int x = 0;x < arr.length;x++){
-            for(int y = 0;y < arr[x].length;y++) arr[x][y] = new Pixel(x, y);
-        }
-
-//        draw = new SortedDraw();
-    }
-
-    @Override
-    public void update(){
-        for(int x = 0;x < arr.length;x++){
-            for(int y = 0;y < arr[x].length;y++) arr[x][y].update();
-        }
-    }
-
-    @Override
-    public void draw(){
-        assets.textures.get("glow.png").bind();
-
-        for(int x = 0;x < arr.length;x++){
-            for(int y = 0;y < arr[x].length;y++) arr[x][y].draw();
-        }
-    }
+// Baseline: 14 fps
+public class RenderTest{
+    public static final float pixSize = 2f;
 
     public static void main(String[] args){
-        JBSAE.width = 400;
-        jbsae(new RenderTest());
+        jbsae(() -> {
+            screen(new Screen(){
+                public void init(){
+                    Log.info("Drawing " + (int)(width / pixSize + 1) * (int)(height / pixSize + 1) + " pixels");
+                }
+
+                public void update(){
+                }
+
+                public void draw(){
+                    assets.textures.get("square.png").bind();
+
+                    for(float x = 0;x < width;x += pixSize){
+                        for(float y = 0;y < height;y += pixSize){
+                            Drawf.fill(Tmp.c1.hsv(x + y, 1f, 1f));
+                            Drawf.rect(x, y, pixSize, pixSize);
+                        }
+                    }
+                }
+            });
+        });
     }
 }
