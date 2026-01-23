@@ -19,7 +19,7 @@ public class Renderer{
     public ShaderProgram program;
 
     public FloatBuffer vertices;
-    public int verticesNum;
+    public int vertexCount;
 
     public Texture binded;
 
@@ -27,8 +27,8 @@ public class Renderer{
     }
 
     public void init(){
-        vertices = MemoryUtil.memAllocFloat(16 * 1024); // TODO: Dynamic allocation?
-        verticesNum = 0;
+        vertices = MemoryUtil.memAllocFloat(64 * 1024);
+        vertexCount = 0;
 
         vertexArray = new VertexArray();
         vertexBuffer = new VertexBuffer();
@@ -64,7 +64,7 @@ public class Renderer{
     }
 
     public void flush(){
-        if(verticesNum <= 0) return;
+        if(vertexCount <= 0) return;
 
         vertices.flip();
         vertexArray.bind();
@@ -72,10 +72,10 @@ public class Renderer{
 
         vertexBuffer.bind(GL_ARRAY_BUFFER);
         vertexBuffer.subData(GL_ARRAY_BUFFER, 0, vertices);
-        glDrawArrays(GL_TRIANGLES, 0, verticesNum);
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
         vertices.clear();
-        verticesNum = 0;
+        vertexCount = 0;
     }
 
     public void draw(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float rx1, float ry1, float rx2, float ry2, float rx3, float ry3, float rx4, float ry4, float r, float g, float b, float a){
@@ -104,7 +104,7 @@ public class Renderer{
         vertex(x4, y4, rx4, ry4, r, g, b, a);
         vertex(x3, y3, rx3, ry3, r, g, b, a);
 
-        verticesNum += 6;
+        vertexCount += 6;
     }
 
     public void vertex(float x, float y, float rx, float ry, float r, float g, float b, float a){

@@ -5,7 +5,7 @@ import jbsae.struct.*;
 
 import static jbsae.util.Mathf.*;
 
-public class RangeTree<T extends Pos4> extends Tree<T>{
+public class RangeTree<T extends Range2> extends Tree<T>{
     public int depthLimit, valueLimit = 4;
     public Range2 range;
 

@@ -29,9 +29,9 @@ public class InterpDisplay extends Screen{
 
     public Seq<Interp> interpSeq = new Seq<>();
     public Seq<String> nameSeq = new Seq<>();
+
     public Color boxColor = new Color();
-    public Vec2 tmp = new Vec2();
-    public Range2 tmp2 = new Range2();
+
     public String lastOver = "";
     public float lastExamplePos = 0;
 
@@ -64,8 +64,8 @@ public class InterpDisplay extends Screen{
 
             // TODO: fix
 
-            tmp2.set(tx - boxSize / 2, ty - boxSize / 2, boxSize, boxSize);
-            if(tmp2.contains(input.mouse)){
+            Tmp.r1.set(tx - boxSize / 2, ty - boxSize / 2, boxSize, boxSize);
+            if(Tmp.r1.contains(input.mouse)){
                 if(!nameSeq.get(i).equals(lastOver)){
                     lastOver = nameSeq.get(i);
                     lastExamplePos = interpSeq.get(i).get(time.millis() % exampleTime / exampleTime) - 0.5f;
@@ -96,8 +96,8 @@ public class InterpDisplay extends Screen{
             float tx = (i % max + 0.5f) * boxSpacing, ty = (i / max + 0.5f) * boxSpacing + input.scroll * -30;
             boxColor.hsv(time.millis() / 10 + tx / 20 + ty / 10, 1, 1);
 
-            tmp2.set(tx - boxSize / 2, ty - boxSize / 2, boxSize, boxSize);
-            if(tmp2.contains(input.mouse)){
+            Tmp.r1.set(tx - boxSize / 2, ty - boxSize / 2, boxSize, boxSize);
+            if(Tmp.r1.contains(input.mouse)){
 //                push();
                 float rx = clamp(input.mouse.x, displaySize / 2f, width - displaySize / 2f);
 //                translate(rx, input.mouse.y + displaySize / 10f);
@@ -117,11 +117,6 @@ public class InterpDisplay extends Screen{
 //                pop();
             }
         }
-    }
-
-    public void line(float x1, float y1, float x2, float y2, float w){
-        tmp.set(x2 - x1, y2 - y1);
-        rectc((x1 + x2) / 2f, (y1 + y2) / 2f, w, tmp.len(), tmp.ang() + 90);
     }
 
     public static void main(String[] args){

@@ -10,7 +10,6 @@ import static jbsae.util.Structf.*;
 
 // I think I am realizing that a Dequeue is in most ways literally just a superior Seq
 public class Queue<T> implements List<T>{
-    public QueueIterator i1, i2;
     public T[] items;
     public int head, tail, size;
 
@@ -21,8 +20,6 @@ public class Queue<T> implements List<T>{
 
     public Queue(int size){
         items = (T[])new Object[size];
-        i1 = new QueueIterator();
-        i2 = new QueueIterator();
     }
 
     public Queue(Object... values){
@@ -47,7 +44,7 @@ public class Queue<T> implements List<T>{
 
     @Override
     public List<T> set(T value, int index){
-        items[mod((head + index), items.length)] = value;
+        items[(head + index < items.length) ? (head + index) : (head + index - items.length)] = value;
         return this;
     }
 
@@ -67,7 +64,7 @@ public class Queue<T> implements List<T>{
 
 
     public Queue<T> addFirst(T value){
-        if(value == null) return this;
+        if(value == null) throw new RuntimeException("Value is null");
         if(size == items.length) resize(max(8, size * 2));
         head = mod(head - 1, items.length);
         items[head] = value;
@@ -76,7 +73,7 @@ public class Queue<T> implements List<T>{
     }
 
     public Queue<T> addLast(T value){
-        if(value == null) return this;
+        if(value == null) throw new RuntimeException("Value is null");
         if(size == items.length) resize(max(8, size * 2));
         items[tail] = value;
         tail = mod(tail + 1, items.length);
@@ -113,7 +110,7 @@ public class Queue<T> implements List<T>{
 
     @Override
     public T get(int index){
-        return items[mod((head + index), items.length)];
+        return items[(head + index < items.length) ? (head + index) : (head + index - items.length)];
     }
 
     public T first(){
@@ -163,14 +160,6 @@ public class Queue<T> implements List<T>{
 
     @Override
     public Iterator<T> iterator(){
-        if(i1.index >= size){
-            i1.index = 0;
-            return i1;
-        }
-        if(i2.index >= size){
-            i2.index = 0;
-            return i2;
-        }
         return new QueueIterator();
     }
 

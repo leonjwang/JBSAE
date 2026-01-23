@@ -43,7 +43,7 @@ public class IntMap<V>{
         if(key == 0) return setZero(value);
         int steps = (trailZeros(keys.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
-            int[] checks = hash3(key, keys.length, Tmp.i3);
+            int[] checks = hash3(key, keys.length);
             for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return set(checks[i], key, value);
             for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
             int index = checks[randInt(0, checks.length - 1)];
@@ -80,7 +80,7 @@ public class IntMap<V>{
         }
         int[] keys = this.keys;
         V[] values = this.values;
-        int[] checks = hash3(key, keys.length, Tmp.i3);
+        int[] checks = hash3(key, keys.length);
         for(int i = 0;i < checks.length;i++){
             if(keys[checks[i]] == key){
                 keys[checks[i]] = 0;
@@ -100,7 +100,7 @@ public class IntMap<V>{
 
     public V get(int key){
         if(key == 0) return zero;
-        int[] checks = hash3(key, keys.length, Tmp.i3);
+        int[] checks = hash3(key, keys.length);
         for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return values[checks[i]];
         return null;
     }
@@ -108,7 +108,7 @@ public class IntMap<V>{
 
     public boolean contains(int key){
         if(key == 0) return zero != null;
-        int[] checks = hash3(key, keys.length, Tmp.i3);
+        int[] checks = hash3(key, keys.length);
         for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return true;
         return false;
     }

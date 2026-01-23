@@ -20,7 +20,10 @@ public class AssetDir extends Fi{
         File[] contents = file.listFiles();
         for(File file : contents){
             if(file.isDirectory()) new AssetDir(file).list(arr);
-            else arr.add(assets.create(file.getPath()));
+            else{
+                AssetFi asset = assets.create(file.getPath());
+                if(asset != null) arr.add(asset);
+            }
         }
         return arr;
     }

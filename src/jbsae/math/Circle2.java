@@ -28,11 +28,11 @@ public class Circle2{
 
 
     public boolean contains(Pos2 value){
-        return dst(x, y, value.x(), value.y()) <= r;
+        return dst2(x, y, value.x(), value.y()) <= r * r;
     }
 
     public boolean overlaps(Circle2 o){
-        return dst(x, y, o.x, o.y) <= r + o.r;
+        return dst2(x, y, o.x, o.y) <= (r + o.r) * (r + o.r);
     }
 
     public Vec2 constrain(Vec2 pos){

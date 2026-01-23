@@ -110,13 +110,6 @@ public class Mathf{
         return max(max(a, b), c);
     }
 
-    /** Returns the maximum of an array of floats. */
-    public static float max(float... v){
-        float max = v[0];
-        for(int i = 1;i < v.length;i++) max = Math.max(max, v[i]);
-        return max;
-    }
-
     /** Returns the maximum of two integers. */
     public static int max(int a, int b){
         return a > b ? a : b;
@@ -125,13 +118,6 @@ public class Mathf{
     /** Returns the maximum of three integers. */
     public static int max(int a, int b, int c){
         return max(max(a, b), c);
-    }
-
-    /** Returns the maximum of an array of integers. */
-    public static int max(int... v){
-        int max = v[0];
-        for(int i = 1;i < v.length;i++) max = Math.max(max, v[i]);
-        return max;
     }
 
 
@@ -204,7 +190,7 @@ public class Mathf{
 
     /** Returns the d-th root of a float. */
     public static float rt(float n, float d){
-        if(n < 0) return (float)Double.NaN;
+        if(n < 0) return Float.NaN;
         if(n == 0) return 0;
 
         float a = n, b = n / d;
@@ -215,19 +201,9 @@ public class Mathf{
         return b;
     }
 
-    /** Returns the d-th root of an integer. */
-    public static int rt(int n, int d){
-        return (int)rt((float)n, (float)d);
-    }
-
     /** Returns the square root of a float. */
     public static float rt2(float n){
         return (float)Math.sqrt(n);
-    }
-
-    /** Returns the square root of an integer. */
-    public static int rt2(int n){
-        return (int)Math.sqrt(n);
     }
 
 
@@ -243,21 +219,15 @@ public class Mathf{
 
 
     /** Distance functions. */
-    /** Returns the distance between two points in 2D space. */
+    /** Returns the distance between two points in 2D space. */ // TODO: Replace all dst
     public static float dst(float x1, float y1, float x2, float y2){
-        return dst(x1, y1, 0, x2, y2, 0);
+        return rt2(dst2(x1, y1, x2, y2));
     }
 
     /** Returns the distance between two points in 3D space. */
     public static float dst(float x1, float y1, float z1, float x2, float y2, float z2){
         return rt2(dst2(x1, y1, z1, x2, y2, z2));
     }
-
-    /** Returns the distance between points in n-dimensional space. */
-    public static float dst(float... param){
-        return rt2(dst2(param));
-    }
-
 
     /** Returns the distance between two Pos2 objects. */
     public static float dst(Pos2 a, Pos2 b){
@@ -272,21 +242,13 @@ public class Mathf{
 
     /** Returns the squared distance between two points in 2D space. */
     public static float dst2(float x1, float y1, float x2, float y2){
-        return dst2(x1, y1, 0, x2, y2, 0);
+        return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
     }
 
     /** Returns the squared distance between two points in 3D space. */
     public static float dst2(float x1, float y1, float z1, float x2, float y2, float z2){
-        return pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2);
+        return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1);
     }
-
-    /** Returns the squared distance between points in n-dimensional space. */
-    public static float dst2(float... param){
-        float total = 0;
-        for(int i = 0;i < param.length / 2;i++) total += pow(param[i] - param[i + param.length / 2], 2);
-        return total;
-    }
-
 
     /** Returns the squared distance between two Pos2 objects. */
     public static float dst2(Pos2 a, Pos2 b){

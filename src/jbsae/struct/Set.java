@@ -11,7 +11,6 @@ import static jbsae.util.Structf.*;
 
 
 public class Set<T> implements Iterable<T>{
-    public SetIterator i1, i2;
     public T[] table;
     public int size = 0;
 
@@ -22,8 +21,6 @@ public class Set<T> implements Iterable<T>{
 
     public Set(int size){
         table = (T[])new Object[size];
-        i1 = new SetIterator();
-        i2 = new SetIterator();
     }
 
     public Set(Object... values){
@@ -48,7 +45,7 @@ public class Set<T> implements Iterable<T>{
     public Set<T> add(T value){
         int steps = (trailZeros(table.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
-            int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
+            int[] checks = hash3(value.hashCode(), table.length);
             for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
             for(int i = 0;i < checks.length;i++){
                 int index = checks[i];
@@ -72,7 +69,7 @@ public class Set<T> implements Iterable<T>{
     }
 
     public Set<T> remove(T value){
-        int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
+        int[] checks = hash3(value.hashCode(), table.length);
         for(int i = 0;i < checks.length;i++){
             if(eql(table[checks[i]], value)){
                 table[checks[i]] = null;
@@ -85,7 +82,7 @@ public class Set<T> implements Iterable<T>{
 
 
     public boolean contains(T value){
-        int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
+        int[] checks = hash3(value.hashCode(), table.length);
         for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return true;
         return false;
     }
@@ -112,14 +109,6 @@ public class Set<T> implements Iterable<T>{
 
     @Override
     public Iterator<T> iterator(){
-        if(i1.nextIndex >= table.length){
-            i1.nextIndex = 0;
-            return i1;
-        }
-        if(i2.nextIndex >= table.length){
-            i2.nextIndex = 0;
-            return i2;
-        }
         return new SetIterator();
     }
 
@@ -129,13 +118,13 @@ public class Set<T> implements Iterable<T>{
     }
 
     private class SetIterator implements Iterator<T>{
-        public int nextIndex = -1;
+        public int nextIndex = 0;
 
         public SetIterator(){
         }
 
         public void findNextIndex(){
-            for(nextIndex++;nextIndex < table.length;nextIndex++) if(table[nextIndex] != null) return;
+            for(;nextIndex < table.length;nextIndex++) if(table[nextIndex] != null) return;
         }
 
         @Override
@@ -146,7 +135,7 @@ public class Set<T> implements Iterable<T>{
 
         @Override
         public T next(){
-            return table[nextIndex];
+            return table[nextIndex++];
         }
     }
 }

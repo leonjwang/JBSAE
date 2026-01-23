@@ -6,7 +6,6 @@ import jbsae.struct.prim.*;
 
 public class SortedDraw extends Draw{
     public Seq<DrawRequest> requests = new Seq<>();
-
     public float z = 0f;
 
 
@@ -49,11 +48,10 @@ public class SortedDraw extends Draw{
     public void render(){
         FloatMap<Layer> layers = new FloatMap<>();
 
-        for(DrawRequest request : requests) if(!layers.contains(request.z)) layers.add(request.z, new Layer(request.z));
-
-        layers.eachKey(k -> layers.get(k).create(requests.size / layers.size));
-
-        for(DrawRequest request : requests) layers.get(request.z).requests.add(request);
+        for(DrawRequest request : requests){
+            if(!layers.contains(request.z)) layers.add(request.z, new Layer(request.z));
+            layers.get(request.z).requests.add(request);
+        }
 
         Seq<Layer> sorted = new Seq<>(layers.values());
         sorted.sort(l -> l.z);
@@ -73,7 +71,7 @@ public class SortedDraw extends Draw{
 
     public DrawRequest setup(Region region, DrawRequest request){
         request.region = region;
-        request.rgba8888 = fill.rgba8888();
+        request.rgba8888 = fill.trim().rgba8888();
         request.z = z;
         return request;
     }
@@ -104,10 +102,7 @@ public class SortedDraw extends Draw{
 
         public Layer(float z){
             this.z = z;
-        }
-
-        public void create(int size){
-            requests = new Seq<>(size);
+            this.requests = new Seq<>();
         }
     }
 }

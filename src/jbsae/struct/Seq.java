@@ -11,7 +11,6 @@ import static jbsae.util.Structf.*;
 
 
 public class Seq<T> implements List<T>{
-    public SeqIterator i1, i2;
     public T[] items;
     public int size;
 
@@ -22,8 +21,6 @@ public class Seq<T> implements List<T>{
 
     public Seq(int size){
         items = (T[])new Object[size];
-        i1 = new SeqIterator();
-        i2 = new SeqIterator();
     }
 
     public Seq(Object... values){
@@ -39,10 +36,7 @@ public class Seq<T> implements List<T>{
 
     @Override
     public Object[] list(){
-        int i = 0;
-        Object[] values = create(size);
-        for(T value : this) values[i++] = value;
-        return values;
+        return Arrays.copyOf(items, size);
     }
 
 
@@ -66,22 +60,15 @@ public class Seq<T> implements List<T>{
         return this;
     }
 
-    /** WARNING: This only copies the array reference and not each value themselves. */
-    public Seq<T> set(Seq<T> values){
-        items = values.items;
-        size = values.size;
-        return this;
-    }
-
     public Seq<T> add(T value){
-        if(value == null) return this;
+        if(value == null) throw new RuntimeException("Value is null");
         if(size >= items.length) resize(max(8, size * 2));
         items[size++] = value;
         return this;
     }
 
     public Seq<T> add(T value, int index){
-        if(value == null) return this;
+        if(value == null) throw new RuntimeException("Value is null");
         if(size >= items.length) resize(max(8, size * 2));
         shift(items, index, size++, 1);
         items[index] = value;
@@ -89,11 +76,13 @@ public class Seq<T> implements List<T>{
     }
 
     public Seq<T> addAll(T... values){
+        if(size + values.length >= items.length) resize(max(8, items.length * 2));
         for(T value : values) add(value);
         return this;
     }
 
     public Seq<T> addAll(List<T> values){
+        if(size + values.size() >= items.length) resize(max(8, items.length * 2));
         for(T value : values) add(value);
         return this;
     }
@@ -120,7 +109,7 @@ public class Seq<T> implements List<T>{
         return items[index];
     }
 
-    @Override //This sucks
+    @Override
     public int size(){
         return size;
     }
@@ -142,19 +131,17 @@ public class Seq<T> implements List<T>{
     }
 
     public Seq<T> sort(){
-        trim();
-        sortArr(items);
+        sortArr(items, 0, size);
         return this;
     }
 
     public Seq<T> sort(Floatf<T> value){
-        trim();
-        sortArr(items, value);
+        sortArr(items, value, 0, size);
         return this;
     }
 
     public Seq<T> clear(){
-        fill(items, null);
+        fill(items, null, 0, size);
         size = 0;
         return this;
     }
@@ -173,14 +160,6 @@ public class Seq<T> implements List<T>{
 
     @Override
     public Iterator<T> iterator(){
-        if(i1.index >= size){
-            i1.index = 0;
-            return i1;
-        }
-        if(i2.index >= size){
-            i2.index = 0;
-            return i2;
-        }
         return new SeqIterator();
     }
 

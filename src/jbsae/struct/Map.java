@@ -11,7 +11,6 @@ import static jbsae.util.Structf.*;
 
 
 public class Map<K, V> implements Iterable<K>{
-    public MapIterator i1, i2;
     public K[] keys;
     public V[] values;
     public int size = 0;
@@ -24,8 +23,6 @@ public class Map<K, V> implements Iterable<K>{
     public Map(int size){
         keys = (K[])new Object[size];
         values = (V[])new Object[size];
-        i1 = new MapIterator();
-        i2 = new MapIterator();
     }
 
     public Map(Object... entries){
@@ -52,7 +49,7 @@ public class Map<K, V> implements Iterable<K>{
     public Map<K, V> add(K key, V value){
         int steps = (trailZeros(keys.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
-            int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+            int[] checks = hash3(key.hashCode(), keys.length);
             for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
             for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == null) return set(checks[i], key, value);
             int index = checks[randInt(0, checks.length - 1)];
@@ -79,7 +76,7 @@ public class Map<K, V> implements Iterable<K>{
     }
 
     public Map<K, V> remove(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length);
         for(int i = 0;i < checks.length;i++){
             if(eql(keys[checks[i]], key)){
                 keys[checks[i]] = null;
@@ -98,14 +95,14 @@ public class Map<K, V> implements Iterable<K>{
 
 
     public V get(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
         return null;
     }
 
 
     public boolean contains(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return true;
         return false;
     }
@@ -135,14 +132,6 @@ public class Map<K, V> implements Iterable<K>{
 
     @Override
     public Iterator<K> iterator(){
-        if(i1.nextIndex >= keys.length){
-            i1.nextIndex = 0;
-            return i1;
-        }
-        if(i2.nextIndex >= keys.length){
-            i2.nextIndex = 0;
-            return i2;
-        }
         return new MapIterator();
     }
 
@@ -152,13 +141,13 @@ public class Map<K, V> implements Iterable<K>{
     }
 
     private class MapIterator implements Iterator<K>{
-        public int nextIndex = -1;
+        public int nextIndex = 0;
 
         public MapIterator(){
         }
 
         public void findNextIndex(){
-            for(nextIndex++;nextIndex < keys.length;nextIndex++) if(keys[nextIndex] != null) return;
+            for(;nextIndex < keys.length;nextIndex++) if(keys[nextIndex] != null) return;
         }
 
         @Override
@@ -169,7 +158,7 @@ public class Map<K, V> implements Iterable<K>{
 
         @Override
         public K next(){
-            return keys[nextIndex];
+            return keys[nextIndex++];
         }
     }
 }

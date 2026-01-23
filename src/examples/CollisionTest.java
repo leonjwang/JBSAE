@@ -1,19 +1,16 @@
 package examples;
 
-import jbsae.*;
-import jbsae.Log.*;
 import jbsae.core.*;
 import jbsae.core.loop.*;
 import jbsae.math.*;
 import jbsae.struct.*;
 import jbsae.struct.tree.*;
-import jbsae.util.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Mathf.*;
 
 // Baseline: 9 fps
-public class PerformanceTest{
+public class CollisionTest{
     public static void main(String[] args){
         jbsae(() -> {
             loop = new DynamicLoop(10000);

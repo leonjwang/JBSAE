@@ -8,12 +8,10 @@ import jbsae.struct.Set;
 import jbsae.struct.prim.*;
 import jbsae.struct.tree.*;
 
-import java.util.*;
-
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
-public class StructTester{
+public class StructTest{
     public static int failed = 0;
 
     public static String single(){

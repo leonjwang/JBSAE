@@ -47,7 +47,7 @@ public class FloatSet{
         }
         int steps = (trailZeros(table.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
-            int[] checks = hash3(intBits(value), table.length, Tmp.i3);
+            int[] checks = hash3(intBits(value), table.length);
             for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return this;
             for(int i = 0;i < checks.length;i++){
                 int index = checks[i];
@@ -78,7 +78,7 @@ public class FloatSet{
             }
             return this;
         }
-        int[] checks = hash3(intBits(value), table.length, Tmp.i3);
+        int[] checks = hash3(intBits(value), table.length);
         for(int i = 0;i < checks.length;i++){
             if(eqlf(table[checks[i]], value)){
                 table[checks[i]] = 0;
@@ -96,7 +96,7 @@ public class FloatSet{
 
     public boolean contains(float value){
         if(eqlf(value, 0)) return zero;
-        int[] checks = hash3(intBits(value), table.length, Tmp.i3);
+        int[] checks = hash3(intBits(value), table.length);
         for(int i = 0;i < checks.length;i++) if(eqlf(table[checks[i]], value)) return true;
         return false;
     }

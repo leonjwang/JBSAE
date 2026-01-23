@@ -40,7 +40,7 @@ public class ObjbMap<K>{
     public ObjbMap<K> add(K key, boolean value){
         int steps = (trailZeros(keys.length) << 1) + 1;
         for(int step = 0;step < steps;step++){
-            int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+            int[] checks = hash3(key.hashCode(), keys.length);
             for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
             for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == null) return set(checks[i], key, value);
             int index = checks[randInt(0, checks.length - 1)];
@@ -62,7 +62,7 @@ public class ObjbMap<K>{
     }
 
     public ObjbMap<K> remove(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length);
         for(int i = 0;i < checks.length;i++){
             if(eql(keys[checks[i]], key)){
                 keys[checks[i]] = null;
@@ -81,14 +81,14 @@ public class ObjbMap<K>{
 
 
     public boolean get(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
         return false;
     }
 
 
     public boolean contains(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
+        int[] checks = hash3(key.hashCode(), keys.length);
         for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return true;
         return false;
     }

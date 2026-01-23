@@ -486,8 +486,16 @@ public class Structf{
         Arrays.sort(arr);
     }
 
+    public static <T> void sortArr(T[] arr, int start, int end){
+        Arrays.sort(arr, start, end);
+    }
+
     public static <T> void sortArr(T[] arr, Floatf<T> value){
-        Arrays.sort(arr, new Comparator<T>(){ // Maybe not create a new one every time something is sorted
+        sortArr(arr, value, 0, arr.length);
+    }
+
+    public static <T> void sortArr(T[] arr, Floatf<T> value, int start, int end){
+        Arrays.sort(arr, start, end, new Comparator<T>(){
             public int compare(T a, T b){
                 return value.get(a) > value.get(b) ? 1 : -1;
             }
