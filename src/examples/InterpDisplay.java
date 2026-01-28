@@ -4,7 +4,6 @@ package examples;
 import jbsae.*;
 import jbsae.core.*;
 import jbsae.graphics.*;
-import jbsae.math.*;
 import jbsae.math.interp.*;
 import jbsae.struct.*;
 import jbsae.util.*;

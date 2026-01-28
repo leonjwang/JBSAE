@@ -27,7 +27,7 @@ public class CollisionTest{
                         Range2 range = new Range2(random(0, 8000), random(0, 8000), random(0, 2000), random(0, 2000));
                         Seq<Pos2> inside = new Seq<>();
                         tree.query(inside, range);
-                        Set<Pos2> insideSet = new Set<>();
+                        Set<Pos2> insideSet = new Set<>(inside.size * 3);
                         for(Pos2 p : inside) insideSet.add(p);
                         inside.clear();
                     }

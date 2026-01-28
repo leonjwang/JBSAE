@@ -71,6 +71,16 @@ public class Mathf{
     }
 
 
+    public static int quadrant(Pos2 pos){
+        return quadrant(pos.x(), pos.y());
+    }
+
+    public static int quadrant(float x, float y){
+        if(y >= 0) return x >= 0 ? 0 : 1;
+        return x < 0 ? 2 : 3;
+    }
+
+
     /** Ported Math functions. */
     /** Rounds a float to the nearest integer. */
     public static int round(float a){

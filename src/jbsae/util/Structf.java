@@ -2,7 +2,6 @@ package jbsae.util;
 
 import jbsae.func.*;
 import jbsae.func.prim.*;
-import jbsae.struct.*;
 import jbsae.struct.List;
 
 import java.lang.reflect.*;
@@ -231,7 +230,8 @@ public class Structf{
     }
 
     public static <T> void copy(T[] from, T[] to, int size){
-        copy(from, 0, size, to, 0);
+        if(size > from.length || size > to.length) throw new ArrayIndexOutOfBoundsException("Invalid size: " + size);
+        System.arraycopy(from, 0, to, 0, size);
     }
 
     public static <T> void copy(T[] from, int fromStart, int fromEnd, T[] to, int toStart){
@@ -239,39 +239,40 @@ public class Structf{
     }
 
     public static <T> void copy(T[] from, int fromStart, int fromEnd, T[] to, int toStart, int toEnd){
-        for(int i = 0;i < min(abs(fromEnd - fromStart), abs(toEnd - toStart));i++){
-            int toIndex = toStart + (toStart < toEnd ? i : -i), fromIndex = fromStart + (fromStart < fromEnd ? i : -i);
-            if(toIndex < 0 || toIndex >= to.length || fromIndex < 0 || fromIndex >= from.length) continue;
-            to[toIndex] = from[fromIndex];
+        int fromDir = Integer.compare(fromEnd, fromStart);
+        int toDir = Integer.compare(toEnd, toStart);
+
+        if(fromDir == 0 || toDir == 0) return;
+
+        int fromLength = abs(fromEnd - fromStart);
+        int toLength = abs(toEnd - toStart);
+        int copyLength = min(fromLength, toLength);
+
+        int fromMin = min(fromStart, fromEnd);
+        int fromMax = max(fromStart, fromEnd);
+        int toMin = min(toStart, toEnd);
+        int toMax = max(toStart, toEnd);
+
+        if(fromMin < 0 || fromMax > from.length || toMin < 0 || toMax > to.length){
+            throw new ArrayIndexOutOfBoundsException(
+            String.format("Invalid range: from[%d:%d] len=%d, to[%d:%d] len=%d",
+            fromStart, fromEnd, from.length, toStart, toEnd, to.length));
+        }
+
+        if(fromDir == toDir){
+            int srcPos = fromDir > 0 ? fromStart : fromEnd;
+            int destPos = toDir > 0 ? toStart : toEnd;
+            System.arraycopy(from, srcPos, to, destPos, copyLength);
+        }else{
+            for(int i = 0;i < copyLength;i++){
+                int fromIdx = fromDir > 0 ? (fromStart + i) : (fromStart - i);
+                int toIdx = toDir > 0 ? (toStart + i) : (toStart - i);
+                to[toIdx] = from[fromIdx];
+            }
         }
     }
 
-
-    public static <T> Seq<T> copy(List<T> arr){
-        return new Seq<>(arr);
-    }
-
-    public static <T> void copy(List<T> from, List<T> to){
-        copy(from, to, min(from.size(), to.size()));
-    }
-
-    public static <T> void copy(List<T> from, List<T> to, int size){
-        copy(from, 0, size, to, 0);
-    }
-
-    public static <T> void copy(List<T> from, int fromStart, int fromEnd, List<T> to, int toStart){
-        copy(from, fromStart, fromEnd, to, toStart, toStart + (fromEnd - fromStart));
-    }
-
-    public static <T> void copy(List<T> from, int fromStart, int fromEnd, List<T> to, int toStart, int toEnd){
-        for(int i = 0;i < min(abs(fromEnd - fromStart), abs(toEnd - toStart));i++){
-            int toIndex = toStart + (toStart < toEnd ? i : -i), fromIndex = fromStart + (fromStart < fromEnd ? i : -i);
-            if(toIndex < 0 || toIndex >= to.size() || fromIndex < 0 || fromIndex >= from.size()) continue;
-            to.set(from.get(fromIndex), toIndex);
-        }
-    }
-
-
+    // TODO: Do I rewrite the rest of these as well?
     public static float[] copy(float[] arr){
         float[] res = new float[arr.length];
         copy(arr, res);

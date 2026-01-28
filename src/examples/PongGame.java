@@ -88,7 +88,7 @@ public class PongGame extends Screen{
 
         void reset(){
             position.set(WIDTH / 2, HEIGHT / 2);
-            velocity.set(Tmp.v1.set(1, 0).rot(random(0, 360)).scl(BALL_SPEED));
+            velocity.set(jbsae.Tmp.v1.set(1, 0).rot(random(0, 360)).scl(BALL_SPEED));
             trail.clear();
         }
 

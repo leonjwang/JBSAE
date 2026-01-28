@@ -1,7 +1,10 @@
 package jbsae.struct;
 
+import jbsae.struct.tree.*;
+
 import java.util.*;
 
+import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
 // TODO: This and the quad/rangetrees might have to be rewritten
@@ -61,10 +64,18 @@ public class Tree<T> implements Iterable<T>{
         return res;
     }
 
+    public int depth(){
+        if(branches.size == 0) return 0;
+
+        int max = 0;
+        for(Tree t : branches) max = max(max, t.depth());
+        return 1 + max;
+    }
+
     public Tree<T> clear(){
         parent = null;
         values.clear();
-        for(Tree<T> branch : branches) branch.clear();
+        for(Tree t : branches) t.clear();
         branches.clear();
         return this;
     }
@@ -81,27 +92,27 @@ public class Tree<T> implements Iterable<T>{
     }
 
     private class TreeIterator implements Iterator<T>{
-        public Seq<TreeIterator> biterators = new Seq<>();
-        public int bindex, index;
+        public Seq<TreeIterator> iterators = new Seq<>();
+        public int branch, index;
 
         public TreeIterator(){
-            for(Tree t : branches) biterators.add((TreeIterator)t.iterator());
+            for(Tree t : branches) iterators.add((TreeIterator)t.iterator());
         }
 
         @Override
         public boolean hasNext(){
             if(index < values.size) return true;
-            if(bindex >= biterators.size) return false;
-            if(!biterators.get(bindex).hasNext()){
-                bindex++;
+            if(branch >= iterators.size) return false;
+            if(!iterators.get(branch).hasNext()){
+                branch++;
                 return hasNext();
             }
-            return biterators.get(bindex).hasNext();
+            return iterators.get(branch).hasNext();
         }
 
         @Override
         public T next(){
-            if(index >= values.size) return biterators.get(bindex).next();
+            if(index >= values.size) return iterators.get(branch).next();
             return values.get(index++);
         }
     }
