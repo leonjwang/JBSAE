@@ -40,7 +40,7 @@ public class Seq<T> implements List<T>{
     }
 
 
-    @Override //TODO: Consider changing to index, value
+    @Override
     public Seq<T> set(T value, int index){
         items[index] = value;
         return this;
@@ -76,13 +76,14 @@ public class Seq<T> implements List<T>{
     }
 
     public Seq<T> addAll(T... values){
-        if(size + values.length >= items.length) resize(max(8, items.length * 2));
-        for(T value : values) add(value);
+        ensureCap(values.length);
+        copy(values, 0, values.length, items, size);
+        size += values.length;
         return this;
     }
 
     public Seq<T> addAll(List<T> values){
-        if(size + values.size() >= items.length) resize(max(8, items.length * 2));
+        ensureCap(values.size());
         for(T value : values) add(value);
         return this;
     }
@@ -100,6 +101,11 @@ public class Seq<T> implements List<T>{
                 break;
             }
         }
+        return this;
+    }
+
+    public Seq<T> ensureCap(int space){
+        if(size + space >= items.length) resize(max(size + space, items.length * 2));
         return this;
     }
 
@@ -136,7 +142,7 @@ public class Seq<T> implements List<T>{
     }
 
     public Seq<T> sort(Floatf<T> value){
-        sortArr(items, value, 0, size);
+        sortArr(items, 0, size, value);
         return this;
     }
 

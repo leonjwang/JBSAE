@@ -53,9 +53,8 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
 
     public Seq<T> query(Seq<T> result, Range2 range){
         if(!bounds.overlaps(range)) return result;
-        if(branches.size == 0){
-            for(T v : values) if(range.contains(v)) result.add(v);
-        }else for(Tree t : branches) ((QuadTree<T>)t).query(result, range);
+        if(branches.size == 0) result.addAll(values);
+        else for(Tree t : branches) ((QuadTree<T>)t).query(result, range);
 
         return result;
     }

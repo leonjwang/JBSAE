@@ -492,10 +492,10 @@ public class Structf{
     }
 
     public static <T> void sortArr(T[] arr, Floatf<T> value){
-        sortArr(arr, value, 0, arr.length);
+        sortArr(arr, 0, arr.length, value);
     }
 
-    public static <T> void sortArr(T[] arr, Floatf<T> value, int start, int end){
+    public static <T> void sortArr(T[] arr, int start, int end, Floatf<T> value){
         Arrays.sort(arr, start, end, new Comparator<T>(){
             public int compare(T a, T b){
                 return value.get(a) > value.get(b) ? 1 : -1;

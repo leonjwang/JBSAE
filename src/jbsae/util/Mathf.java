@@ -421,6 +421,17 @@ public class Mathf{
 
 
     /** Ported class functions. */
+    public static int nextPowerOfTwo(int value){
+        if(value == 0) return 1;
+        value--;
+        value |= value >> 1;
+        value |= value >> 2;
+        value |= value >> 4;
+        value |= value >> 8;
+        value |= value >> 16;
+        return value + 1;
+    }
+
     /** Returns the number of trailing zeros in the binary representation of an integer. */
     public static int trailZeros(int i){
         return Integer.numberOfTrailingZeros(i);
