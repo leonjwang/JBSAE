@@ -6,7 +6,7 @@ public interface List<T> extends Iterable<T>{
     Object[] list();
 
 
-    List<T> set(T value, int index);
+    List<T> set(int index, T value);
 
     List<T> set(Object... values);
 

@@ -16,8 +16,16 @@ public class Structf{
     public static final int PRIME2 = 0xb4b82e39;
     public static final int PRIME3 = 0xced1c241;
 
+    public static int hash(int h, int prime){
+        h *= prime;
+        return h ^ h;
+    }
 
-    /** Generic array creation. */
+    public static int hash(int h, int prime, int n){
+        return (hash(h, prime) >>> (31 - trailZeros(n))) & (n - 1);
+    }
+
+
     public static <T> T[] create(int size){
         return (T[])new Object[size];
     }
@@ -28,197 +36,88 @@ public class Structf{
     }
 
 
-    /** Array filling. */
     public static <T> void fill(T[] arr, T value){
-        fill(arr, value, 0, arr.length);
+        fill(arr, 0, arr.length, value);
     }
 
-    public static <T> void fill(T[] arr, T value, int start, int end){
+    public static <T> void fill(T[] arr, int start, int end, T value){
         for(int i = start;i < end;i++) arr[i] = value;
     }
 
     public static <T> void fill(T[][] arr, T value){
-        fill(arr, value, 0, arr.length, 0, arr[0].length);
+        for(int i = 0;i < arr.length;i++) fill(arr[i], value);
     }
-
-    public static <T> void fill(T[][] arr, T value, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
-    }
-
 
     public static <T> void fill(List<T> arr, T value){
-        fill(arr, value, 0, arr.size());
+        fill(arr, 0, arr.size(), value);
     }
 
-    public static <T> void fill(List<T> arr, T value, int start, int end){
+    public static <T> void fill(List<T> arr, int start, int end, T value){
         for(int i = start;i < end;i++) arr.set(i, value);
     }
 
-
     public static void fill(float[] arr, float value){
-        fill(arr, value, 0, arr.length);
+        fill(arr, 0, arr.length, value);
     }
 
-    public static void fill(float[] arr, float value, int start, int end){
+    public static void fill(float[] arr, int start, int end, float value){
         for(int i = start;i < end;i++) arr[i] = value;
     }
 
     public static void fill(float[][] arr, float value){
-        fill(arr, value, 0, arr.length, 0, arr[0].length);
+        for(int i = 0;i < arr.length;i++) fill(arr[i], value);
     }
-
-    public static void fill(float[][] arr, float value, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
-    }
-
 
     public static void fill(int[] arr, int value){
-        fill(arr, value, 0, arr.length);
+        fill(arr, 0, arr.length, value);
     }
 
-    public static void fill(int[] arr, int value, int start, int end){
+    public static void fill(int[] arr, int start, int end, int value){
         for(int i = start;i < end;i++) arr[i] = value;
     }
 
     public static void fill(int[][] arr, int value){
-        fill(arr, value, 0, arr.length, 0, arr[0].length);
-    }
-
-    public static void fill(int[][] arr, int value, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
+        for(int i = 0;i < arr.length;i++) fill(arr[i], value);
     }
 
 
-    public static void fill(boolean[] arr, boolean value){
-        fill(arr, value, 0, arr.length);
-    }
-
-    public static void fill(boolean[] arr, boolean value, int start, int end){
-        for(int i = start;i < end;i++) arr[i] = value;
-    }
-
-    public static void fill(boolean[][] arr, boolean value){
-        fill(arr, value, 0, arr.length, 0, arr[0].length);
-    }
-
-    public static void fill(boolean[][] arr, boolean value, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
-    }
-
-
-    public static void fill(char[] arr, char value){
-        fill(arr, value, 0, arr.length);
-    }
-
-    public static void fill(char[] arr, char value, int start, int end){
-        for(int i = start;i < end;i++) arr[i] = value;
-    }
-
-    public static void fill(char[][] arr, char value){
-        fill(arr, value, 0, arr.length, 0, arr[0].length);
-    }
-
-    public static void fill(char[][] arr, char value, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) fill(arr[i], value, bottom, top);
-    }
-
-
-    /** Array iteration and eaching. */
     public static <T> void each(T[] arr, Cons<T> cons){
-        each(arr, cons, 0, arr.length);
+        each(arr, 0, arr.length, cons);
     }
 
-    public static <T> void each(T[] arr, Cons<T> cons, int start, int end){
+    public static <T> void each(T[] arr, int start, int end, Cons<T> cons){
         for(int i = start;i < end;i++) cons.get(arr[i]);
     }
 
     public static <T> void each(T[][] arr, Cons<T> cons){
-        each(arr, cons, 0, arr.length, 0, arr[0].length);
+        for(int i = 0;i < arr.length;i++) each(arr[i], cons);
     }
-
-    public static <T> void each(T[][] arr, Cons<T> cons, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
-    }
-
-
-    public static <T> void each(List<T> arr, Cons<T> cons){
-        each(arr, cons, 0, arr.size());
-    }
-
-    public static <T> void each(List<T> arr, Cons<T> cons, int start, int end){
-        for(int i = start;i < end;i++) cons.get(arr.get(i));
-    }
-
 
     public static void each(float[] arr, Floatc cons){
-        each(arr, cons, 0, arr.length);
+        each(arr, 0, arr.length, cons);
     }
 
-    public static void each(float[] arr, Floatc cons, int start, int end){
+    public static void each(float[] arr, int start, int end, Floatc cons){
         for(int i = start;i < end;i++) cons.get(arr[i]);
     }
 
     public static void each(float[][] arr, Floatc cons){
-        each(arr, cons, 0, arr.length, 0, arr[0].length);
+        for(int i = 0;i < arr.length;i++) each(arr[i], cons);
     }
-
-    public static void each(float[][] arr, Floatc cons, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
-    }
-
 
     public static void each(int[] arr, Intc cons){
-        each(arr, cons, 0, arr.length);
+        each(arr, 0, arr.length, cons);
     }
 
-    public static void each(int[] arr, Intc cons, int start, int end){
+    public static void each(int[] arr, int start, int end, Intc cons){
         for(int i = start;i < end;i++) cons.get(arr[i]);
     }
 
     public static void each(int[][] arr, Intc cons){
-        each(arr, cons, 0, arr.length, 0, arr[0].length);
-    }
-
-    public static void each(int[][] arr, Intc cons, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
+        for(int i = 0;i < arr.length;i++) each(arr[i], cons);
     }
 
 
-    public static void each(boolean[] arr, Boolc cons){
-        each(arr, cons, 0, arr.length);
-    }
-
-    public static void each(boolean[] arr, Boolc cons, int start, int end){
-        for(int i = start;i < end;i++) cons.get(arr[i]);
-    }
-
-    public static void each(boolean[][] arr, Boolc cons){
-        each(arr, cons, 0, arr.length, 0, arr[0].length);
-    }
-
-    public static void each(boolean[][] arr, Boolc cons, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
-    }
-
-
-    public static void each(char[] arr, Intc cons){
-        each(arr, cons, 0, arr.length);
-    }
-
-    public static void each(char[] arr, Intc cons, int start, int end){
-        for(int i = start;i < end;i++) cons.get(arr[i]);
-    }
-
-    public static void each(char[][] arr, Intc cons){
-        each(arr, cons, 0, arr.length, 0, arr[0].length);
-    }
-
-    public static void each(char[][] arr, Intc cons, int start, int end, int bottom, int top){
-        for(int i = start;i < end;i++) each(arr[i], cons, bottom, top);
-    }
-
-
-    /** Array copying. */
     public static <T> T[] copy(T[] arr){
         T[] res = create(arr.length);
         copy(arr, res);
@@ -272,7 +171,7 @@ public class Structf{
         }
     }
 
-    // TODO: Do I rewrite the rest of these as well?
+
     public static float[] copy(float[] arr){
         float[] res = new float[arr.length];
         copy(arr, res);
@@ -284,7 +183,8 @@ public class Structf{
     }
 
     public static void copy(float[] from, float[] to, int size){
-        copy(from, 0, size, to, 0);
+        if(size > from.length || size > to.length) throw new ArrayIndexOutOfBoundsException("Invalid size: " + size);
+        System.arraycopy(from, 0, to, 0, size);
     }
 
     public static void copy(float[] from, int fromStart, int fromEnd, float[] to, int toStart){
@@ -292,10 +192,36 @@ public class Structf{
     }
 
     public static void copy(float[] from, int fromStart, int fromEnd, float[] to, int toStart, int toEnd){
-        for(int i = 0;i < min(abs(fromEnd - fromStart), abs(toEnd - toStart));i++){
-            int toIndex = toStart + (toStart < toEnd ? i : -i), fromIndex = fromStart + (fromStart < fromEnd ? i : -i);
-            if(toIndex < 0 || toIndex >= to.length || fromIndex < 0 || fromIndex >= from.length) continue;
-            to[toIndex] = from[fromIndex];
+        int fromDir = Integer.compare(fromEnd, fromStart);
+        int toDir = Integer.compare(toEnd, toStart);
+
+        if(fromDir == 0 || toDir == 0) return;
+
+        int fromLength = abs(fromEnd - fromStart);
+        int toLength = abs(toEnd - toStart);
+        int copyLength = min(fromLength, toLength);
+
+        int fromMin = min(fromStart, fromEnd);
+        int fromMax = max(fromStart, fromEnd);
+        int toMin = min(toStart, toEnd);
+        int toMax = max(toStart, toEnd);
+
+        if(fromMin < 0 || fromMax > from.length || toMin < 0 || toMax > to.length){
+            throw new ArrayIndexOutOfBoundsException(
+            String.format("Invalid range: from[%d:%d] len=%d, to[%d:%d] len=%d",
+            fromStart, fromEnd, from.length, toStart, toEnd, to.length));
+        }
+
+        if(fromDir == toDir){
+            int srcPos = fromDir > 0 ? fromStart : fromEnd;
+            int destPos = toDir > 0 ? toStart : toEnd;
+            System.arraycopy(from, srcPos, to, destPos, copyLength);
+        }else{
+            for(int i = 0;i < copyLength;i++){
+                int fromIdx = fromDir > 0 ? (fromStart + i) : (fromStart - i);
+                int toIdx = toDir > 0 ? (toStart + i) : (toStart - i);
+                to[toIdx] = from[fromIdx];
+            }
         }
     }
 
@@ -311,7 +237,8 @@ public class Structf{
     }
 
     public static void copy(int[] from, int[] to, int size){
-        copy(from, 0, size, to, 0);
+        if(size > from.length || size > to.length) throw new ArrayIndexOutOfBoundsException("Invalid size: " + size);
+        System.arraycopy(from, 0, to, 0, size);
     }
 
     public static void copy(int[] from, int fromStart, int fromEnd, int[] to, int toStart){
@@ -319,69 +246,40 @@ public class Structf{
     }
 
     public static void copy(int[] from, int fromStart, int fromEnd, int[] to, int toStart, int toEnd){
-        for(int i = 0;i < min(abs(fromEnd - fromStart), abs(toEnd - toStart));i++){
-            int toIndex = toStart + (toStart < toEnd ? i : -i), fromIndex = fromStart + (fromStart < fromEnd ? i : -i);
-            if(toIndex < 0 || toIndex >= to.length || fromIndex < 0 || fromIndex >= from.length) continue;
-            to[toIndex] = from[fromIndex];
+        int fromDir = Integer.compare(fromEnd, fromStart);
+        int toDir = Integer.compare(toEnd, toStart);
+
+        if(fromDir == 0 || toDir == 0) return;
+
+        int fromLength = abs(fromEnd - fromStart);
+        int toLength = abs(toEnd - toStart);
+        int copyLength = min(fromLength, toLength);
+
+        int fromMin = min(fromStart, fromEnd);
+        int fromMax = max(fromStart, fromEnd);
+        int toMin = min(toStart, toEnd);
+        int toMax = max(toStart, toEnd);
+
+        if(fromMin < 0 || fromMax > from.length || toMin < 0 || toMax > to.length){
+            throw new ArrayIndexOutOfBoundsException(
+            String.format("Invalid range: from[%d:%d] len=%d, to[%d:%d] len=%d",
+            fromStart, fromEnd, from.length, toStart, toEnd, to.length));
+        }
+
+        if(fromDir == toDir){
+            int srcPos = fromDir > 0 ? fromStart : fromEnd;
+            int destPos = toDir > 0 ? toStart : toEnd;
+            System.arraycopy(from, srcPos, to, destPos, copyLength);
+        }else{
+            for(int i = 0;i < copyLength;i++){
+                int fromIdx = fromDir > 0 ? (fromStart + i) : (fromStart - i);
+                int toIdx = toDir > 0 ? (toStart + i) : (toStart - i);
+                to[toIdx] = from[fromIdx];
+            }
         }
     }
 
 
-    public static boolean[] copy(boolean[] arr){
-        boolean[] res = new boolean[arr.length];
-        copy(arr, res);
-        return res;
-    }
-
-    public static void copy(boolean[] from, boolean[] to){
-        copy(from, to, min(from.length, to.length));
-    }
-
-    public static void copy(boolean[] from, boolean[] to, int size){
-        copy(from, 0, size, to, 0);
-    }
-
-    public static void copy(boolean[] from, int fromStart, int fromEnd, boolean[] to, int toStart){
-        copy(from, fromStart, fromEnd, to, toStart, toStart + (fromEnd - fromStart));
-    }
-
-    public static void copy(boolean[] from, int fromStart, int fromEnd, boolean[] to, int toStart, int toEnd){
-        for(int i = 0;i < min(abs(fromEnd - fromStart), abs(toEnd - toStart));i++){
-            int toIndex = toStart + (toStart < toEnd ? i : -i), fromIndex = fromStart + (fromStart < fromEnd ? i : -i);
-            if(toIndex < 0 || toIndex >= to.length || fromIndex < 0 || fromIndex >= from.length) continue;
-            to[toIndex] = from[fromIndex];
-        }
-    }
-
-
-    public static char[] copy(char[] arr){
-        char[] res = new char[arr.length];
-        copy(arr, res);
-        return res;
-    }
-
-    public static void copy(char[] from, char[] to){
-        copy(from, to, min(from.length, to.length));
-    }
-
-    public static void copy(char[] from, char[] to, int size){
-        copy(from, 0, size, to, 0);
-    }
-
-    public static void copy(char[] from, int fromStart, int fromEnd, char[] to, int toStart){
-        copy(from, fromStart, fromEnd, to, toStart, toStart + (fromEnd - fromStart));
-    }
-
-    public static void copy(char[] from, int fromStart, int fromEnd, char[] to, int toStart, int toEnd){
-        for(int i = 0;i < min(abs(fromEnd - fromStart), abs(toEnd - toStart));i++){
-            int toIndex = toStart + (toStart < toEnd ? i : -i), fromIndex = fromStart + (fromStart < fromEnd ? i : -i);
-            if(toIndex < 0 || toIndex >= to.length || fromIndex < 0 || fromIndex >= from.length) continue;
-            to[toIndex] = from[fromIndex];
-        }
-    }
-
-
-    /** Array shifting. */
     public static <T> void shift(T[] arr, int amount){
         shift(arr, 0, arr.length, amount);
     }
@@ -409,88 +307,6 @@ public class Structf{
     }
 
 
-    public static void shift(boolean[] arr, int amount){
-        shift(arr, 0, arr.length, amount);
-    }
-
-    public static void shift(boolean[] arr, int start, int end, int amount){
-        copy(arr, amount > 0 ? (end - 1) : start, amount > 0 ? (start - 1) : end, arr, amount > 0 ? (end + amount - 1) : (start + amount));
-    }
-
-
-    public static void shift(char[] arr, int amount){
-        shift(arr, 0, arr.length, amount);
-    }
-
-    public static void shift(char[] arr, int start, int end, int amount){
-        copy(arr, amount > 0 ? (end - 1) : start, amount > 0 ? (start - 1) : end, arr, amount > 0 ? (end + amount - 1) : (start + amount));
-    }
-
-
-    /** Array flipping. */
-    public static <T> void flip(T[] arr){
-        flip(arr, 0, arr.length);
-    }
-
-    public static <T> void flip(T[] arr, int start, int end){
-        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
-    }
-
-
-    public static <T> void flip(List<T> arr){
-        flip(arr, 0, arr.size());
-    }
-
-    public static <T> void flip(List<T> arr, int start, int end){
-        for(int i = start;i < (start + end) / 2;i++) arr.set(i, arr.get(end - i - 1));
-    }
-
-
-    public static void flip(float[] arr){
-        flip(arr, 0, arr.length);
-    }
-
-    public static void flip(float[] arr, int start, int end){
-        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
-    }
-
-
-    public static void flip(int[] arr){
-        flip(arr, 0, arr.length);
-    }
-
-    public static void flip(int[] arr, int start, int end){
-        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
-    }
-
-
-    public static void flip(boolean[] arr){
-        flip(arr, 0, arr.length);
-    }
-
-    public static void flip(boolean[] arr, int start, int end){
-        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
-    }
-
-
-    public static void flip(char[] arr){
-        flip(arr, 0, arr.length);
-    }
-
-    public static void flip(char[] arr, int start, int end){
-        for(int i = start;i < (start + end) / 2;i++) arr[i] = arr[end - i - 1];
-    }
-
-
-    /** Array sorting. */
-    public static <T> void sortArr(T[] arr){
-        Arrays.sort(arr);
-    }
-
-    public static <T> void sortArr(T[] arr, int start, int end){
-        Arrays.sort(arr, start, end);
-    }
-
     public static <T> void sortArr(T[] arr, Floatf<T> value){
         sortArr(arr, 0, arr.length, value);
     }
@@ -503,20 +319,7 @@ public class Structf{
         });
     }
 
-    public static void sortArr(float[] arr){
-        Arrays.sort(arr);
-    }
 
-    public static void sortArr(int[] arr){
-        Arrays.sort(arr);
-    }
-
-    public static void sortArr(char[] arr){
-        Arrays.sort(arr);
-    }
-
-
-    /** Comparison functions. */
     public static boolean eql(Object a, Object b){
         return (a != null && a.equals(b)) || a == b;
     }
@@ -632,14 +435,7 @@ public class Structf{
         return true;
     }
 
-    public static boolean eqlc(char[] a, char[] b){
-        for(int i = 0;i < a.length;i++) if(!contains(b, a[i])) return false;
-        for(int i = 0;i < b.length;i++) if(!contains(a, b[i])) return false;
-        return true;
-    }
 
-
-    /** Utility methods. */
     public static boolean contains(Object[] arr, Object value){
         for(int i = 0;i < arr.length;i++) if(eql(arr[i], value)) return true;
         return false;
@@ -660,52 +456,6 @@ public class Structf{
         return false;
     }
 
-    public static boolean contains(char[] arr, char value){
-        for(int i = 0;i < arr.length;i++) if(arr[i] == value) return true;
-        return false;
-    }
-
-
-    public static boolean inside(Object[] arr, int i){
-        return i >= 0 && i < arr.length;
-    }
-
-    public static boolean inside(Object[][] arr, int i, int j){
-        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
-    }
-
-    public static boolean inside(float[] arr, int i){
-        return i >= 0 && i < arr.length;
-    }
-
-    public static boolean inside(float[][] arr, int i, int j){
-        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
-    }
-
-    public static boolean inside(int[] arr, int i){
-        return i >= 0 && i < arr.length;
-    }
-
-    public static boolean inside(int[][] arr, int i, int j){
-        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
-    }
-
-    public static boolean inside(boolean[] arr, int i){
-        return i >= 0 && i < arr.length;
-    }
-
-    public static boolean inside(boolean[][] arr, int i, int j){
-        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
-    }
-
-    public static boolean inside(char[] arr, int i){
-        return i >= 0 && i < arr.length;
-    }
-
-    public static boolean inside(char[][] arr, int i, int j){
-        return i >= 0 && i < arr.length && j >= 0 && j < arr[i].length;
-    }
-
 
     public static Object choose(Object[] arr){
         return arr[randInt(0, arr.length - 1)];
@@ -723,16 +473,7 @@ public class Structf{
         return arr[randInt(0, arr.length - 1)];
     }
 
-    public static boolean choose(boolean[] arr){
-        return arr[randInt(0, arr.length - 1)];
-    }
 
-    public static char choose(char[] arr){
-        return arr[randInt(0, arr.length - 1)];
-    }
-
-
-    /** Object array conversions (Should not be needed with JBSAE). */
     public static float[] objf(Object... arr){
         float[] res = new float[arr.length];
         for(int i = 0;i < arr.length;i++) res[i] = (Float)arr[i];
@@ -755,23 +496,5 @@ public class Structf{
         char[] res = new char[arr.length];
         for(int i = 0;i < arr.length;i++) res[i] = (Character)arr[i];
         return res;
-    }
-
-
-    /** Hashing integers. */
-    public static int[] hash3(int h, int n){
-        return hash3(h, n, new int[3]);
-    }
-
-    public static int[] hash3(int h, int n, int[] arr){
-        arr[0] = hash(h, PRIME1, n);
-        arr[1] = hash(h, PRIME2, n);
-        arr[2] = hash(h, PRIME3, n);
-        return arr;
-    }
-
-    public static int hash(int h, int prime, int n){
-        h *= prime;
-        return (h ^ h >>> (31 - trailZeros(n))) & (n - 1);
     }
 }
