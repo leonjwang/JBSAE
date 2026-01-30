@@ -53,7 +53,8 @@ public class SortedDraw extends Draw{
             layers.get(request.z).requests.add(request);
         }
 
-        Seq<Layer> sorted = new Seq<>(layers.values());
+        Object[] values = layers.values();
+        Seq<Layer> sorted = new Seq<Layer>(values.length).addAll(values);
         sorted.sort(l -> l.z);
 
         for(Layer layer : sorted){

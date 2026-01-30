@@ -421,9 +421,10 @@ public class Mathf{
 
 
     /** Ported class functions. */
-    public static int nextPowerOfTwo(int value){
+    /** Returns the next power of two after this value. */
+    public static int nextPow2(int value){
         if(value == 0) return 1;
-        value--;
+        value = value - 1;
         value |= value >> 1;
         value |= value >> 2;
         value |= value >> 4;
@@ -435,6 +436,10 @@ public class Mathf{
     /** Returns the number of trailing zeros in the binary representation of an integer. */
     public static int trailZeros(int i){
         return Integer.numberOfTrailingZeros(i);
+    }
+
+    public static int floorLog2(int n){
+        return 31 - Integer.numberOfLeadingZeros(n);
     }
 
     /** Returns the bit representation of a float. */

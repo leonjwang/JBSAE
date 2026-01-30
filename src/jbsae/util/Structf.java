@@ -16,13 +16,23 @@ public class Structf{
     public static final int PRIME2 = 0xb4b82e39;
     public static final int PRIME3 = 0xced1c241;
 
-    public static int hash(int h, int prime){
-        h *= prime;
-        return h ^ h;
+    @Deprecated
+    public static int[] hash3(int hash, int n){
+        int[] arr = new int[3];
+        arr[0] = hash % n;
+        arr[1] = hashn(hash, PRIME1, n);
+        arr[2] = hashn(hash, PRIME2, n);
+        return arr;
     }
 
-    public static int hash(int h, int prime, int n){
-        return (hash(h, prime) >>> (31 - trailZeros(n))) & (n - 1);
+    public static int hash(int h, int shift, int prime){
+        h *= prime;
+        return h ^ (h >>> shift);
+    }
+
+    public static int hashn(int h, int prime, int n){
+        h *= prime;
+        return (h ^ h >>> (31 - trailZeros(n))) & (n - 1);
     }
 
 
@@ -76,7 +86,19 @@ public class Structf{
         for(int i = start;i < end;i++) arr[i] = value;
     }
 
-    public static void fill(int[][] arr, int value){
+    public static void fill(int[][] arr, char value){
+        for(int i = 0;i < arr.length;i++) fill(arr[i], value);
+    }
+
+    public static void fill(char[] arr, char value){
+        fill(arr, 0, arr.length, value);
+    }
+
+    public static void fill(char[] arr, int start, int end, char value){
+        for(int i = start;i < end;i++) arr[i] = value;
+    }
+
+    public static void fill(char[][] arr, char value){
         for(int i = 0;i < arr.length;i++) fill(arr[i], value);
     }
 
@@ -117,9 +139,10 @@ public class Structf{
         for(int i = 0;i < arr.length;i++) each(arr[i], cons);
     }
 
+    // REWRITE THESE COPIES
 
     public static <T> T[] copy(T[] arr){
-        T[] res = create(arr.length);
+        T[] res = create(arr.length, arr);
         copy(arr, res);
         return res;
     }
@@ -129,47 +152,13 @@ public class Structf{
     }
 
     public static <T> void copy(T[] from, T[] to, int size){
-        if(size > from.length || size > to.length) throw new ArrayIndexOutOfBoundsException("Invalid size: " + size);
-        System.arraycopy(from, 0, to, 0, size);
+        copy(from, 0, to, 0, size);
     }
 
-    public static <T> void copy(T[] from, int fromStart, int fromEnd, T[] to, int toStart){
-        copy(from, fromStart, fromEnd, to, toStart, toStart + (fromEnd - fromStart));
+    public static <T> void copy(T[] from, int fromStart, T[] to, int toStart, int size){
+        System.arraycopy(from, fromStart, to, toStart, size);
     }
 
-    public static <T> void copy(T[] from, int fromStart, int fromEnd, T[] to, int toStart, int toEnd){
-        int fromDir = Integer.compare(fromEnd, fromStart);
-        int toDir = Integer.compare(toEnd, toStart);
-
-        if(fromDir == 0 || toDir == 0) return;
-
-        int fromLength = abs(fromEnd - fromStart);
-        int toLength = abs(toEnd - toStart);
-        int copyLength = min(fromLength, toLength);
-
-        int fromMin = min(fromStart, fromEnd);
-        int fromMax = max(fromStart, fromEnd);
-        int toMin = min(toStart, toEnd);
-        int toMax = max(toStart, toEnd);
-
-        if(fromMin < 0 || fromMax > from.length || toMin < 0 || toMax > to.length){
-            throw new ArrayIndexOutOfBoundsException(
-            String.format("Invalid range: from[%d:%d] len=%d, to[%d:%d] len=%d",
-            fromStart, fromEnd, from.length, toStart, toEnd, to.length));
-        }
-
-        if(fromDir == toDir){
-            int srcPos = fromDir > 0 ? fromStart : fromEnd;
-            int destPos = toDir > 0 ? toStart : toEnd;
-            System.arraycopy(from, srcPos, to, destPos, copyLength);
-        }else{
-            for(int i = 0;i < copyLength;i++){
-                int fromIdx = fromDir > 0 ? (fromStart + i) : (fromStart - i);
-                int toIdx = toDir > 0 ? (toStart + i) : (toStart - i);
-                to[toIdx] = from[fromIdx];
-            }
-        }
-    }
 
 
     public static float[] copy(float[] arr){
@@ -183,46 +172,11 @@ public class Structf{
     }
 
     public static void copy(float[] from, float[] to, int size){
-        if(size > from.length || size > to.length) throw new ArrayIndexOutOfBoundsException("Invalid size: " + size);
-        System.arraycopy(from, 0, to, 0, size);
+        copy(from, 0, to, 0, size);
     }
 
-    public static void copy(float[] from, int fromStart, int fromEnd, float[] to, int toStart){
-        copy(from, fromStart, fromEnd, to, toStart, toStart + (fromEnd - fromStart));
-    }
-
-    public static void copy(float[] from, int fromStart, int fromEnd, float[] to, int toStart, int toEnd){
-        int fromDir = Integer.compare(fromEnd, fromStart);
-        int toDir = Integer.compare(toEnd, toStart);
-
-        if(fromDir == 0 || toDir == 0) return;
-
-        int fromLength = abs(fromEnd - fromStart);
-        int toLength = abs(toEnd - toStart);
-        int copyLength = min(fromLength, toLength);
-
-        int fromMin = min(fromStart, fromEnd);
-        int fromMax = max(fromStart, fromEnd);
-        int toMin = min(toStart, toEnd);
-        int toMax = max(toStart, toEnd);
-
-        if(fromMin < 0 || fromMax > from.length || toMin < 0 || toMax > to.length){
-            throw new ArrayIndexOutOfBoundsException(
-            String.format("Invalid range: from[%d:%d] len=%d, to[%d:%d] len=%d",
-            fromStart, fromEnd, from.length, toStart, toEnd, to.length));
-        }
-
-        if(fromDir == toDir){
-            int srcPos = fromDir > 0 ? fromStart : fromEnd;
-            int destPos = toDir > 0 ? toStart : toEnd;
-            System.arraycopy(from, srcPos, to, destPos, copyLength);
-        }else{
-            for(int i = 0;i < copyLength;i++){
-                int fromIdx = fromDir > 0 ? (fromStart + i) : (fromStart - i);
-                int toIdx = toDir > 0 ? (toStart + i) : (toStart - i);
-                to[toIdx] = from[fromIdx];
-            }
-        }
+    public static void copy(float[] from, int fromStart, float[] to, int toStart, int size){
+        System.arraycopy(from, fromStart, to, toStart, size);
     }
 
 
@@ -237,46 +191,29 @@ public class Structf{
     }
 
     public static void copy(int[] from, int[] to, int size){
-        if(size > from.length || size > to.length) throw new ArrayIndexOutOfBoundsException("Invalid size: " + size);
-        System.arraycopy(from, 0, to, 0, size);
+        copy(from, 0, to, 0, size);
     }
 
-    public static void copy(int[] from, int fromStart, int fromEnd, int[] to, int toStart){
-        copy(from, fromStart, fromEnd, to, toStart, toStart + (fromEnd - fromStart));
+    public static void copy(int[] from, int fromStart, int[] to, int toStart, int size){
+        System.arraycopy(from, fromStart, to, toStart, size);
     }
 
-    public static void copy(int[] from, int fromStart, int fromEnd, int[] to, int toStart, int toEnd){
-        int fromDir = Integer.compare(fromEnd, fromStart);
-        int toDir = Integer.compare(toEnd, toStart);
+    public static char[] copy(char[] arr){
+        char[] res = new char[arr.length];
+        copy(arr, res);
+        return res;
+    }
 
-        if(fromDir == 0 || toDir == 0) return;
+    public static void copy(char[] from, char[] to){
+        copy(from, to, min(from.length, to.length));
+    }
 
-        int fromLength = abs(fromEnd - fromStart);
-        int toLength = abs(toEnd - toStart);
-        int copyLength = min(fromLength, toLength);
+    public static void copy(char[] from, char[] to, int size){
+        copy(from, 0, to, 0, size);
+    }
 
-        int fromMin = min(fromStart, fromEnd);
-        int fromMax = max(fromStart, fromEnd);
-        int toMin = min(toStart, toEnd);
-        int toMax = max(toStart, toEnd);
-
-        if(fromMin < 0 || fromMax > from.length || toMin < 0 || toMax > to.length){
-            throw new ArrayIndexOutOfBoundsException(
-            String.format("Invalid range: from[%d:%d] len=%d, to[%d:%d] len=%d",
-            fromStart, fromEnd, from.length, toStart, toEnd, to.length));
-        }
-
-        if(fromDir == toDir){
-            int srcPos = fromDir > 0 ? fromStart : fromEnd;
-            int destPos = toDir > 0 ? toStart : toEnd;
-            System.arraycopy(from, srcPos, to, destPos, copyLength);
-        }else{
-            for(int i = 0;i < copyLength;i++){
-                int fromIdx = fromDir > 0 ? (fromStart + i) : (fromStart - i);
-                int toIdx = toDir > 0 ? (toStart + i) : (toStart - i);
-                to[toIdx] = from[fromIdx];
-            }
-        }
+    public static void copy(char[] from, int fromStart, char[] to, int toStart, int size){
+        System.arraycopy(from, fromStart, to, toStart, size);
     }
 
 
@@ -285,7 +222,8 @@ public class Structf{
     }
 
     public static <T> void shift(T[] arr, int start, int end, int amount){
-        copy(arr, amount > 0 ? (end - 1) : start, amount > 0 ? (start - 1) : end, arr, amount > 0 ? (end + amount - 1) : (start + amount));
+        if(amount < 0) for(int i = start - amount;i < end;i++) arr[i] = arr[i - amount];
+        else for(int i = end - 1 + amount;i >= start;i--) arr[i] = arr[i - amount];
     }
 
 
@@ -294,7 +232,8 @@ public class Structf{
     }
 
     public static void shift(float[] arr, int start, int end, int amount){
-        copy(arr, amount > 0 ? (end - 1) : start, amount > 0 ? (start - 1) : end, arr, amount > 0 ? (end + amount - 1) : (start + amount));
+        if(amount < 0) for(int i = start - amount;i < end;i++) arr[i] = arr[i - amount];
+        else for(int i = end - 1 + amount;i >= start;i--) arr[i] = arr[i - amount];
     }
 
 
@@ -303,7 +242,17 @@ public class Structf{
     }
 
     public static void shift(int[] arr, int start, int end, int amount){
-        copy(arr, amount > 0 ? (end - 1) : start, amount > 0 ? (start - 1) : end, arr, amount > 0 ? (end + amount - 1) : (start + amount));
+        if(amount < 0) for(int i = start - amount;i < end;i++) arr[i] = arr[i - amount];
+        else for(int i = end - 1 + amount;i >= start;i--) arr[i] = arr[i - amount];
+    }
+
+    public static void shift(char[] arr, int amount){
+        shift(arr, 0, arr.length, amount);
+    }
+
+    public static void shift(char[] arr, int start, int end, int amount){
+        if(amount < 0) for(int i = start - amount;i < end;i++) arr[i] = arr[i - amount];
+        else for(int i = end - 1 + amount;i >= start;i--) arr[i] = arr[i - amount];
     }
 
 
