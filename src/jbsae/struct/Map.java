@@ -19,11 +19,11 @@ public class Map<K, V> implements Iterable<K>{
     public int size;
 
     public Map(){
-        this(128);
+        this(50);
     }
 
     public Map(int capacity){
-        setCap(nextPow2(capacity));
+        setCap(nextPow2((int)(capacity / loadFactor + 1)));
         keys = create(tableCap + stashCap);
         values = create(tableCap + stashCap);
     }
@@ -37,25 +37,21 @@ public class Map<K, V> implements Iterable<K>{
 
     private void setCap(int cap){
         this.tableCap = cap;
-        this.stashCap = floorLog2(cap);
+        this.stashCap = floorLog2(cap) * 2;
         this.threshold = (int)(cap * loadFactor);
         this.shift = floorLog2(cap);
         this.mask = cap - 1;
-        this.steps = (int)(rt2(cap) / 8 + 4);
-    }
-
-    private int conv(int hash){
-        return hash & mask;
+        this.steps = (int)(rt2(cap) / 16 + 4);
     }
 
     public Map<K, V> add(K key, V value){
         if(key == null) throw new RuntimeException("Value is null");
 
         int base = key.hashCode();
-        int hash1 = conv(base);
-        int hash2 = conv(hash(base, shift, PRIME1));
-        int hash3 = conv(hash(base, shift, PRIME2));
-        int hash4 = conv(hash(base, shift, PRIME3));
+        int hash1 = base & mask;
+        int hash2 = (hash(base, shift, PRIME1) & mask);
+        int hash3 = (hash(base, shift, PRIME2) & mask);
+        int hash4 = (hash(base, shift, PRIME3) & mask);
 
         if(tryReplace(hash1, key, value)) return this;
         if(tryReplace(hash2, key, value)) return this;
@@ -67,7 +63,7 @@ public class Map<K, V> implements Iterable<K>{
         if(tryPlace(hash3, key, value)) return this;
         if(tryPlace(hash4, key, value)) return this;
 
-        addi(swapRandom(hash1, hash2, hash3, hash4, key, value), value);
+        place(swapRandom(hash1, hash2, hash3, hash4, key, value), value);
 
         return this;
     }
@@ -80,10 +76,10 @@ public class Map<K, V> implements Iterable<K>{
 
     public V get(K key){
         int base = key.hashCode();
-        int hash1 = conv(base);
-        int hash2 = conv(hash(base, shift,  PRIME1));
-        int hash3 = conv(hash(base, shift, PRIME2));
-        int hash4 = conv(hash(base, shift, PRIME3));
+        int hash1 = base & mask;
+        int hash2 = (hash(base, shift,  PRIME1) & mask);
+        int hash3 = (hash(base, shift, PRIME2) & mask);
+        int hash4 = (hash(base, shift, PRIME3) & mask);
         if(key.equals(keys[hash1])) return values[hash1];
         if(key.equals(keys[hash2])) return values[hash2];
         if(key.equals(keys[hash3])) return values[hash3];
@@ -94,10 +90,10 @@ public class Map<K, V> implements Iterable<K>{
     public Map<K, V> remove(K key){
         if(key == null) throw new RuntimeException("Value is null");
         int base = key.hashCode();
-        if(tryErase(conv(base), key)) return this;
-        if(tryErase(conv(hash(base, shift, PRIME1)), key)) return this;
-        if(tryErase(conv(hash(base, shift, PRIME2)), key)) return this;
-        if(tryErase(conv(hash(base, shift, PRIME3)), key)) return this;
+        if(tryErase(base & mask, key)) return this;
+        if(tryErase((hash(base, shift, PRIME1) & mask), key)) return this;
+        if(tryErase((hash(base, shift, PRIME2) & mask), key)) return this;
+        if(tryErase((hash(base, shift, PRIME3) & mask), key)) return this;
         for(int i = 0;i < stashSize;i++) if(tryErase(tableCap + i, key)) return this;
         return this;
     }
@@ -112,23 +108,23 @@ public class Map<K, V> implements Iterable<K>{
 
     public Map<K, V> ensure(int space){
         int needed = (int)((size + space) / loadFactor + 1);
-        if(needed > tableCap) resize(tableCap * 2);
+        if((size + needed) > tableCap) resize(nextPow2((size + needed)));
         return this;
     }
 
-    private void addi(K key, V value){
+    private void place(K key, V value){
         for(int i = 0;i < steps;i++){
             int base = key.hashCode();
-            int hash1 = conv(base);
+            int hash1 = base & mask;
             if(tryPlace(hash1, key, value)) return;
 
-            int hash2 = conv(hash(base, shift, PRIME1));
+            int hash2 = (hash(base, shift, PRIME1) & mask);
             if(tryPlace(hash2, key, value)) return;
 
-            int hash3 = conv(hash(base,shift,  PRIME2));
+            int hash3 = (hash(base,shift,  PRIME2) & mask);
             if(tryPlace(hash3, key, value)) return;
 
-            int hash4 = conv(hash(base, shift, PRIME3));
+            int hash4 = (hash(base, shift, PRIME3) & mask);
             if(tryPlace(hash4, key, value)) return;
 
             key = swapRandom(hash1, hash2, hash3, hash4, key, value);
@@ -166,7 +162,7 @@ public class Map<K, V> implements Iterable<K>{
     }
 
     private void stash(K key, V value){
-        while(stashSize >= stashCap) resize(tableCap * 2);
+        if(stashSize >= stashCap) resize(tableCap * 2);
         values[tableCap + stashSize] = value;
         keys[tableCap + stashSize++] = key;
         size++;
@@ -179,7 +175,7 @@ public class Map<K, V> implements Iterable<K>{
         keys = create(tableCap + stashCap);
         values = create(tableCap + stashCap);
         size = stashSize = 0;
-        for(int i = 0;i < oldKeys.length;i++) if(oldKeys[i] != null) addi(oldKeys[i], oldVals[i]);
+        for(int i = 0;i < oldKeys.length;i++) if(oldKeys[i] != null) place(oldKeys[i], oldVals[i]);
     }
 
     @Override
@@ -210,6 +206,7 @@ public class Map<K, V> implements Iterable<K>{
 
         @Override
         public K next(){
+            findNextIndex();
             return keys[nextIndex++];
         }
     }

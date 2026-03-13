@@ -9,6 +9,7 @@ import jbsae.struct.tree.*;
 import static jbsae.JBSAE.*;
 import static jbsae.util.Mathf.*;
 
+//-XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining
 // Baseline: 9 fps
 public class CollisionTest{
     public static void main(String[] args){
@@ -27,7 +28,7 @@ public class CollisionTest{
                         Range2 range = new Range2(random(0, 8000), random(0, 8000), random(0, 2000), random(0, 2000));
                         Seq<Pos2> inside = new Seq<>();
                         tree.query(inside, range);
-                        Set<Pos2> insideSet = new Set<Pos2>(inside.size, 0.5f);
+                        Set<Pos2> insideSet = new Set<Pos2>().ensure(inside.size);
                         for(Pos2 p : inside) insideSet.add(p);
                         inside.clear();
                     }

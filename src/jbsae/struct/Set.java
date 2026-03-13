@@ -1,7 +1,5 @@
 package jbsae.struct;
 
-import jbsae.*;
-
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
@@ -20,15 +18,10 @@ public class Set<T> implements Iterable<T>{
     public int size;
 
     public Set(){
-        this(256);
+        this(50);
     }
 
     public Set(int capacity){
-        this(capacity, 0.8f);
-    }
-
-    public Set(int capacity, float loadFactor){
-        this.loadFactor = loadFactor;
         setCap(nextPow2((int)(capacity / loadFactor + 1)));
         table = create(tableCap + stashCap);
     }
@@ -42,7 +35,7 @@ public class Set<T> implements Iterable<T>{
 
     private void setCap(int cap){
         this.tableCap = cap;
-        this.stashCap = floorLog2(cap);
+        this.stashCap = floorLog2(cap) * 2;
         this.threshold = (int)(cap * loadFactor);
         this.shift = floorLog2(cap);
         this.mask = cap - 1;
@@ -68,7 +61,7 @@ public class Set<T> implements Iterable<T>{
         if(tryPlace(hash3, value)) return this;
         if(tryPlace(hash4, value)) return this;
 
-        addi(swapRandom(hash1, hash2, hash3, hash4, value));
+        place(swapRandom(hash1, hash2, hash3, hash4, value));
 
         return this;
     }
@@ -104,11 +97,11 @@ public class Set<T> implements Iterable<T>{
 
     public Set<T> ensure(int space){
         int needed = (int)((size + space) / loadFactor + 1);
-        if(needed > tableCap) resize(tableCap * 2);
+        if((size + needed) > tableCap) resize(nextPow2((size + needed)));
         return this;
     }
 
-    private void addi(T value){
+    private void place(T value){
         for(int i = 0;i < steps;i++){
             int base = value.hashCode();
 
@@ -157,7 +150,7 @@ public class Set<T> implements Iterable<T>{
     }
 
     private void stash(T value){
-        while(stashSize >= stashCap) resize(tableCap * 2);
+        if(stashSize >= stashCap) resize(tableCap * 2);
         table[tableCap + stashSize++] = value;
         size++;
     }
@@ -167,7 +160,7 @@ public class Set<T> implements Iterable<T>{
         setCap(capacity);
         table = create(tableCap + stashCap);
         size = stashSize = 0;
-        for(int i = 0;i < old.length;i++) if(old[i] != null) addi(old[i]);
+        for(int i = 0;i < old.length;i++) if(old[i] != null) place(old[i]);
     }
 
     @Override
@@ -198,6 +191,7 @@ public class Set<T> implements Iterable<T>{
 
         @Override
         public T next(){
+            findNextIndex();
             return table[nextIndex++];
         }
     }
