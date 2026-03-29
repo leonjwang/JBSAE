@@ -7,6 +7,7 @@ import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
 
+// TODO: Reimplement
 @Deprecated
 public class CharSeq{
     public char[] items;

@@ -15,6 +15,7 @@ import static jbsae.util.Colorf.*;
 import static jbsae.util.Drawf.*;
 import static jbsae.util.Mathf.*;
 
+@Deprecated
 public class InterpDisplay extends Screen{
     public static float displaySize = 150;
     public static float exampleSize = 5;

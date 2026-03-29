@@ -229,7 +229,7 @@ public class Mathf{
 
 
     /** Distance functions. */
-    /** Returns the distance between two points in 2D space. */ // TODO: Replace all dst
+    /** Returns the distance between two points in 2D space. */
     public static float dst(float x1, float y1, float x2, float y2){
         return rt2(dst2(x1, y1, x2, y2));
     }

@@ -4,7 +4,6 @@ package jbsae.graphics.draw;
 import jbsae.*;
 import jbsae.graphics.*;
 import jbsae.math.*;
-import jbsae.struct.*;
 
 import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
@@ -55,8 +54,8 @@ public class Draw{
         drawi(region, x1, y1, x2, y2, x3, y3, x4, y4);
     }
 
-    public void drawi(Region region, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4){
-        if(region != null && renderer.binded != region.texture) region.texture.bind();
+    private void drawi(Region region, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4){
+        if(region != null) region.texture.bind();
 
         Range2 r = region != null ? region.region : Tmp.r1.set(0, 0, 1, 1);
         renderer.draw(x1, y1, x2, y2, x3, y3, x4, y4,
