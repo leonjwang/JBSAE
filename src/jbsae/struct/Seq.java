@@ -10,7 +10,7 @@ import static jbsae.util.Structf.*;
 public class Seq<T> implements List<T>{
     private T[] items;
 
-    public boolean ordered = false;
+    public boolean ordered = true;
     public int size;
 
     public Seq(){
@@ -68,7 +68,7 @@ public class Seq<T> implements List<T>{
         return this;
     }
 
-    public Seq<T> add(T value, int index){
+    public Seq<T> add(int index, T value){
         if(value == null) throw new RuntimeException("Value is null");
         if(size >= items.length) resize((int)(items.length * 1.5f + 1));
         shift(items, index, size++, 1);
@@ -90,10 +90,9 @@ public class Seq<T> implements List<T>{
     }
 
     public Seq<T> remove(int index){
-        if(ordered){
-            shift(items, index + 1, size--, -1);
-            items[size] = null;
-        }else items[index] = items[--size];
+        if(ordered) shift(items, index + 1, size--, -1);
+        else items[index] = items[--size];
+        items[size] = null;
         return this;
     }
 

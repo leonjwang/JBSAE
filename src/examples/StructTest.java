@@ -11,6 +11,7 @@
 //import static jbsae.util.Mathf.*;
 //import static jbsae.util.Structf.*;
 //
+ // TODO: Rewrite + Standardized Unit Testing Method?
 //public class StructTest{
 //    public static int failed = 0;
 //
