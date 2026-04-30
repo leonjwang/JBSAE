@@ -6,7 +6,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-public class Queue<T> implements List<T>{
+public class Queue<T> implements Listable<T>{
     private T[] items;
     private int head, tail, end;
 
@@ -23,23 +23,6 @@ public class Queue<T> implements List<T>{
         head = 0;
     }
 
-    public Queue(T[] items){
-        this(items.length);
-        for(int i = 0;i < items.length;i++) this.items[i] = (T)items[i];
-        head = 0;
-        tail = end = items.length - 1;
-        size = items.length;
-    }
-
-    @Override
-    public Object[] list(){
-        Object[] values = new Object[size];
-        int n = min(items.length - head, size);
-        copy(items, head, values, 0, n);
-        copy(items, 0, values, n, size - n);
-        return values;
-    }
-
     private int increment(int index){
         return (index == end) ? 0 : (index + 1);
     }
@@ -52,12 +35,10 @@ public class Queue<T> implements List<T>{
         return (head + index < items.length) ? (head + index) : (head + index - items.length);
     }
 
-    @Override
-    public List<T> set(int index, T value){
+    public Listable<T> set(int index, T value){
         items[trueIndex(index)] = value;
         return this;
     }
-
 
     public Queue<T> addFirst(T value){
         if(value == null) throw new RuntimeException("Value is null");
@@ -68,6 +49,16 @@ public class Queue<T> implements List<T>{
         return this;
     }
 
+    public Queue<T> addAllFirst(Iterator<T> itr) {
+        if(itr instanceof Listerator<T> list) ensure(list.size());
+        while(itr.hasNext()) addFirst(itr.next());
+        return this;
+    }
+
+    public Queue<T> addAllFirst(Iterable<T> values){
+        return addAllFirst(values.iterator());
+    }
+
     public Queue<T> addLast(T value){
         if(value == null) throw new RuntimeException("Value is null");
         if(size >= items.length) resize((int)(items.length * 1.5f + 1));
@@ -75,6 +66,16 @@ public class Queue<T> implements List<T>{
         items[tail] = value;
         size++;
         return this;
+    }
+
+    public Queue<T> addAllLast(Iterator<T> itr) {
+        if(itr instanceof Listerator<T> list) ensure(list.size());
+        while(itr.hasNext()) addFirst(itr.next());
+        return this;
+    }
+
+    public Queue<T> addAllLast(Iterable<T> values){
+        return addAllFirst(values.iterator());
     }
 
     public Queue<T> removeFirst(){
@@ -104,7 +105,6 @@ public class Queue<T> implements List<T>{
     }
 
 
-    @Override
     public T get(int index){
         return items[trueIndex(index)];
     }
@@ -131,6 +131,11 @@ public class Queue<T> implements List<T>{
         return this;
     }
 
+    public Queue<T> ensure(int space){
+        if(size + space >= items.length) resize(size + space + 1);
+        return this;
+    }
+
     public Queue<T> resize(int capacity){
         T[] old = items;
         items = create(capacity, items);
@@ -145,7 +150,7 @@ public class Queue<T> implements List<T>{
 
 
     @Override
-    public Iterator<T> iterator(){
+    public Listerator<T> iterator(){
         return new QueueIterator();
     }
 
@@ -154,8 +159,8 @@ public class Queue<T> implements List<T>{
         return itrToString(this);
     }
 
-    private class QueueIterator implements Iterator<T>{
-        public int index;
+    private class QueueIterator implements Listerator<T>{
+        public int index = 0;
 
         public QueueIterator(){
         }
@@ -168,6 +173,11 @@ public class Queue<T> implements List<T>{
         @Override
         public T next(){
             return get(index++);
+        }
+
+        @Override
+        public int size(){
+            return size;
         }
     }
 }

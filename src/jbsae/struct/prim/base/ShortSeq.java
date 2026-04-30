@@ -101,7 +101,7 @@ public class ShortSeq{
 
     @Override
     public String toString(){
-        Seq<Object> values = new Seq<>();
+        Seq<Object> values = new Seq<>(size());
         for(int i = 0;i < size;i++) values.add(items[i]);
         return itrToString(values);
     }

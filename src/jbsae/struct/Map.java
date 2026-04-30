@@ -6,7 +6,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-public class Map<K, V> implements Iterable<K>{
+public class Map<K, V> implements Listable<K>{
     private K[] keys;
     private V[] values;
 
@@ -179,8 +179,12 @@ public class Map<K, V> implements Iterable<K>{
     }
 
     @Override
-    public Iterator<K> iterator(){
-        return new SetIterator();
+    public Listerator<K> iterator(){
+        return new KeyIterator();
+    }
+
+    public Listerator<V> values(){
+        return new ValIterator();
     }
 
     @Override
@@ -188,10 +192,15 @@ public class Map<K, V> implements Iterable<K>{
         return itrToString(this);
     }
 
-    private class SetIterator implements Iterator<K>{
+    @Override
+    public int size(){
+        return size;
+    }
+
+    private class KeyIterator implements Listerator<K>{
         public int nextIndex = 0;
 
-        public SetIterator(){
+        public KeyIterator(){
         }
 
         public void findNextIndex(){
@@ -208,6 +217,39 @@ public class Map<K, V> implements Iterable<K>{
         public K next(){
             findNextIndex();
             return keys[nextIndex++];
+        }
+
+        @Override
+        public int size(){
+            return size;
+        }
+    }
+
+    private class ValIterator implements Listerator<V>{
+        public int nextIndex = 0;
+
+        public ValIterator(){
+        }
+
+        public void findNextIndex(){
+            for(;nextIndex < keys.length;nextIndex++) if(keys[nextIndex] != null) return;
+        }
+
+        @Override
+        public boolean hasNext(){
+            findNextIndex();
+            return nextIndex < keys.length;
+        }
+
+        @Override
+        public V next(){
+            findNextIndex();
+            return values[nextIndex++];
+        }
+
+        @Override
+        public int size(){
+            return size;
         }
     }
 }

@@ -2,7 +2,6 @@ package jbsae.util;
 
 import jbsae.func.*;
 import jbsae.func.prim.*;
-import jbsae.struct.List;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -10,7 +9,7 @@ import java.util.*;
 import static jbsae.util.Mathf.*;
 
 
-@SuppressWarnings("all")
+// TODO: Delete this whole class
 public class Structf{
     public static final int PRIME1 = 0xbe1f14b1;
     public static final int PRIME2 = 0xb4b82e39;
@@ -36,6 +35,13 @@ public class Structf{
     }
 
 
+    public static <T> Iterable<T> wrap(Iterator<T> itr){
+        return () -> itr;
+    }
+
+
+    // TODO: Remove
+
     public static <T> T[] create(int size){
         return (T[])new Object[size];
     }
@@ -58,13 +64,13 @@ public class Structf{
         for(int i = 0;i < arr.length;i++) fill(arr[i], value);
     }
 
-    public static <T> void fill(List<T> arr, T value){
-        fill(arr, 0, arr.size(), value);
-    }
-
-    public static <T> void fill(List<T> arr, int start, int end, T value){
-        for(int i = start;i < end;i++) arr.set(i, value);
-    }
+//    public static <T> void fill(Listable<T> arr, T value){
+//        fill(arr, 0, arr.size(), value);
+//    }
+//
+//    public static <T> void fill(Listable<T> arr, int start, int end, T value){
+//        for(int i = start;i < end;i++) arr.set(i, value);
+//    }
 
     public static void fill(float[] arr, float value){
         fill(arr, 0, arr.length, value);
@@ -139,7 +145,7 @@ public class Structf{
         for(int i = 0;i < arr.length;i++) each(arr[i], cons);
     }
 
-    // REWRITE THESE COPIES
+    // TODO: REWRITE THESE COPIES ?
 
     public static <T> T[] copy(T[] arr){
         T[] res = create(arr.length, arr);
@@ -410,9 +416,9 @@ public class Structf{
         return arr[randInt(0, arr.length - 1)];
     }
 
-    public static <T> Object choose(List<T> arr){
-        return arr.get(randInt(0, arr.size() - 1));
-    }
+//    public static <T> Object choose(Listable<T> arr){
+//        return arr.get(randInt(0, arr.size() - 1));
+//    }
 
     public static float choose(float[] arr){
         return arr[randInt(0, arr.length - 1)];

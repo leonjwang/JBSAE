@@ -7,7 +7,7 @@ import java.util.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-public class Seq<T> implements List<T>{
+public class Seq<T> implements Listable<T>{
     private T[] items;
 
     public boolean ordered = true;
@@ -27,19 +27,10 @@ public class Seq<T> implements List<T>{
         return this;
     }
 
-    @Override
-    public Object[] list(){
-        Object[] values = new Object[size];
-        copy(items, values, size);
-        return values;
-    }
-
-    @Override
     public T get(int index){
         return items[index];
     }
 
-    @Override
     public Seq<T> set(int index, T value){
         this.items[index] = value;
         return this;
@@ -53,12 +44,17 @@ public class Seq<T> implements List<T>{
         return this;
     }
 
-    public Seq<T> set(List<T> values){
-        if(values.size() >= items.length) resize(values.size() + 1);
-        for(int i = 0;i < values.size();i++) items[i] = values.get(i);
-        for(int i = values.size();i < size;i++) items[i] = null;
-        size = values.size();
+    public Seq<T> set(Iterator<T> itr) {
+        if(itr instanceof Listerator<T> list) ensure(list.size());
+        int i = 0, oldSize = size;
+        while(itr.hasNext()) items[i++] = itr.next();
+        size = i;
+        for(;i < oldSize;i++) items[i] = null;
         return this;
+    }
+
+    public Seq<T> set(Iterable<T> values){
+        return set(values.iterator());
     }
 
     public Seq<T> add(T value){
@@ -76,17 +72,14 @@ public class Seq<T> implements List<T>{
         return this;
     }
 
-    public Seq<T> addAll(Object[] values){
-        ensure(values.length);
-        copy(values, 0, items, size, values.length);
-        size += values.length;
+    public Seq<T> addAll(Iterator<T> itr) {
+        if(itr instanceof Listerator<T> list) ensure(list.size());
+        while(itr.hasNext()) add(itr.next());
         return this;
     }
 
-    public Seq<T> addAll(List<T> values){
-        ensure(values.size());
-        for(int i = 0;i < values.size();i++) items[size++] = values.get(i);
-        return this;
+    public Seq<T> addAll(Iterable<T> values){
+        return addAll(values.iterator());
     }
 
     public Seq<T> remove(int index){
@@ -130,7 +123,7 @@ public class Seq<T> implements List<T>{
     }
 
     @Override
-    public Iterator<T> iterator(){
+    public Listerator<T> iterator(){
         return new SeqIterator();
     }
 
@@ -139,8 +132,8 @@ public class Seq<T> implements List<T>{
         return itrToString(this);
     }
 
-    private class SeqIterator implements Iterator<T>{
-        public int index;
+    private class SeqIterator implements Listerator<T>{
+        public int index = 0;
 
         public SeqIterator(){
         }
@@ -153,6 +146,11 @@ public class Seq<T> implements List<T>{
         @Override
         public T next(){
             return items[index++];
+        }
+
+        @Override
+        public int size(){
+            return size;
         }
     }
 }

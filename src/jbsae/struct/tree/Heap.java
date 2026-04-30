@@ -30,7 +30,7 @@ public class Heap<T>{
         return this;
     }
 
-    public Heap<T> pushAll(List<T> values){
+    public Heap<T> pushAll(Listable<T> values){
         int i = size();
         this.values.addAll(values);
         for(;i < size();i++) swim(i);
@@ -39,7 +39,7 @@ public class Heap<T>{
 
     private void swim(int index){
         if(index == 0) return;
-        int parent = (index - 1) / 2;
+        int parent = (index - 1) >>> 1;
         if(above(index, parent)){
             swap(index, parent);
             swim(parent);
@@ -47,7 +47,7 @@ public class Heap<T>{
     }
 
     private void sink(int index){
-        int left = index * 2 + 1, right = left + 1;
+        int left = (index << 1) + 1, right = left + 1;
         if(left >= size()) return;
         int smaller = right >= size() ? left : (above(left, right) ? left : right);
         if(above(smaller, index)){

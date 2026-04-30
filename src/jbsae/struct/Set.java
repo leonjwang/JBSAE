@@ -6,7 +6,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-public class Set<T> implements Iterable<T>{
+public class Set<T> implements Listable<T>{
     private T[] table;
 
     private int tableCap, stashCap;
@@ -64,6 +64,16 @@ public class Set<T> implements Iterable<T>{
         place(swapRandom(hash1, hash2, hash3, hash4, value));
 
         return this;
+    }
+
+    public Set<T> addAll(Iterator<T> itr) {
+        if(itr instanceof Listerator<T> list) ensure(list.size());
+        while(itr.hasNext()) add(itr.next());
+        return this;
+    }
+
+    public Set<T> addAll(Iterable<T> values){
+        return addAll(values.iterator());
     }
 
     public boolean contains(T value){
@@ -164,7 +174,7 @@ public class Set<T> implements Iterable<T>{
     }
 
     @Override
-    public Iterator<T> iterator(){
+    public Listerator<T> iterator(){
         return new SetIterator();
     }
 
@@ -173,7 +183,12 @@ public class Set<T> implements Iterable<T>{
         return itrToString(this);
     }
 
-    private class SetIterator implements Iterator<T>{
+    @Override
+    public int size(){
+        return size;
+    }
+
+    private class SetIterator implements Listerator<T>{
         public int nextIndex = 0;
 
         public SetIterator(){
@@ -193,6 +208,11 @@ public class Set<T> implements Iterable<T>{
         public T next(){
             findNextIndex();
             return table[nextIndex++];
+        }
+
+        @Override
+        public int size(){
+            return size;
         }
     }
 }
