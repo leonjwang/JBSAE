@@ -46,10 +46,10 @@ public class Seq<T> implements Listable<T>{
 
     public Seq<T> set(Iterator<T> itr) {
         if(itr instanceof Listerator<T> list) ensure(list.size() - size);
-        int i = 0, oldSize = size;
-        while(itr.hasNext()) items[i++] = itr.next();
-        size = i;
-        for(;i < oldSize;i++) items[i] = null;
+        int oldSize = size;
+        clear();
+        while(itr.hasNext()) add(itr.next());
+        for(int i = size;i < oldSize;i++) items[i] = null;
         return this;
     }
 
