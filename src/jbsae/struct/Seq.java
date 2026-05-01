@@ -37,7 +37,7 @@ public class Seq<T> implements Listable<T>{
     }
 
     public Seq<T> set(T[] values){
-        if(values.length >= items.length) resize(values.length + 1);
+        ensure(values.length - size);
         for(int i = 0;i < values.length;i++) items[i] = values[i];
         for(int i = values.length;i < size;i++) items[i] = null;
         size = values.length;
@@ -45,7 +45,7 @@ public class Seq<T> implements Listable<T>{
     }
 
     public Seq<T> set(Iterator<T> itr) {
-        if(itr instanceof Listerator<T> list) ensure(list.size());
+        if(itr instanceof Listerator<T> list) ensure(list.size() - size);
         int i = 0, oldSize = size;
         while(itr.hasNext()) items[i++] = itr.next();
         size = i;
@@ -58,16 +58,15 @@ public class Seq<T> implements Listable<T>{
     }
 
     public Seq<T> add(T value){
-        if(value == null) throw new RuntimeException("Value is null");
         if(size >= items.length) resize((int)(items.length * 1.5f + 1));
         items[size++] = value;
         return this;
     }
 
     public Seq<T> add(int index, T value){
-        if(value == null) throw new RuntimeException("Value is null");
+        index = Math.min(index, size);
         if(size >= items.length) resize((int)(items.length * 1.5f + 1));
-        shift(items, index, size++, 1);
+        for(int i = size++;i > index;i--) items[i] = items[i - 1];
         items[index] = value;
         return this;
     }
@@ -83,7 +82,7 @@ public class Seq<T> implements Listable<T>{
     }
 
     public Seq<T> remove(int index){
-        if(ordered) shift(items, index + 1, size--, -1);
+        if(ordered) for(int i = index;i < --size;i++) items[i] = items[i + 1];
         else items[index] = items[--size];
         items[size] = null;
         return this;
@@ -101,7 +100,7 @@ public class Seq<T> implements Listable<T>{
     }
 
     public Seq<T> clear(){
-        fill(items, 0, size, null);
+        Arrays.fill(items, 0, size, null);
         size = 0;
         return this;
     }
@@ -114,7 +113,7 @@ public class Seq<T> implements Listable<T>{
     private void resize(int capacity){
         T[] old = this.items;
         this.items = create(capacity);
-        copy(old, this.items, size);
+        System.arraycopy(old, 0, this.items, 0, old.length);
     }
 
     @Override
