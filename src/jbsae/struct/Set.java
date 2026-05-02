@@ -6,7 +6,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-public class Set<T> implements Listable<T>{
+public class Set<T> implements Iterable<T>{
     private T[] table;
 
     private int tableCap, stashCap;
@@ -49,25 +49,22 @@ public class Set<T> implements Listable<T>{
         int hash1 = base & mask;
         int hash2 = hash(base, shift, PRIME1) & mask;
         int hash3 = hash(base, shift, PRIME2) & mask;
-        int hash4 = hash(base, shift, PRIME3) & mask;
 
         if(value.equals(table[hash1])) return this;
         if(value.equals(table[hash2])) return this;
         if(value.equals(table[hash3])) return this;
-        if(value.equals(table[hash4])) return this;
 
         if(tryPlace(hash1, value)) return this;
         if(tryPlace(hash2, value)) return this;
         if(tryPlace(hash3, value)) return this;
-        if(tryPlace(hash4, value)) return this;
 
-        place(swapRandom(hash1, hash2, hash3, hash4, value));
+        place(swapRandom(hash1, hash2, hash3, value));
 
         return this;
     }
 
     public Set<T> addAll(Iterator<T> itr) {
-        if(itr instanceof Listerator<T> list) ensure(list.size());
+        if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) add(itr.next());
         return this;
     }
@@ -82,7 +79,6 @@ public class Set<T> implements Listable<T>{
         if(value.equals(table[base & mask])) return true;
         if(value.equals(table[hash(base, shift, PRIME1) & mask])) return true;
         if(value.equals(table[hash(base, shift, PRIME2) & mask])) return true;
-        if(value.equals(table[hash(base, shift, PRIME3) & mask])) return true;
         for(int i = 0;i < stashSize;i++) if(value.equals(table[tableCap + i])) return true;
         return false;
     }
@@ -93,7 +89,6 @@ public class Set<T> implements Listable<T>{
         if(tryErase(base & mask, value)) return this;
         if(tryErase(hash(base, shift, PRIME1) & mask, value)) return this;
         if(tryErase(hash(base, shift, PRIME2) & mask, value)) return this;
-        if(tryErase(hash(base, shift, PRIME3) & mask, value)) return this;
         for(int i = 0;i < stashSize;i++) if(tryErase(tableCap + i, value)) return this;
         return this;
     }
@@ -124,10 +119,7 @@ public class Set<T> implements Listable<T>{
             int hash3 = hash(base, shift, PRIME2) & mask;
             if(tryPlace(hash3, value)) return;
 
-            int hash4 = hash(base, shift, PRIME3) & mask;
-            if(tryPlace(hash4, value)) return;
-
-            value = swapRandom(hash1, hash2, hash3, hash4, value);
+            value = swapRandom(hash1, hash2, hash3, value);
         }
 
         stash(value);
@@ -140,16 +132,14 @@ public class Set<T> implements Listable<T>{
         return true;
     }
 
-    private T swapRandom(int hash1, int hash2, int hash3, int hash4, T value){
+    private T swapRandom(int hash1, int hash2, int hash3, T value){
         switch(RAND.nexti() & 3){
             case 0:
                 return swap(hash1, value);
             case 1:
                 return swap(hash2, value);
-            case 2:
-                return swap(hash3, value);
             default:
-                return swap(hash4, value);
+                return swap(hash3, value);
         }
     }
 
@@ -174,7 +164,7 @@ public class Set<T> implements Listable<T>{
     }
 
     @Override
-    public Listerator<T> iterator(){
+    public Iterator<T> iterator(){
         return new SetIterator();
     }
 
@@ -183,12 +173,8 @@ public class Set<T> implements Listable<T>{
         return itrToString(this);
     }
 
-    @Override
-    public int size(){
-        return size;
-    }
 
-    private class SetIterator implements Listerator<T>{
+    private class SetIterator implements Iterator<T>, Sized{
         public int nextIndex = 0;
 
         public SetIterator(){

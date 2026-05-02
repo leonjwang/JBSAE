@@ -6,7 +6,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-public class Map<K, V> implements Listable<K>{
+public class Map<K, V> implements Iterable<K>{
     private K[] keys;
     private V[] values;
 
@@ -179,11 +179,11 @@ public class Map<K, V> implements Listable<K>{
     }
 
     @Override
-    public Listerator<K> iterator(){
+    public Iterator<K> iterator(){
         return new KeyIterator();
     }
 
-    public Listerator<V> values(){
+    public Iterator<V> values(){
         return new ValIterator();
     }
 
@@ -192,12 +192,7 @@ public class Map<K, V> implements Listable<K>{
         return itrToString(this);
     }
 
-    @Override
-    public int size(){
-        return size;
-    }
-
-    private class KeyIterator implements Listerator<K>{
+    private class KeyIterator implements Iterator<K>, Sized{
         public int nextIndex = 0;
 
         public KeyIterator(){
@@ -225,7 +220,7 @@ public class Map<K, V> implements Listable<K>{
         }
     }
 
-    private class ValIterator implements Listerator<V>{
+    private class ValIterator implements Iterator<V>, Sized{
         public int nextIndex = 0;
 
         public ValIterator(){

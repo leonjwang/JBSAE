@@ -7,7 +7,7 @@ import java.util.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-public class Seq<T> implements Listable<T>{
+public class Seq<T> implements Iterable<T>{
     private T[] items;
 
     public boolean ordered = true;
@@ -45,7 +45,7 @@ public class Seq<T> implements Listable<T>{
     }
 
     public Seq<T> set(Iterator<T> itr) {
-        if(itr instanceof Listerator<T> list) ensure(list.size() - size);
+        if(itr instanceof Sized list) ensure(list.size() - size);
         int oldSize = size;
         clear();
         while(itr.hasNext()) add(itr.next());
@@ -72,7 +72,7 @@ public class Seq<T> implements Listable<T>{
     }
 
     public Seq<T> addAll(Iterator<T> itr) {
-        if(itr instanceof Listerator<T> list) ensure(list.size());
+        if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) add(itr.next());
         return this;
     }
@@ -117,12 +117,7 @@ public class Seq<T> implements Listable<T>{
     }
 
     @Override
-    public int size(){
-        return size;
-    }
-
-    @Override
-    public Listerator<T> iterator(){
+    public Iterator<T> iterator(){
         return new SeqIterator();
     }
 
@@ -131,7 +126,7 @@ public class Seq<T> implements Listable<T>{
         return itrToString(this);
     }
 
-    private class SeqIterator implements Listerator<T>{
+    private class SeqIterator implements Iterator<T>, Sized{
         public int index = 0;
 
         public SeqIterator(){

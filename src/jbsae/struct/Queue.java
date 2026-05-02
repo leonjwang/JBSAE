@@ -6,7 +6,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-public class Queue<T> implements Listable<T>{
+public class Queue<T> implements Iterable<T>{
     private T[] items;
     private int head, tail, end;
 
@@ -35,7 +35,7 @@ public class Queue<T> implements Listable<T>{
         return (head + index < items.length) ? (head + index) : (head + index - items.length);
     }
 
-    public Listable<T> set(int index, T value){
+    public Queue<T> set(int index, T value){
         items[trueIndex(index)] = value;
         return this;
     }
@@ -50,7 +50,7 @@ public class Queue<T> implements Listable<T>{
     }
 
     public Queue<T> addAllFirst(Iterator<T> itr) {
-        if(itr instanceof Listerator<T> list) ensure(list.size());
+        if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) addFirst(itr.next());
         return this;
     }
@@ -69,7 +69,7 @@ public class Queue<T> implements Listable<T>{
     }
 
     public Queue<T> addAllLast(Iterator<T> itr) {
-        if(itr instanceof Listerator<T> list) ensure(list.size());
+        if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) addFirst(itr.next());
         return this;
     }
@@ -117,11 +117,6 @@ public class Queue<T> implements Listable<T>{
         return items[tail];
     }
 
-    @Override
-    public int size(){
-        return size;
-    }
-
     public Queue<T> clear(){
         int n = min(items.length - head, size);
         for(int i = 0;i < n;i++) items[head + i] = null;
@@ -140,8 +135,8 @@ public class Queue<T> implements Listable<T>{
         T[] old = items;
         items = create(capacity, items);
         int n = min(items.length - head, size);
-        copy(old, head, items, 0, n);
-        copy(old, 0, items, n, size - n);
+        System.arraycopy(old, head, items, 0, n);
+        System.arraycopy(old, 0, items, n, size - n);
         head = 0;
         tail = size - 1;
         end = capacity - 1;
@@ -150,7 +145,7 @@ public class Queue<T> implements Listable<T>{
 
 
     @Override
-    public Listerator<T> iterator(){
+    public Iterator<T> iterator(){
         return new QueueIterator();
     }
 
@@ -159,7 +154,7 @@ public class Queue<T> implements Listable<T>{
         return itrToString(this);
     }
 
-    private class QueueIterator implements Listerator<T>{
+    private class QueueIterator implements Iterator<T>, Sized{
         public int index = 0;
 
         public QueueIterator(){
