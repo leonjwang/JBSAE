@@ -18,19 +18,19 @@ public class Stringf{
     }
 
     public static String valToString(Object... arr){
-        CharSeq str = (CharSeq)new CharSeq().add('(');
+        CharSeq str = new CharSeq(arr.length).add('(');
         for(Object o : arr) str.add(o.toString()).add(',');
         return str.substring(0, str.size - 1).add(')').toString();
     }
 
     public static String arrToString(Object... arr){
-        CharSeq str = (CharSeq)new CharSeq().add('[');
+        CharSeq str = new CharSeq(arr.length).add('[');
         for(Object o : arr) str.add(o.toString()).add(", ");
         return str.substring(0, str.size - 2).add(']').toString();
     }
 
     public static <T> String itrToString(Iterable<T> arr){
-        CharSeq str = (CharSeq)new CharSeq().add('[');
+        CharSeq str = new CharSeq().add('[');
         for(T o : arr) str.add(o.toString()).add(", ");
         return str.size == 1 ? "[]" : str.substring(0, str.size - 2).add(']').toString();
     }
@@ -44,7 +44,7 @@ public class Stringf{
         int s = (int)((time / 1000) % 60);
         int m = (int)((time / (1000 * 60)) % 60);
         int h = (int)(time / (1000 * 60 * 60));
-        CharSeq result = new CharSeq();
+        CharSeq result = new CharSeq(32);
         if(days){
             int d = h / 24;
             h = h % 24;
@@ -67,7 +67,7 @@ public class Stringf{
         int s = (int)((time / 1000) % 60);
         int m = (int)((time / (1000 * 60)) % 60);
         int h = (int)(time / (1000 * 60 * 60));
-        CharSeq result = new CharSeq();
+        CharSeq result = new CharSeq(16);
         if(h < 10) result.add('0');
         result.add(h).add(':');
         if(m < 10) result.add('0');

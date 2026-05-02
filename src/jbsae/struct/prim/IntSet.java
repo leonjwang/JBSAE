@@ -3,6 +3,8 @@ package jbsae.struct.prim;
 import jbsae.*;
 import jbsae.func.prim.*;
 
+import java.util.*;
+
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
@@ -104,7 +106,7 @@ public class IntSet{
     }
 
     public IntSet clear(){
-        fill(table, 0);
+        Arrays.fill(table, 0);
         zero = false;
         size = 0;
         return this;

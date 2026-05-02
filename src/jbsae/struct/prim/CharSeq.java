@@ -2,9 +2,10 @@ package jbsae.struct.prim;
 
 import jbsae.func.prim.*;
 
+import java.util.*;
+
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
-import static jbsae.util.Structf.*;
 
 
 // TODO: Reimplement
@@ -33,7 +34,7 @@ public class CharSeq{
 
     public char[] list(){
         char[] values = new char[size];
-        copy(items, values, size);
+        System.arraycopy(items, 0, values, 0, size);
         return values;
     }
 
@@ -64,10 +65,11 @@ public class CharSeq{
         return this;
     }
 
+    @Deprecated
     public CharSeq add(char value, int index){
-        if(size >= items.length) resize(max(8, size * 2));
-        shift(items, index, size++, 1);
-        items[index] = value;
+//        if(size >= items.length) resize(max(8, size * 2));
+//        shift(items, index, size++, 1);
+//        items[index] = value;
         return this;
     }
 
@@ -81,16 +83,18 @@ public class CharSeq{
         return this;
     }
 
+    @Deprecated
     public CharSeq add(String str, int index){
-        if(size + str.length() >= items.length) resize(max(8, (size + str.length()) * 2));
-        shift(items, index, (size += str.length()), str.length());
-        for(int i = 0;i < str.length();i++) items[i + index] = str.charAt(i);
+//        if(size + str.length() >= items.length) resize(max(8, (size + str.length()) * 2));
+//        shift(items, index, (size += str.length()), str.length());
+//        for(int i = 0;i < str.length();i++) items[i + index] = str.charAt(i);
         return this;
     }
 
 
+    @Deprecated
     public CharSeq remove(int index){
-        shift(items, index + 1, size--, -1);
+//        shift(items, index + 1, size--, -1);
         items[size] = 0;
         return this;
     }
@@ -105,8 +109,9 @@ public class CharSeq{
         return this;
     }
 
+    @Deprecated
     public CharSeq remove(int index, int range){
-        shift(items, index + range, (size -= range) + range, -range);
+//        shift(items, index + range, (size -= range) + range, -range);
         for(int i = 0;i < range;i++) items[size + i] = 0;
         return this;
     }
@@ -143,14 +148,14 @@ public class CharSeq{
     }
 
     public CharSeq clear(){
-        fill(items, '\0');
+        Arrays.fill(items, '\0');
         size = 0;
         return this;
     }
 
     public CharSeq resize(int newSize){
         char[] items = new char[newSize];
-        copy(this.items, items, size);
+        System.arraycopy(this.items, 0, items, 0, size);
         this.items = items;
         return this;
     }
@@ -211,7 +216,8 @@ public class CharSeq{
         for(start = 0;start < size;start++) if(items[start] > ' ') break;
         for(end = size - 1;end >= 0;end--) if(items[end] > ' ') break;
         if(end >= start){
-            shift(items, start, start + (size = end - start + 1), -start);
+//            shift(items, start, start + (size = end - start + 1), -start);
+            size = end - start + 1;
             resize(size);
         }else clear();
         return this;

@@ -3,6 +3,7 @@ package jbsae.struct.tree;
 import jbsae.func.prim.*;
 import jbsae.struct.*;
 
+// TODO: Turn into tournament heap?
 public class Heap<T>{
     private Seq<T> values;
 
@@ -30,10 +31,15 @@ public class Heap<T>{
         return this;
     }
 
-    public Heap<T> pushAll(Listable<T> values){
+    public Heap<T> pushAll(Iterable<T> values){
         int i = size();
         this.values.addAll(values);
         for(;i < size();i++) swim(i);
+        return this;
+    }
+
+    public Heap<T> update(T value){
+        // TODO: Find and update (swim/sink)
         return this;
     }
 
@@ -69,7 +75,7 @@ public class Heap<T>{
 
     public T pop(){
         T value = values.get(0);
-        swap(0, values.size() - 1);
+        swap(0, values.size - 1);
         values.remove(size() - 1);
         sink(0);
         return value;
@@ -85,6 +91,6 @@ public class Heap<T>{
     }
 
     public int size(){
-        return values.size();
+        return values.size;
     }
 }

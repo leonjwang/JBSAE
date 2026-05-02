@@ -7,6 +7,8 @@ import java.util.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
+
+// TODO: I haven't decided whether I want to use Arrays.fill / System.arraycopy whenever possible or just let the JIT handle it.
 public class Seq<T> implements Iterable<T>{
     private T[] items;
 

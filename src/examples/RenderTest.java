@@ -79,7 +79,7 @@ public class RenderTest{
 
                     for(float x = 0;x < width;x += pixSize){
                         for(float y = 0;y < height;y += pixSize){
-                            Drawf.layer(Structf.choose(z));
+//                            Drawf.layer(Structf.choose(z));
                             Drawf.fill(Tmp.c1.hsv(x + y, 1f, 1f));
                             Drawf.rect(x, y, pixSize, pixSize);
                         }

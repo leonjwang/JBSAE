@@ -10,7 +10,7 @@ import static jbsae.util.Stringf.*;
 public class Log{
     public static String envar = "JBSAE_LOG_LEVEL";
 
-    public static int maxLogs = 10000; // -1 for unlimited
+    public static int maxLogs = 1000; // -1 for unlimited
     public static Queue<LogInfo> logs;
 
     public static LogLevel level = LogLevel.INFO;

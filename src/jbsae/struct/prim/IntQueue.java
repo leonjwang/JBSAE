@@ -2,6 +2,8 @@ package jbsae.struct.prim;
 
 import jbsae.func.prim.*;
 
+import java.util.*;
+
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
@@ -99,7 +101,7 @@ public class IntQueue{
     }
 
     public IntQueue clear(){
-        fill(items, 0);
+        Arrays.fill(items, 0);
         head = tail = size = 0;
         return this;
     }

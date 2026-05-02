@@ -58,7 +58,7 @@ public class InterpVisualizer extends Screen{
         float ty = input.scroll * SCROLL_SCALE;
 
         Drawf.fill(Colorf.WHITE);
-        for(int i = 0;i < interps.size();i++){
+        for(int i = 0;i < interps.size;i++){
             Interp interp = interps.get(i);
 
             if((x + BOX_SIZE) > width){

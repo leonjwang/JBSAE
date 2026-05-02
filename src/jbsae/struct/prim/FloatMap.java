@@ -4,6 +4,8 @@ import jbsae.*;
 import jbsae.func.prim.*;
 import jbsae.util.*;
 
+import java.util.*;
+
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Structf.*;
 
@@ -126,8 +128,8 @@ public class FloatMap<V>{
     }
 
     public FloatMap<V> clear(){
-        fill(keys, 0);
-        fill(values, null);
+        Arrays.fill(keys, 0);
+        Arrays.fill(values, null);
         size = 0;
         return this;
     }
