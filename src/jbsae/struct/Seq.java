@@ -62,7 +62,6 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq<T> add(int index, T value){
-
         if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
         System.arraycopy(items, index, items, index + 1, size - index);
         size++;

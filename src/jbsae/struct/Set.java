@@ -43,8 +43,6 @@ public class Set<T> implements Iterable<T>{
     }
 
     public Set<T> add(T value){
-        if(value == null) throw new RuntimeException("Value is null");
-
         int base = value.hashCode();
         int hash1 = base & mask;
         int hash2 = hash(base, shift, PRIME1) & mask;
@@ -53,6 +51,7 @@ public class Set<T> implements Iterable<T>{
         if(value.equals(table[hash1])) return this;
         if(value.equals(table[hash2])) return this;
         if(value.equals(table[hash3])) return this;
+        for(int i = 0;i < stashSize;i++) if(value.equals(table[tableCap + i])) return this;
 
         if(tryPlace(hash1, value)) return this;
         if(tryPlace(hash2, value)) return this;
@@ -63,7 +62,7 @@ public class Set<T> implements Iterable<T>{
         return this;
     }
 
-    public Set<T> addAll(Iterator<T> itr) {
+    public Set<T> addAll(Iterator<T> itr){
         if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) add(itr.next());
         return this;
@@ -74,7 +73,6 @@ public class Set<T> implements Iterable<T>{
     }
 
     public boolean contains(T value){
-        if(value == null) throw new RuntimeException("Value is null");
         int base = value.hashCode();
         if(value.equals(table[base & mask])) return true;
         if(value.equals(table[hash(base, shift, PRIME1) & mask])) return true;
@@ -84,12 +82,17 @@ public class Set<T> implements Iterable<T>{
     }
 
     public Set<T> remove(T value){
-        if(value == null) throw new RuntimeException("Value is null");
         int base = value.hashCode();
         if(tryErase(base & mask, value)) return this;
         if(tryErase(hash(base, shift, PRIME1) & mask, value)) return this;
         if(tryErase(hash(base, shift, PRIME2) & mask, value)) return this;
-        for(int i = 0;i < stashSize;i++) if(tryErase(tableCap + i, value)) return this;
+        for(int i = 0;i < stashSize;i++) if(value.equals(table[tableCap + i])){
+            table[tableCap + i] = table[tableCap + stashSize - 1];
+            table[tableCap + stashSize - 1] = null;
+            stashSize--;
+            size--;
+            return this;
+        }
         return this;
     }
 
@@ -98,6 +101,12 @@ public class Set<T> implements Iterable<T>{
         table[index] = null;
         size--;
         return true;
+    }
+
+    public Set<T> clear(){
+        Arrays.fill(table, null);
+        size = stashSize = 0;
+        return this;
     }
 
     public Set<T> ensure(int space){

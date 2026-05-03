@@ -6,6 +6,7 @@ import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
+// Consider making this like Set, where items.length is always a power of two so we can take advantage of bitwise operations
 public class Queue<T> implements Iterable<T>{
     private T[] items;
     private int head, tail, end;
@@ -41,8 +42,7 @@ public class Queue<T> implements Iterable<T>{
     }
 
     public Queue<T> addFirst(T value){
-        if(value == null) throw new RuntimeException("Value is null");
-        if(size >= items.length) resize((int)(items.length * 1.5f + 1));
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
         head = decrement(head);
         items[head] = value;
         size++;
@@ -60,8 +60,7 @@ public class Queue<T> implements Iterable<T>{
     }
 
     public Queue<T> addLast(T value){
-        if(value == null) throw new RuntimeException("Value is null");
-        if(size >= items.length) resize((int)(items.length * 1.5f + 1));
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
         tail = increment(tail);
         items[tail] = value;
         size++;
@@ -70,12 +69,12 @@ public class Queue<T> implements Iterable<T>{
 
     public Queue<T> addAllLast(Iterator<T> itr) {
         if(itr instanceof Sized list) ensure(list.size());
-        while(itr.hasNext()) addFirst(itr.next());
+        while(itr.hasNext()) addLast(itr.next());
         return this;
     }
 
     public Queue<T> addAllLast(Iterable<T> values){
-        return addAllFirst(values.iterator());
+        return addAllLast(values.iterator());
     }
 
     public Queue<T> removeFirst(){
@@ -119,8 +118,8 @@ public class Queue<T> implements Iterable<T>{
 
     public Queue<T> clear(){
         int n = min(items.length - head, size);
-        for(int i = 0;i < n;i++) items[head + i] = null;
-        for(int i = n;i < size;i++) items[i - n] = null;
+        Arrays.fill(items, head, head + n, null);
+        Arrays.fill(items, 0, size - n, null);
         head = size = 0;
         tail = end;
         return this;
@@ -134,7 +133,7 @@ public class Queue<T> implements Iterable<T>{
     public Queue<T> resize(int capacity){
         T[] old = items;
         items = create(capacity, items);
-        int n = min(items.length - head, size);
+        int n = min(old.length - head, size);
         System.arraycopy(old, head, items, 0, n);
         System.arraycopy(old, 0, items, n, size - n);
         head = 0;
