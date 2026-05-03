@@ -7,8 +7,7 @@ import java.util.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-
-// TODO: I haven't decided whether I want to use Arrays.fill / System.arraycopy whenever possible or just let the JIT handle it.
+// None of these data structures should be modified while in iteration
 public class Seq<T> implements Iterable<T>{
     private T[] items;
 
@@ -22,7 +21,6 @@ public class Seq<T> implements Iterable<T>{
     public Seq(int capacity){
         items = create(capacity);
     }
-
 
     public Seq<T> ordered(boolean ordered){
         this.ordered = ordered;
@@ -40,18 +38,16 @@ public class Seq<T> implements Iterable<T>{
 
     public Seq<T> set(T[] values){
         ensure(values.length - size);
-        for(int i = 0;i < values.length;i++) items[i] = values[i];
-        for(int i = values.length;i < size;i++) items[i] = null;
+        System.arraycopy(values, 0, items, 0, values.length);
+        if(size > values.length) Arrays.fill(items, values.length, size, null);
         size = values.length;
         return this;
     }
 
     public Seq<T> set(Iterator<T> itr) {
         if(itr instanceof Sized list) ensure(list.size() - size);
-        int oldSize = size;
         clear();
         while(itr.hasNext()) add(itr.next());
-        for(int i = size;i < oldSize;i++) items[i] = null;
         return this;
     }
 
@@ -60,15 +56,16 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq<T> add(T value){
-        if(size >= items.length) resize((int)(items.length * 1.5f + 1));
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
         items[size++] = value;
         return this;
     }
 
     public Seq<T> add(int index, T value){
-        index = Math.min(index, size);
-        if(size >= items.length) resize((int)(items.length * 1.5f + 1));
-        for(int i = size++;i > index;i--) items[i] = items[i - 1];
+
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
+        System.arraycopy(items, index, items, index + 1, size - index);
+        size++;
         items[index] = value;
         return this;
     }
@@ -84,7 +81,7 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq<T> remove(int index){
-        if(ordered) for(int i = index;i < --size;i++) items[i] = items[i + 1];
+        if(ordered) System.arraycopy(items, index + 1, items, index, --size - index);
         else items[index] = items[--size];
         items[size] = null;
         return this;
@@ -94,7 +91,6 @@ public class Seq<T> implements Iterable<T>{
         for(int i = 0;i < size;i++) if(value.equals(items[i])) return remove(i);
         return this;
     }
-
 
     public Seq<T> sort(Floatf<T> value){
         sortArr(items, 0, size, value);
@@ -115,7 +111,7 @@ public class Seq<T> implements Iterable<T>{
     private void resize(int capacity){
         T[] old = this.items;
         this.items = create(capacity);
-        System.arraycopy(old, 0, this.items, 0, old.length);
+        System.arraycopy(old, 0, this.items, 0, size);
     }
 
     @Override
