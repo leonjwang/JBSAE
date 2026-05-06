@@ -22,7 +22,7 @@ public class PongGame extends Screen{
     public static final float BALL_SIZE = 10;
     public static final int BALL_SPEED = 5;
     public static int TRAIL_LENGTH = 20;  // Length of the trail
-    public static final int BALL_COUNT = 3000;     // Number of balls
+    public static final int BALL_COUNT = 30;     // Number of balls
     public static final float ADD_BALL_INTERVAL = 10; // Time interval to add new balls (in seconds)
 
     public static final float[] PITCHES = {1f, 1.3f, 1.5f, 2f};
