@@ -48,20 +48,17 @@ public class Map<K, V> implements Iterable<K>{
         int hash1 = base & mask;
         int hash2 = (hash(base, shift, PRIME1) & mask);
         int hash3 = (hash(base, shift, PRIME2) & mask);
-        int hash4 = (hash(base, shift, PRIME3) & mask);
 
         if(tryReplace(hash1, key, value)) return this;
         if(tryReplace(hash2, key, value)) return this;
         if(tryReplace(hash3, key, value)) return this;
-        if(tryReplace(hash4, key, value)) return this;
         for(int i = 0; i < stashSize; i++) if(tryReplace(tableCap + i, key, value)) return this;
 
         if(tryPlace(hash1, key, value)) return this;
         if(tryPlace(hash2, key, value)) return this;
         if(tryPlace(hash3, key, value)) return this;
-        if(tryPlace(hash4, key, value)) return this;
 
-        swapRandom(hash1, hash2, hash3, hash4, key, value);
+        swapRandom(hash1, hash2, hash3, key, value);
         key = displacedKey;
         value = displacedValue;
         place(key, value);
@@ -83,12 +80,10 @@ public class Map<K, V> implements Iterable<K>{
         int hash1 = base & mask;
         int hash2 = (hash(base, shift,  PRIME1) & mask);
         int hash3 = (hash(base, shift, PRIME2) & mask);
-        int hash4 = (hash(base, shift, PRIME3) & mask);
 
         if(key.equals(keys[hash1])) return values[hash1];
         if(key.equals(keys[hash2])) return values[hash2];
         if(key.equals(keys[hash3])) return values[hash3];
-        if(key.equals(keys[hash4])) return values[hash4];
 
         for(int i = 0; i < stashSize; i++) if(key.equals(keys[tableCap + i])) return values[tableCap + i];
 
@@ -100,7 +95,6 @@ public class Map<K, V> implements Iterable<K>{
         if(tryErase(base & mask, key)) return this;
         if(tryErase((hash(base, shift, PRIME1) & mask), key)) return this;
         if(tryErase((hash(base, shift, PRIME2) & mask), key)) return this;
-        if(tryErase((hash(base, shift, PRIME3) & mask), key)) return this;
         for(int i = 0;i < stashSize;i++) if(key.equals(keys[tableCap + i])){
             keys[tableCap + i] = keys[tableCap + stashSize - 1];
             values[tableCap + i] = values[tableCap + stashSize - 1];
@@ -149,10 +143,7 @@ public class Map<K, V> implements Iterable<K>{
             int hash3 = (hash(base,shift,  PRIME2) & mask);
             if(tryPlace(hash3, key, value)) return;
 
-            int hash4 = (hash(base, shift, PRIME3) & mask);
-            if(tryPlace(hash4, key, value)) return;
-
-            swapRandom(hash1, hash2, hash3, hash4, key, value);
+            swapRandom(hash1, hash2, hash3, key, value);
             key = displacedKey;
             value = displacedValue;
         }
@@ -168,7 +159,7 @@ public class Map<K, V> implements Iterable<K>{
         return true;
     }
 
-    private void swapRandom(int hash1, int hash2, int hash3, int hash4, K key, V value){
+    private void swapRandom(int hash1, int hash2, int hash3, K key, V value){
         switch(abs(RAND.nexti()) % 3){
             case 0:
                 swap(hash1, key, value);
@@ -176,11 +167,8 @@ public class Map<K, V> implements Iterable<K>{
             case 1:
                 swap(hash2, key, value);
                 return;
-            case 2:
-                swap(hash3, key, value);
-                return;
             default:
-                swap(hash4, key, value);
+                swap(hash3, key, value);
         }
     }
 

@@ -1,142 +1,322 @@
 package jbsae.struct.prim;
 
-import jbsae.func.prim.*;
+import jbsae.struct.*;
+import jbsae.struct.prim.iterator.*;
 
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
+import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-@Deprecated
 public class IntMap<V>{
-    public V zero;
-    public int[] keys;
-    public V[] values;
-    public int size = 0;
+    private boolean eqli(int a, int b){
+        return a == b;
+    }
+
+    private int[] keys;
+    private V[] values;
+
+    private V zeroValue;
+    private boolean hasZeroValue;
+
+    private int tableCap, stashCap;
+    private int loadThreshold, shift, mask, steps;
+
+    private int stashSize;
+
+    public float loadFactor = 0.8f;
+    public int size;
 
     public IntMap(){
-        this(16);
+        this(50);
     }
 
-    public IntMap(int size){
-        keys = new int[size];
-        values = (V[])new Object[size];
+    public IntMap(int capacity){
+        setCap(nextPow2((int)(capacity / loadFactor + 1)));
+        keys = new int[tableCap + stashCap];
+        values = (V[])new Object[tableCap + stashCap];
     }
 
-
-    public int[] keys(){
-        int i = 0;
-        int[] values = new int[size];
-        for(int j = 0;j < keys.length;j++) if(keys[j] != 0) values[i++] = keys[j];
-        if(zero != null) values[size - 1] = 0;
-        return values;
+    public IntMap<V> loadFactor(int loadFactor){
+        this.loadFactor = loadFactor;
+        this.loadThreshold = (int)(tableCap * loadFactor);
+        return this;
     }
 
-    public Object[] values(){
-        int[] keys = keys();
-        Object[] values = new Object[size];
-        for(int i = 0;i < keys.length;i++) values[i] = get(keys[i]);
-        return values;
+    private void setCap(int cap){
+        this.tableCap = cap;
+        this.stashCap = floorLog2(cap) * 2;
+        this.loadThreshold = (int)(cap * loadFactor);
+        this.shift = floorLog2(cap);
+        this.mask = cap - 1;
+        this.steps = (int)(rt2(cap) / 16 + 4);
     }
-
 
     public IntMap<V> add(int key, V value){
-        if(value == null) return this;
-        if(key == 0) return setZero(value);
-        int steps = (trailZeros(keys.length) << 1) + 1;
-        for(int step = 0;step < steps;step++){
-            int[] checks = hash3(key, keys.length);
-            for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return set(checks[i], key, value);
-            for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == 0) return set(checks[i], key, value);
-            int index = checks[randInt(0, checks.length - 1)];
-            int displacedKey = keys[index];
-            V displacedValue = values[index];
-            keys[index] = key;
-            values[index] = value;
-            key = displacedKey;
-            value = displacedValue;
+        if(eqli(key, 0)){
+            if(!hasZeroValue){
+                hasZeroValue = true;
+                size++;
+            }
+            zeroValue = value;
+            return this;
         }
-        return resize(keys.length << 1).add(key, value);
-    }
 
-    private IntMap<V> set(int i, int key, V value){
-        if(keys[i] == 0) size++;
-        keys[i] = key;
-        values[i] = value;
+        int base = key;
+        int hash1 = base & mask;
+        int hash2 = (hash(base, shift, PRIME1) & mask);
+        int hash3 = (hash(base, shift, PRIME2) & mask);
+
+        if(tryReplace(hash1, key, value)) return this;
+        if(tryReplace(hash2, key, value)) return this;
+        if(tryReplace(hash3, key, value)) return this;
+        for(int i = 0;i < stashSize;i++) if(tryReplace(tableCap + i, key, value)) return this;
+
+        if(tryPlace(hash1, key, value)) return this;
+        if(tryPlace(hash2, key, value)) return this;
+        if(tryPlace(hash3, key, value)) return this;
+
+        swapRandom(hash1, hash2, hash3, key, value);
+        key = displacedKey;
+        value = displacedValue;
+        place(key, value);
+        displacedKey = 0;
+        displacedValue = null;
+
         return this;
     }
 
-    private IntMap<V> setZero(V value){
-        if(zero == null) size++;
-        zero = value;
-        return this;
+    private boolean tryReplace(int index, int key, V value){
+        if(!eqli(key, keys[index])) return false;
+        values[index] = value;
+        return true;
+    }
+
+    public V get(int key){
+        if(eqli(key, 0)){
+            return hasZeroValue ? zeroValue : null;
+        }
+
+        int base = key;
+        int hash1 = base & mask;
+        int hash2 = (hash(base, shift, PRIME1) & mask);
+        int hash3 = (hash(base, shift, PRIME2) & mask);
+
+        if(eqli(key, keys[hash1])) return values[hash1];
+        if(eqli(key, keys[hash2])) return values[hash2];
+        if(eqli(key, keys[hash3])) return values[hash3];
+
+        for(int i = 0;i < stashSize;i++) if(eqli(key, keys[tableCap + i])) return values[tableCap + i];
+
+        return null;
     }
 
     public IntMap<V> remove(int key){
-        if(key == 0){
-            if(zero != null){
-                zero = null;
+        if(eqli(key, 0)){
+            if(hasZeroValue){
+                hasZeroValue = false;
+                zeroValue = null;
                 size--;
             }
             return this;
         }
-        int[] keys = this.keys;
-        V[] values = this.values;
-        int[] checks = hash3(key, keys.length);
-        for(int i = 0;i < checks.length;i++){
-            if(keys[checks[i]] == key){
-                keys[checks[i]] = 0;
-                values[checks[i]] = null;
+
+        int base = key;
+        if(tryErase(base & mask, key)) return this;
+        if(tryErase((hash(base, shift, PRIME1) & mask), key)) return this;
+        if(tryErase((hash(base, shift, PRIME2) & mask), key)) return this;
+        for(int i = 0;i < stashSize;i++)
+            if(eqli(key, keys[tableCap + i])){
+                keys[tableCap + i] = keys[tableCap + stashSize - 1];
+                values[tableCap + i] = values[tableCap + stashSize - 1];
+                keys[tableCap + stashSize - 1] = 0;
+                values[tableCap + stashSize - 1] = null;
+                stashSize--;
                 size--;
                 return this;
             }
-        }
         return this;
     }
 
-    public IntMap<V> removeAll(int... keys){
-        for(int i = 0;i < keys.length;i++) remove(keys[i]);
-        return this;
-    }
-
-
-    public V get(int key){
-        if(key == 0) return zero;
-        int[] checks = hash3(key, keys.length);
-        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return values[checks[i]];
-        return null;
-    }
-
-
-    public boolean contains(int key){
-        if(key == 0) return zero != null;
-        int[] checks = hash3(key, keys.length);
-        for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == key) return true;
-        return false;
-    }
-
-    public IntMap<V> eachKey(Floatc cons){
-        if(zero != null) cons.get(0);
-        for(int j = 0;j < keys.length;j++) if(keys[j] != 0) cons.get(keys[j]);
-        return this;
+    private boolean tryErase(int index, int key){
+        if(!eqli(key, keys[index])) return false;
+        keys[index] = 0;
+        values[index] = null;
+        size--;
+        return true;
     }
 
     public IntMap<V> clear(){
-
         Arrays.fill(keys, 0);
         Arrays.fill(values, null);
-        size = 0;
+        size = stashSize = 0;
+        hasZeroValue = false;
+        zeroValue = null;
         return this;
     }
 
-    public IntMap<V> resize(int newSize){
-        int[] keys = keys();
-        V[] values = (V[])values();
-        size = 0;
-        zero = null;
-        this.keys = new int[newSize];
-        this.values = (V[])new Object[newSize];
-        for(int j = 0;j < keys.length;j++) add(keys[j], values[j]);
+    public IntMap<V> ensure(int space){
+        int needed = (int)((size + space) / loadFactor + 1);
+        if(needed > tableCap) resize(nextPow2(needed));
         return this;
+    }
+
+    private int displacedKey = 0;
+    private V displacedValue = null;
+
+    private void place(int key, V value){
+        for(int i = 0;i < steps;i++){
+            int base = key;
+            int hash1 = base & mask;
+            if(tryPlace(hash1, key, value)) return;
+
+            int hash2 = (hash(base, shift, PRIME1) & mask);
+            if(tryPlace(hash2, key, value)) return;
+
+            int hash3 = (hash(base, shift, PRIME2) & mask);
+            if(tryPlace(hash3, key, value)) return;
+
+            swapRandom(hash1, hash2, hash3, key, value);
+            key = displacedKey;
+            value = displacedValue;
+        }
+
+        stash(key, value);
+    }
+
+    private boolean tryPlace(int index, int key, V value){
+        if(keys[index] != 0) return false;
+        keys[index] = key;
+        values[index] = value;
+        if(size++ >= loadThreshold) resize(tableCap * 2);
+        return true;
+    }
+
+    private void swapRandom(int hash1, int hash2, int hash3, int key, V value){
+        switch(abs(RAND.nexti()) % 3){
+            case 0:
+                swap(hash1, key, value);
+                return;
+            case 1:
+                swap(hash2, key, value);
+                return;
+            default:
+                swap(hash3, key, value);
+        }
+    }
+
+    private void swap(int index, int key, V value){
+        displacedKey = keys[index];
+        displacedValue = values[index];
+        keys[index] = key;
+        values[index] = value;
+    }
+
+    private void stash(int key, V value){
+        if(stashSize >= stashCap){
+            resize(tableCap * 2);
+            place(key, value);
+            return;
+        }
+        values[tableCap + stashSize] = value;
+        keys[tableCap + stashSize++] = key;
+        size++;
+    }
+
+    private void resize(int capacity){
+        int[] oldKeys = keys;
+        V[] oldVals = values;
+        setCap(capacity);
+        keys = new int[tableCap + stashCap];
+        values = (V[])new Object[tableCap + stashCap];
+
+        size = hasZeroValue ? 1 : 0;
+        stashSize = 0;
+
+        for(int i = 0;i < oldKeys.length;i++) if(oldKeys[i] != 0) place(oldKeys[i], oldVals[i]);
+        displacedKey = 0;
+        displacedValue = null;
+    }
+
+    public IntIterator iterator(){
+        return new KeyIterator();
+    }
+
+    public Iterator<V> values(){
+        return new ValIterator();
+    }
+
+    @Override
+    public String toString(){
+        return itrToString(iterator());
+    }
+
+    private class KeyIterator extends IntIterator implements Sized{
+        public int nextIndex = 0;
+        public boolean yieldedZero = !hasZeroValue;
+
+        public KeyIterator(){
+        }
+
+        public void findNextIndex(){
+            for(;nextIndex < keys.length;nextIndex++) if(keys[nextIndex] != 0) return;
+        }
+
+        @Override
+        public boolean hasNext(){
+            if(!yieldedZero) return true;
+            findNextIndex();
+            return nextIndex < keys.length;
+        }
+
+        @Override
+        public int nexti(){
+            if(!yieldedZero){
+                yieldedZero = true;
+                return 0;
+            }
+            findNextIndex();
+            return keys[nextIndex++];
+        }
+
+        @Override
+        public int size(){
+            return size;
+        }
+    }
+
+    private class ValIterator implements Iterator<V>, Sized{
+        public int nextIndex = 0;
+        public boolean yieldedZero = !hasZeroValue;
+
+        public ValIterator(){
+        }
+
+        public void findNextIndex(){
+            for(;nextIndex < keys.length;nextIndex++) if(keys[nextIndex] != 0) return;
+        }
+
+        @Override
+        public boolean hasNext(){
+            if(!yieldedZero) return true;
+            findNextIndex();
+            return nextIndex < keys.length;
+        }
+
+        @Override
+        public V next(){
+            if(!yieldedZero){
+                yieldedZero = true;
+                return zeroValue;
+            }
+            findNextIndex();
+            return values[nextIndex++];
+        }
+
+        @Override
+        public int size(){
+            return size;
+        }
     }
 }
