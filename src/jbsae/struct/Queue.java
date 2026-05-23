@@ -1,99 +1,91 @@
 package jbsae.struct;
 
-import jbsae.func.*;
-
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
-import static jbsae.util.Structf.*;
 
-// I think I am realizing that a Dequeue is in most ways literally just a superior Seq
-public class Queue<T> implements List<T>{
-    public QueueIterator i1, i2;
-    public T[] items;
-    public int head, tail, size;
+// Consider making this like Set, where items.length is always a power of two so we can take advantage of bitwise operations
+public class Queue<T> implements Iterable<T>{
+    private T[] items;
+    private int head, tail, end;
+
+    public int size;
 
 
     public Queue(){
-        this(4);
+        this(16);
     }
 
-    public Queue(int size){
-        items = (T[])new Object[size];
-        i1 = new QueueIterator();
-        i2 = new QueueIterator();
+    public Queue(int capacity){
+        items = (T[])new Object[capacity];
+        tail = end = capacity - 1;
+        head = 0;
     }
 
-    public Queue(Object... values){
-        this(values.length);
-        set(values);
+    private int increment(int index){
+        return (index == end) ? 0 : (index + 1);
     }
 
-    public Queue(Iterable<T> values){
-        this();
-        for(T value : values) addLast(value);
+    private int decrement(int index){
+        return (index == 0) ? end : (index - 1);
     }
 
-
-    @Override
-    public Object[] list(){
-        int i = 0;
-        Object[] values = create(size);
-        for(T value : this) values[i++] = value;
-        return values;
+    private int trueIndex(int index){
+        return (head + index < items.length) ? (head + index) : (head + index - items.length);
     }
 
-
-    @Override
-    public List<T> set(T value, int index){
-        items[mod((head + index), items.length)] = value;
+    public Queue<T> set(int index, T value){
+        items[trueIndex(index)] = value;
         return this;
     }
-
-    @Override
-    public List<T> set(Object... values){
-        clear();
-        for(Object value : values) addLast((T)value);
-        return this;
-    }
-
-    @Override
-    public List<T> set(List<T> values){
-        clear();
-        for(T value : values) addLast(value);
-        return this;
-    }
-
 
     public Queue<T> addFirst(T value){
-        if(value == null) return this;
-        if(size == items.length) resize(max(8, size * 2));
-        head = mod(head - 1, items.length);
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
+        head = decrement(head);
         items[head] = value;
         size++;
         return this;
     }
 
+    public Queue<T> addAllFirst(Iterator<T> itr) {
+        if(itr instanceof Sized list) ensure(list.size());
+        while(itr.hasNext()) addFirst(itr.next());
+        return this;
+    }
+
+    public Queue<T> addAllFirst(Iterable<T> values){
+        return addAllFirst(values.iterator());
+    }
+
     public Queue<T> addLast(T value){
-        if(value == null) return this;
-        if(size == items.length) resize(max(8, size * 2));
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
+        tail = increment(tail);
         items[tail] = value;
-        tail = mod(tail + 1, items.length);
         size++;
         return this;
     }
 
+    public Queue<T> addAllLast(Iterator<T> itr) {
+        if(itr instanceof Sized list) ensure(list.size());
+        while(itr.hasNext()) addLast(itr.next());
+        return this;
+    }
+
+    public Queue<T> addAllLast(Iterable<T> values){
+        return addAllLast(values.iterator());
+    }
+
     public Queue<T> removeFirst(){
         items[head] = null;
-        head = mod(head + 1, items.length);
+        head = increment(head);
         size--;
         return this;
     }
 
     public Queue<T> removeLast(){
-        tail = mod(tail - 1, items.length);
         items[tail] = null;
+        tail = decrement(tail);
         size--;
         return this;
     }
@@ -111,76 +103,57 @@ public class Queue<T> implements List<T>{
     }
 
 
-    @Override
     public T get(int index){
-        return items[mod((head + index), items.length)];
+        return items[trueIndex(index)];
     }
 
     public T first(){
-        return get(0);
+        return items[head];
     }
 
     public T last(){
-        return get(size - 1);
-    }
-
-    @Override
-    public int size(){
-        return size;
-    }
-
-
-    public boolean contains(T value){
-        for(int i = 0;i < size;i++) if(eql(get(i), value)) return true;
-        return false;
-    }
-
-    public Queue<T> each(Cons<T> cons){
-        for(int i = 0;i < size;i++) cons.get(get(i));
-        return this;
+        return items[tail];
     }
 
     public Queue<T> clear(){
-        fill(items, null);
-        head = tail = size = 0;
+        int n = min(items.length - head, size);
+        Arrays.fill(items, head, head + n, null);
+        Arrays.fill(items, 0, size - n, null);
+        head = size = 0;
+        tail = end;
         return this;
     }
 
-    public Queue<T> trim(){
-        resize(size);
+    public Queue<T> ensure(int space){
+        if(size + space >= items.length) resize(size + space + 1);
         return this;
     }
 
-    public Queue<T> resize(int newSize){
-        T[] items = create(newSize, this.items);
-        for(int i = 0;i < size;i++) items[i] = get(i);
-        this.items = items;
+    public Queue<T> resize(int capacity){
+        T[] old = items;
+        items =  (T[])new Object[capacity];
+        int n = min(old.length - head, size);
+        System.arraycopy(old, head, items, 0, n);
+        System.arraycopy(old, 0, items, n, size - n);
         head = 0;
-        tail = size;
+        tail = size - 1;
+        end = capacity - 1;
         return this;
     }
 
 
     @Override
     public Iterator<T> iterator(){
-        if(i1.index >= size){
-            i1.index = 0;
-            return i1;
-        }
-        if(i2.index >= size){
-            i2.index = 0;
-            return i2;
-        }
         return new QueueIterator();
     }
 
     @Override
     public String toString(){
-        return itrToString(this);
+        return itrToString(iterator());
     }
 
-    private class QueueIterator implements Iterator<T>{
-        public int index;
+    private class QueueIterator implements Iterator<T>, Sized{
+        public int index = 0;
 
         public QueueIterator(){
         }
@@ -193,6 +166,11 @@ public class Queue<T> implements List<T>{
         @Override
         public T next(){
             return get(index++);
+        }
+
+        @Override
+        public int size(){
+            return size;
         }
     }
 }

@@ -1,141 +1,200 @@
 package jbsae.struct;
 
-import jbsae.*;
-import jbsae.func.*;
-
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-
 public class Set<T> implements Iterable<T>{
-    public SetIterator i1, i2;
-    public T[] table;
-    public int size = 0;
+    private T[] table;
 
+    private int tableCap, stashCap;
+    private int threshold, shift, mask, steps;
+
+    private int stashSize;
+
+    public float loadFactor = 0.8f;
+    public int size;
 
     public Set(){
-        this(4);
+        this(50);
     }
 
-    public Set(int size){
-        table = (T[])new Object[size];
-        i1 = new SetIterator();
-        i2 = new SetIterator();
+    public Set(int capacity){
+        setCap(nextPow2((int)(capacity / loadFactor + 1)));
+        table = (T[])new Object[tableCap + stashCap];
     }
 
-    public Set(Object... values){
-        this(values.length);
-        for(Object value : values) add((T)value);
-    }
-
-    public Set(Iterable<T> values){
-        this();
-        for(T value : values) add(value);
+    public Set<T> loadFactor(float loadFactor){
+        this.loadFactor = loadFactor;
+        this.threshold = (int)(tableCap * loadFactor);
+        return this;
     }
 
 
-    public Object[] list(){
-        int i = 0;
-        Object[] values = create(size);
-        for(T value : this) values[i++] = value;
-        return values;
+    private void setCap(int cap){
+        this.tableCap = cap;
+        this.stashCap = floorLog2(cap) * 2;
+        this.threshold = (int)(cap * loadFactor);
+        this.shift = floorLog2(cap);
+        this.mask = cap - 1;
+        this.steps = (int)(rt2(cap) / 16 + 4);
     }
-
 
     public Set<T> add(T value){
-        int steps = (trailZeros(table.length) << 1) + 1;
-        for(int step = 0;step < steps;step++){
-            int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
-            for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return this;
-            for(int i = 0;i < checks.length;i++){
-                int index = checks[i];
-                if(table[index] == null){
-                    table[index] = value;
-                    size++;
-                    return this;
-                }
-            }
-            int index = checks[randInt(0, checks.length - 1)];
-            T displaced = table[index];
-            table[index] = value;
-            value = displaced;
-        }
-        return resize(table.length << 1).add(value);
-    }
+        int base = value.hashCode();
+        int hash1 = base & mask;
+        int hash2 = hash(base, shift, PRIME1) & mask;
+        int hash3 = hash(base, shift, PRIME2) & mask;
 
-    public Set<T> addAll(T... values){
-        for(T value : values) add(value);
+        if(value.equals(table[hash1])) return this;
+        if(value.equals(table[hash2])) return this;
+        if(value.equals(table[hash3])) return this;
+        for(int i = 0;i < stashSize;i++) if(value.equals(table[tableCap + i])) return this;
+
+        if(tryPlace(hash1, value)) return this;
+        if(tryPlace(hash2, value)) return this;
+        if(tryPlace(hash3, value)) return this;
+
+        place(swapRandom(hash1, hash2, hash3, value));
+
         return this;
     }
 
-    public Set<T> remove(T value){
-        int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++){
-            if(eql(table[checks[i]], value)){
-                table[checks[i]] = null;
-                size--;
-                return this;
-            }
-        }
+    public Set<T> addAll(Iterator<T> itr){
+        if(itr instanceof Sized list) ensure(list.size());
+        while(itr.hasNext()) add(itr.next());
         return this;
     }
 
+    public Set<T> addAll(Iterable<T> values){
+        return addAll(values.iterator());
+    }
 
     public boolean contains(T value){
-        int[] checks = hash3(value.hashCode(), table.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eql(table[checks[i]], value)) return true;
+        int base = value.hashCode();
+        if(value.equals(table[base & mask])) return true;
+        if(value.equals(table[hash(base, shift, PRIME1) & mask])) return true;
+        if(value.equals(table[hash(base, shift, PRIME2) & mask])) return true;
+        for(int i = 0;i < stashSize;i++) if(value.equals(table[tableCap + i])) return true;
         return false;
     }
 
-    public Set<T> each(Cons<T> cons){
-        for(T t : this) cons.get(t);
+    public Set<T> remove(T value){
+        int base = value.hashCode();
+        if(tryErase(base & mask, value)) return this;
+        if(tryErase(hash(base, shift, PRIME1) & mask, value)) return this;
+        if(tryErase(hash(base, shift, PRIME2) & mask, value)) return this;
+        for(int i = 0;i < stashSize;i++) if(value.equals(table[tableCap + i])){
+            table[tableCap + i] = table[tableCap + stashSize - 1];
+            table[tableCap + stashSize - 1] = null;
+            stashSize--;
+            size--;
+            return this;
+        }
         return this;
+    }
+
+    private boolean tryErase(int index, T value){
+        if(!value.equals(table[index])) return false;
+        table[index] = null;
+        size--;
+        return true;
     }
 
     public Set<T> clear(){
-        fill(table, null);
-        size = 0;
+        Arrays.fill(table, null);
+        size = stashSize = 0;
         return this;
     }
 
-    public Set<T> resize(int newSize){
-        T[] values = (T[])list();
-        size = 0;
-        this.table = create(newSize, table);
-        for(int j = 0;j < values.length;j++) add(values[j]);
+    public Set<T> ensure(int space){
+        int needed = (int)((size + space) / loadFactor + 1);
+        if(needed > tableCap) resize(nextPow2(needed));
         return this;
     }
 
+    private void place(T value){
+        for(int i = 0;i < steps;i++){
+            int base = value.hashCode();
+
+            int hash1 = base & mask;
+            if(tryPlace(hash1, value)) return;
+
+            int hash2 = hash(base, shift, PRIME1) & mask;
+            if(tryPlace(hash2, value)) return;
+
+            int hash3 = hash(base, shift, PRIME2) & mask;
+            if(tryPlace(hash3, value)) return;
+
+            value = swapRandom(hash1, hash2, hash3, value);
+        }
+
+        stash(value);
+    }
+
+    private boolean tryPlace(int index, T value){
+        if(table[index] != null) return false;
+        table[index] = value;
+        if(size++ >= threshold) resize(tableCap * 2);
+        return true;
+    }
+
+    private T swapRandom(int hash1, int hash2, int hash3, T value){
+        switch(abs(RAND.nexti()) % 3){
+            case 0:
+                return swap(hash1, value);
+            case 1:
+                return swap(hash2, value);
+            default:
+                return swap(hash3, value);
+        }
+    }
+
+    private T swap(int index, T value){
+        T old = table[index];
+        table[index] = value;
+        return old;
+    }
+
+    private void stash(T value){
+        if(stashSize >= stashCap){
+            resize(tableCap * 2);
+            place(value);
+            return;
+        }
+        table[tableCap + stashSize++] = value;
+        size++;
+    }
+
+    private void resize(int capacity){
+        T[] old = table;
+        setCap(capacity);
+        table = (T[])new Object[tableCap + stashCap];
+        size = stashSize = 0;
+        for(int i = 0;i < old.length;i++) if(old[i] != null) place(old[i]);
+    }
 
     @Override
     public Iterator<T> iterator(){
-        if(i1.nextIndex >= table.length){
-            i1.nextIndex = 0;
-            return i1;
-        }
-        if(i2.nextIndex >= table.length){
-            i2.nextIndex = 0;
-            return i2;
-        }
         return new SetIterator();
     }
 
     @Override
     public String toString(){
-        return itrToString(this);
+        return itrToString(iterator());
     }
 
-    private class SetIterator implements Iterator<T>{
-        public int nextIndex = -1;
+
+    private class SetIterator implements Iterator<T>, Sized{
+        public int nextIndex = 0;
 
         public SetIterator(){
         }
 
         public void findNextIndex(){
-            for(nextIndex++;nextIndex < table.length;nextIndex++) if(table[nextIndex] != null) return;
+            for(;nextIndex < table.length;nextIndex++) if(table[nextIndex] != null) return;
         }
 
         @Override
@@ -146,7 +205,13 @@ public class Set<T> implements Iterable<T>{
 
         @Override
         public T next(){
-            return table[nextIndex];
+            findNextIndex();
+            return table[nextIndex++];
+        }
+
+        @Override
+        public int size(){
+            return size;
         }
     }
 }

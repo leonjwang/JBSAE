@@ -7,6 +7,7 @@ import jbsae.graphics.draw.*;
 import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
 
+// TODO: Consider implementing a high level function for setting proceeding stroke width, texture, etc. Also consider the responsibility of layer and fill form Draw to Drawf
 public class Drawf{
     /** Set fill color. */
     public static void fill(){
@@ -67,21 +68,32 @@ public class Drawf{
         line(x1, y1, x2, y2, 1);
     }
 
-    public static void line(float x1, float y1, float x2, float y2, float w){
-        line(null, x1, y1, x2, y2, w);
+    public static void line(float x1, float y1, float x2, float y2, float s){
+        line(null, x1, y1, x2, y2, s);
     }
 
     public static void line(Region region, float x1, float y1, float x2, float y2){
         line(region, x1, y1, x2, y2, 1);
     }
 
-    public static void line(Region region, float x1, float y1, float x2, float y2, float w){
-        Tmp.v1.setr(Mathf.angle(x2 - x1, y2 - y1) + 90, w / 2f);
+    public static void line(Region region, float x1, float y1, float x2, float y2, float s){
+        Tmp.v1.setr(Mathf.angle(x2 - x1, y2 - y1) + 90, s / 2f);
         draw.draw(region,
         x1 + Tmp.v1.x, y1 + Tmp.v1.y,
         x1 - Tmp.v1.x, y1 - Tmp.v1.y,
         x2 - Tmp.v1.x, y2 - Tmp.v1.y,
         x2 + Tmp.v1.x, y2 + Tmp.v1.y);
+    }
+
+    public static void box(Region region, float x,  float y, float w, float h){
+        box(region, x, y, w, h, 1);
+    }
+
+    public static void box(Region region, float x,  float y, float w, float h, float s){
+        line(region, x, y, x + w, y, s);
+        line(region, x, y, x, y + h, s);
+        line(region, x + w, y + h, x + w, y, s);
+        line(region, x + w, y + h, x, y + h, s);
     }
 
 
@@ -102,7 +114,10 @@ public class Drawf{
         draw.draw(region, x, y, w, h, r);
     }
 
-    // TODO: Draw quad
+    /** Draw a quadrilateral. */
+    public static void quad(Region region, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4){
+        draw.draw(region, x1, y1, x2, y2, x3, y3, x4, y4);
+    }
 
     /** Set the font. */
     public static void font(Font font){
@@ -128,33 +143,5 @@ public class Drawf{
             draw(glyph.region, x + tx + glyph.xOffset * scl, y + ty + size - (glyph.yOffset + glyph.height) * scl, glyph.width * scl, glyph.height * scl);
             tx += glyph.xAdvance * scl;
         }
-    }
-
-
-    /** Translation functions. */
-    public static void rotate(float r){
-        draw.matrixes.first().rotate(r);
-    }
-
-    public static void scale(float s){
-        scale(s, s);
-    }
-
-    public static void scale(float x, float y){
-        draw.matrixes.first().scale(x, y);
-    }
-
-    public static void translate(float x, float y){
-        draw.matrixes.first().translate(x, y);
-    }
-
-
-    /** Current setting manipulation. */
-    public static void push(){
-        draw.matrixes.addFirst(new DrawMatrix());
-    }
-
-    public static void pop(){
-        draw.matrixes.removeFirst();
     }
 }

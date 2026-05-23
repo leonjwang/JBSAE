@@ -1,8 +1,7 @@
 package jbsae.util;
 
-import jbsae.struct.prim.*;
-
 import java.io.*;
+import java.util.*;
 
 public class Stringf{
     public static char lowerCase(char ch){
@@ -17,22 +16,37 @@ public class Stringf{
         return String.copyValueOf(chars);
     }
 
-    public static String valToString(Object... arr){
-        CharSeq str = (CharSeq)new CharSeq().add('(');
-        for(Object o : arr) str.add(o.toString()).add(',');
-        return str.substring(0, str.size - 1).add(')').toString();
+    public static String valToString(Object... values){
+        StringBuilder str = new StringBuilder(values.length * 2).append('(');
+        boolean first = true;
+        for(Object o : values){
+            if(!first) str.append(',');
+            else first = false;
+            str.append(o.toString());
+        }
+        return str.append(')').toString();
     }
 
     public static String arrToString(Object... arr){
-        CharSeq str = (CharSeq)new CharSeq().add('[');
-        for(Object o : arr) str.add(o.toString()).add(", ");
-        return str.substring(0, str.size - 2).add(']').toString();
+        StringBuilder str = new StringBuilder(arr.length * 2).append('[');
+        boolean first = true;
+        for(Object o : arr){
+            if(!first) str.append(", ");
+            else first = false;
+            str.append(o.toString());
+        }
+        return str.append(']').toString();
     }
 
-    public static <T> String itrToString(Iterable<T> arr){
-        CharSeq str = (CharSeq)new CharSeq().add('[');
-        for(T o : arr) str.add(o.toString()).add(", ");
-        return str.size == 1 ? "[]" : str.substring(0, str.size - 2).add(']').toString();
+    public static <T> String itrToString(Iterator<T> itr){
+        StringBuilder str = new StringBuilder().append('[');
+        boolean first = true;
+        while(itr.hasNext()){
+            if(!first) str.append(", ");
+            else first = false;
+            str.append(itr.next().toString());
+        }
+        return str.append(']').toString();
     }
 
     public static String formatMillis(long time){
@@ -44,21 +58,21 @@ public class Stringf{
         int s = (int)((time / 1000) % 60);
         int m = (int)((time / (1000 * 60)) % 60);
         int h = (int)(time / (1000 * 60 * 60));
-        CharSeq result = new CharSeq();
+        StringBuilder result = new StringBuilder(32);
         if(days){
             int d = h / 24;
             h = h % 24;
-            result.add(d).add('d').add(' ');
+            result.append(d).append('d').append(' ');
         }
-        if(h < 10) result.add('0');
-        result.add(h).add('h').add(' ');
-        if(m < 10) result.add('0');
-        result.add(m).add('m').add(' ');
-        if(s < 10) result.add('0');
-        result.add(s).add('s').add(' ');
-        if(ms < 10) result.add('0');
-        if(ms < 100) result.add('0');
-        result.add(ms).add('m').add('s');
+        if(h < 10) result.append('0');
+        result.append(h).append('h').append(' ');
+        if(m < 10) result.append('0');
+        result.append(m).append('m').append(' ');
+        if(s < 10) result.append('0');
+        result.append(s).append('s').append(' ');
+        if(ms < 10) result.append('0');
+        if(ms < 100) result.append('0');
+        result.append(ms).append('m').append('s');
         return result.toString();
     }
 
@@ -67,16 +81,16 @@ public class Stringf{
         int s = (int)((time / 1000) % 60);
         int m = (int)((time / (1000 * 60)) % 60);
         int h = (int)(time / (1000 * 60 * 60));
-        CharSeq result = new CharSeq();
-        if(h < 10) result.add('0');
-        result.add(h).add(':');
-        if(m < 10) result.add('0');
-        result.add(m).add(':');
-        if(s < 10) result.add('0');
-        result.add(s).add('.');
-        if(ms < 10) result.add('0');
-        if(ms < 100) result.add('0');
-        result.add(ms);
+        StringBuilder result = new StringBuilder(16);
+        if(h < 10) result.append('0');
+        result.append(h).append(':');
+        if(m < 10) result.append('0');
+        result.append(m).append(':');
+        if(s < 10) result.append('0');
+        result.append(s).append('.');
+        if(ms < 10) result.append('0');
+        if(ms < 100) result.append('0');
+        result.append(ms);
         return result.toString();
     }
 

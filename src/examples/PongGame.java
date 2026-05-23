@@ -22,12 +22,11 @@ public class PongGame extends Screen{
     public static final float BALL_SIZE = 10;
     public static final int BALL_SPEED = 5;
     public static int TRAIL_LENGTH = 20;  // Length of the trail
-    public static final int BALL_COUNT = 3000;     // Number of balls
+    public static final int BALL_COUNT = 30;     // Number of balls
     public static final float ADD_BALL_INTERVAL = 10; // Time interval to add new balls (in seconds)
 
     public static final float[] PITCHES = {1f, 1.3f, 1.5f, 2f};
 
-    // Game objects
     private Range2 paddle1;
     private Range2 paddle2;
     private float paddle1Velocity;
@@ -62,7 +61,6 @@ public class PongGame extends Screen{
                 trail.removeLast();
             }
 
-            // Check collision with paddles
             if(paddle1.contains(position) || paddle2.contains(position)){
 //                sounds.play("bop.wav").pitch(Structf.choose(PITCHES));
                 float currentSpeed = velocity.len();
@@ -70,7 +68,6 @@ public class PongGame extends Screen{
                 velocity.nor().scl(currentSpeed + 0.5f);  // Increase speed slightly
             }
 
-            // Check collision with top and bottom walls
             if(position.y <= 0 || position.y + BALL_SIZE >= HEIGHT){
 //                sounds.play("bop.wav").pitch(Structf.choose(PITCHES));
                 velocity.y *= -1;
@@ -88,12 +85,11 @@ public class PongGame extends Screen{
 
         void reset(){
             position.set(WIDTH / 2, HEIGHT / 2);
-            velocity.set(Tmp.v1.set(1, 0).rot(random(0, 360)).scl(BALL_SPEED));
+            velocity.set(jbsae.Tmp.v1.set(1, 0).rot(random(0, 360)).scl(BALL_SPEED));
             trail.clear();
         }
 
         void draw(){
-            // Draw ball trail
             int alphaStep = 255 / TRAIL_LENGTH;
             for(int i = 0;i < trail.size;i++){
                 Vec2 pos = trail.get(i);
@@ -101,7 +97,6 @@ public class PongGame extends Screen{
                 Drawf.rect(pos.x, pos.y, BALL_SIZE * (TRAIL_LENGTH - i / 2f) / TRAIL_LENGTH, BALL_SIZE * (TRAIL_LENGTH - i / 2f) / TRAIL_LENGTH);
             }
 
-            // Draw ball
             Drawf.fill(1f, 1f, 1f);
             Drawf.rect(position.x, position.y, BALL_SIZE, BALL_SIZE);
         }

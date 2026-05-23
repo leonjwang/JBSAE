@@ -4,22 +4,33 @@ import jbsae.*;
 import jbsae.audio.*;
 import jbsae.core.*;
 import jbsae.graphics.*;
+import jbsae.graphics.gl.*;
 import jbsae.math.*;
 import jbsae.util.*;
 
 import static jbsae.JBSAE.*;
-import static jbsae.util.Mathf.*;
 
 public class AudioTest{
+
     public static void main(String[] args){
         jbsae(() -> {
             Drawf.font(assets.fonts.get("brandbe.fnt"));
 
-            Source song = sounds.play("mix.wav");
+            Source song = sounds.play("Nadir.wav");
             song.loop(true);
             song.pitch(1f);
             song.relative(false);
             song.position(new Vec3(10, 0, 0));
+
+            Pixmap wheelMap = new Pixmap(width, height);
+            Vec2 center = new Vec2(width / 2f, height / 2f);
+            for(int y = 0;y < height;y++){
+                for(int x = 0;x < width;x++){
+                    Tmp.v1.set(x, y).sub(center);
+                    wheelMap.set(x, y, Tmp.c1.hsv(Tmp.v1.ang(), 1f, Tmp.v1.len() / 300f));
+                }
+            }
+            Texture wheel = wheelMap.create();
 
             screen(new Screen(){
                 public float la = 360f;
@@ -27,45 +38,37 @@ public class AudioTest{
 
                 @Override
                 public void draw(){
+                    if(!song.playing()) song.play();
+
                     Vec2 v = new Vec2().set(input.mouse).sub(width / 2f, height / 2f);
 
                     a += Mathf.diffa(v.ang(), la);
                     la = v.ang();
                     a = Math.max(a, 0);
 
-                    Region circle = assets.textures.get("circle.png").full;
+                    wheel.bind();
+                    Drawf.fill(Colorf.WHITE);
+
+                    Drawf.rectc(width / 2f, height / 2f, width, height);
+
                     Region square = assets.textures.get("square.png").full;
 
-                    for(int i = 0;i < 3600;i++){
-                        float ang = i / 10f;
-                        Drawf.fill(Tmp.c1.hsv(ang, 1f, 1f));
-                        Tmp.v1.set(width + height, 0).rot(ang).add(width / 2f, height / 2f);
-                        Tmp.v2.set(Tmp.v1).nor().scl(-2);
-                        Drawf.line(square, width / 2f + Tmp.v2.x, height / 2f + Tmp.v2.y, Tmp.v1.x, Tmp.v1.y, 5f);
-                    }
 
-                    for(float i = 0;i < 70;i += 0.5f){
-                        Drawf.fill(Tmp.c1.set(Colorf.BLACK).a(max(0, (70 - i) / 1000f) + 0.005f));
-                        Drawf.drawc(circle, width / 2f, height / 2f, i * i / 5f, i * i / 5f);
-                    }
-
-
-                    Drawf.fill(Tmp.c1.hsv(a, 1f, 1f).a(v.len() / height * 2));
+                    Drawf.fill(Tmp.c1.set(1f, 1f, 1f).a(0.2f));
                     Drawf.line(square, width / 2f, height / 2f, input.mouse.x, input.mouse.y, 5f);
 
-                    Drawf.fill(Tmp.c1.hsv(a + 180, 1f, 1f));
+
+                    Drawf.fill(1f, 1f, 1f, 0.9f);
                     Drawf.text("" + a, 10, 10, 30);
 
-                    Drawf.fill(Tmp.c1.hsv(0f, 0f, v.len()));
+                    Drawf.fill(1f, 1f, 1f, 0.9f);
                     Drawf.text("" + v.len(), 10, 40, 20);
 
-                    float pitch = max(1, a) / 360;
+                    float pitch = Math.max(1, a) / 360f;
                     song.pitch(pitch);
 
                     float gain = (v.len() / height) * 4f;
                     song.gain(gain);
-
-                    if(!song.playing()) song.play();
                 }
             });
         });

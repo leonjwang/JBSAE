@@ -1,81 +1,28 @@
 package jbsae.struct.prim;
 
-import jbsae.func.prim.*;
+import jbsae.struct.*;
+import jbsae.struct.prim.iterator.*;
 
-import static jbsae.util.Mathf.*;
-import static jbsae.util.Structf.*;
+import java.util.*;
+
+import static jbsae.util.Stringf.*;
 
 public class IntSeq{
-    public int[] items;
+    private int[] items;
+
+    public boolean ordered = true;
     public int size;
 
     public IntSeq(){
-        this(4);
+        this(16);
     }
 
-    public IntSeq(int size){
-        items = new int[size];
+    public IntSeq(int capacity){
+        items = new int[capacity];
     }
 
-    public IntSeq(int... values){
-        this(values.length);
-        for(int i = 0;i < values.length;i++) add(values[i]);
-    }
-
-    public int[] list(){
-        int[] values = new int[size];
-        copy(items, values, size);
-        return values;
-    }
-
-    public IntSeq set(int value, int index){
-        items[index] = value;
-        return this;
-    }
-
-    public IntSeq set(int... values){
-        clear();
-        for(int i = 0;i < values.length;i++) add(values[i]);
-        return this;
-    }
-
-    public IntSeq set(IntSeq values){
-        items = values.items;
-        size = values.size;
-        return this;
-    }
-
-    public IntSeq add(int value){
-        if(size >= items.length) resize(max(8, size * 2));
-        items[size++] = value;
-        return this;
-    }
-
-    public IntSeq add(int value, int index){
-        if(size >= items.length) resize(max(8, size * 2));
-        shift(items, index, size++, 1);
-        items[index] = value;
-        return this;
-    }
-
-    public IntSeq addAll(int... values){
-        for(int i = 0;i < values.length;i++) add(values[i]);
-        return this;
-    }
-
-    public IntSeq remove(int index){
-        shift(items, index + 1, size--, -1);
-        items[size] = 0;
-        return this;
-    }
-
-    public IntSeq removeValue(int value){
-        for(int i = 0;i < size;i++){
-            if(items[i] == value){
-                remove(i);
-                break;
-            }
-        }
+    public IntSeq ordered(boolean ordered){
+        this.ordered = ordered;
         return this;
     }
 
@@ -83,42 +30,100 @@ public class IntSeq{
         return items[index];
     }
 
-    public boolean contains(int value){
-        for(int i = 0;i < size;i++) if(items[i] == value) return true;
-        return false;
+    public IntSeq set(int index, int value){
+        this.items[index] = value;
+        return this;
     }
 
-    public boolean contains(Boolfi condition){
-        for(int i = 0;i < size;i++) if(condition.get(items[i])) return true;
-        return false;
+    public IntSeq set(int[] values){
+        ensure(values.length - size);
+        System.arraycopy(values, 0, items, 0, values.length);
+        size = values.length;
+        return this;
     }
 
-    public IntSeq each(Intc cons){
-        for(int i = 0;i < size;i++) cons.get(items[i]);
+    public IntSeq set(IntIterator itr){
+        if(itr instanceof Sized list) ensure(list.size() - size);
+        clear();
+        while(itr.hasNext()) add(itr.next());
+        return this;
+    }
+
+    public IntSeq add(int value){
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
+        items[size++] = value;
+        return this;
+    }
+
+    public IntSeq add(int index, int value){
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
+        System.arraycopy(items, index, items, index + 1, size - index);
+        size++;
+        items[index] = value;
+        return this;
+    }
+
+    public IntSeq addAll(IntIterator itr){
+        if(itr instanceof Sized list) ensure(list.size());
+        while(itr.hasNext()) add(itr.next());
+        return this;
+    }
+
+    public IntSeq remove(int index){
+        if(ordered) System.arraycopy(items, index + 1, items, index, --size - index);
+        else items[index] = items[--size];
         return this;
     }
 
     public IntSeq sort(){
-        trim();
-        sortArr(items);
+        Arrays.sort(items, 0, size);
         return this;
     }
 
     public IntSeq clear(){
-        fill(items, 0);
         size = 0;
         return this;
     }
 
-    public IntSeq trim(){
-        resize(size);
+    public IntSeq ensure(int space){
+        if(size + space >= items.length) resize(size + space + 1);
         return this;
     }
 
-    public IntSeq resize(int newSize){
-        int[] items = new int[newSize];
-        copy(this.items, items, size);
-        this.items = items;
-        return this;
+    private void resize(int capacity){
+        int[] old = this.items;
+        this.items = new int[capacity];
+        System.arraycopy(old, 0, this.items, 0, size);
+    }
+
+    public IntIterator iterator(){
+        return new SeqIterator();
+    }
+
+    @Override
+    public String toString(){
+        return itrToString(iterator());
+    }
+
+    private class SeqIterator extends IntIterator implements Sized{
+        public int index = 0;
+
+        public SeqIterator(){
+        }
+
+        @Override
+        public boolean hasNext(){
+            return index < size;
+        }
+
+        @Override
+        public int nexti(){
+            return items[index++];
+        }
+
+        @Override
+        public int size(){
+            return size;
+        }
     }
 }

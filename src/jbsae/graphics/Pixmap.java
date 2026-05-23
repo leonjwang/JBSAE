@@ -17,18 +17,23 @@ public class Pixmap{
 
         int i = 0;
         t.image.position(0);
+        clear();
         each(pos -> {
-            set(new Color(
+            set(pos, new Color(
             mod(t.image.get(), 256) / 255f,
             mod(t.image.get(), 256) / 255f,
             mod(t.image.get(), 256) / 255f,
-            mod(t.image.get(), 256) / 255f), pos);
+            mod(t.image.get(), 256) / 255f));
         });
     }
 
     public Pixmap(int width, int height){
         map = new Color[width][height];
-        each(pos -> set(new Color(), pos));
+        clear();
+    }
+
+    public void clear(){
+        each(pos -> map[pos.x][pos.y] = new Color());
     }
 
     public int width(){
@@ -47,12 +52,17 @@ public class Pixmap{
         return map[clamp(x, 0, width() - 1)][clamp(y, 0, height() - 1)];
     }
 
-    public Pixmap set(Color c, Point2 pos){
-        return set(c, pos.x, pos.y);
+    public Pixmap set(int x, int y, float r, float g, float b, float a){
+        map[clamp(x, 0, width() - 1)][clamp(y, 0, height() - 1)].set(r, g, b, a);
+        return this;
     }
 
-    public Pixmap set(Color c, int x, int y){
-        map[clamp(x, 0, width() - 1)][clamp(y, 0, height() - 1)] = c;
+    public Pixmap set(Point2 pos, Color c){
+        return set(pos.x, pos.y, c);
+    }
+
+    public Pixmap set(int x, int y, Color c){
+        set(x, y, c.r, c.g, c.b, c.a);
         return this;
     }
 

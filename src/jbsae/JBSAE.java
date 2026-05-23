@@ -25,7 +25,7 @@ public class JBSAE{
     public static GameLoop loop = new FixedLoop();
     public static Sounds sounds = new Sounds();
 
-    public static Draw draw = new Draw();
+    public static Draw draw = new SortedDraw();
 
     public static void init(){
         glfwInit();

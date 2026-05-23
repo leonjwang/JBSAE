@@ -8,7 +8,7 @@ import jbsae.util.*;
 
 import static jbsae.JBSAE.*;
 
-public class Hanoi{
+public class HanoiVisualization{
     public static Seq<Move> moves = new Seq<>();
 
     public static void hanoi(int n, Tower a, Tower b, Tower c){
@@ -38,7 +38,7 @@ public class Hanoi{
         JBSAE.jbsae(() -> {
             JBSAE.screen(new Screen(){
                 public int counter = 0;
-                public int period = 20;
+                public int period = 5;
                 public int move = 0;
 
                 public void update(){

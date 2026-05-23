@@ -3,11 +3,17 @@ package jbsae.struct.tree;
 import jbsae.math.*;
 import jbsae.struct.*;
 
-import static jbsae.util.Mathf.*;
+public class QuadTree<T extends Pos2>{
+    private Seq<T> values;
+    private int size;
 
-public class QuadTree<T extends Pos2> extends Tree<T>{
-    public int depthLimit, valueLimit = 4;
-    public Range2 range;
+    public QuadTree<T> b1, b2, b3, b4;
+
+    private float cx, cy;
+
+    public Range2 bounds;
+
+    public int depthCap = 8, valueCap = 16;
 
 
     public QuadTree(float w, float h){
@@ -18,68 +24,92 @@ public class QuadTree<T extends Pos2> extends Tree<T>{
         this(new Range2(x, y, w, h));
     }
 
-    public QuadTree(Range2 range){
-        depthLimit = clamp((int)log(max(range.w, range.h), 2), 4, 16);
-        branches = new Seq<>();
-        values = new Seq<>();
-        this.range = range;
+    public QuadTree(Range2 bounds){
+        values = new Seq<>(valueCap);
+        setBounds(bounds);
     }
 
-
     public QuadTree<T> valueLimit(int valueLimit){
-        this.valueLimit = valueLimit;
+        this.valueCap = valueLimit;
         return this;
     }
 
     public QuadTree<T> depthLimit(int depthLimit){
-        this.depthLimit = depthLimit;
+        this.depthCap = depthLimit;
         return this;
     }
 
-
-    public QuadTree<T> find(Pos2 value){
-        if(branches.size <= 0) return this;
-        int index = 0;
-        if(value.x() >= (range.x + range.w / 2)) index = (value.y() >= (range.y + range.h / 2) ? 0 : 3);
-        else index = (value.y() >= (range.y + range.h / 2) ? 1 : 2);
-        return ((QuadTree<T>)branches.get(index)).find(value);
+    private void setBounds(Range2 bounds){
+        this.bounds = bounds;
+        this.cx = bounds.x + bounds.w / 2;
+        this.cy = bounds.y + bounds.h / 2;
     }
 
-    public Seq<T> query(Seq<T> arr, Range2 range){
-        if(branches.size <= 0) arr.addAll(values);
-        else for(Tree<T> branch : branches){
-            QuadTree<T> b = (QuadTree<T>)branch;
-            if(b.range.overlaps(range)) b.query(arr, range);
+
+    private QuadTree<T> find(Pos2 value){
+        if(b1 == null) return this;
+        if(value.x() >= cx){
+            if(value.y() >= cy) return b1;
+            else return b4;
         }
-        return arr;
+        if(value.y() >= cy) return b2;
+        else return b3;
+    }
+
+    public Seq<T> query(Range2 range){
+        return query(new Seq<>(), range);
+    }
+
+    public Seq<T> query(Seq<T> result, Range2 range){
+        result.ensure(estimate(range));
+        append(result, range);
+        return result;
+    }
+
+    private void append(Seq<T> result, Range2 range){
+        if(b1 == null) result.addAll(values);
+        else{
+            if(b1.bounds.overlaps(range)) b1.append(result, range);
+            if(b2.bounds.overlaps(range)) b2.append(result, range);
+            if(b3.bounds.overlaps(range)) b3.append(result, range);
+            if(b4.bounds.overlaps(range)) b4.append(result, range);
+        }
+    }
+
+    private int estimate(Range2 range){
+        if(b1 == null) return size;
+
+        int total = 0;
+        if(b1.bounds.overlaps(range)) total += b1.estimate(range);
+        if(b2.bounds.overlaps(range)) total += b2.estimate(range);
+        if(b3.bounds.overlaps(range)) total += b3.estimate(range);
+        if(b4.bounds.overlaps(range)) total += b4.estimate(range);
+        return total;
     }
 
 
-    @Override
     public QuadTree<T> add(T value){
-        if(!range.contains(value)) return this;
-        if((values.size >= valueLimit || branches.size > 0) && depthLimit > 0){
-            if(branches.size <= 0){
-                for(int i = 0;i < 4;i++) addBranch(new QuadTree<T>(range.cpy().splt(2, i)).depthLimit(depthLimit - 1).valueLimit(valueLimit));
-                addAll(values).add(value);
-                values.clear();
-            }else find(value).add(value);
-        }else values.add(value);
+        if(value == null || !bounds.contains(value)) return this;
+
+        size++;
+        if(b1 != null) find(value).add(value);
+        else{
+            values.add(value);
+            if(size >= valueCap && depthCap > 0) subdivide();
+        }
         return this;
     }
 
-    @Override
-    public QuadTree<T> remove(T value){
-        if(!range.contains(value)) return this;
-        if(branches.size > 0) find(value).remove(value);
-        else values.remove(value);
-        return this;
-    }
+    private void subdivide(){
+        if(b1 != null) return;
 
-    @Override
-    public boolean contains(T value){
-        if(branches.size > 0) return find(value).contains(value);
-        else return values.contains(value);
+        float w2 = bounds.w / 2, h2 = bounds.h / 2;
+        b1 = new QuadTree<T>(cx, cy, w2, h2);
+        b2 = new QuadTree<T>(bounds.x, cy, w2, h2);
+        b3 = new QuadTree<T>(bounds.x, bounds.y, w2, h2);
+        b4 = new QuadTree<T>(cx, bounds.y, w2, h2);
+
+        for(T value : values) find(value).add(value);
+        values = null;
     }
 }
-

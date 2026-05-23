@@ -1,196 +1,130 @@
 package jbsae.struct;
 
-import jbsae.func.*;
 import jbsae.func.prim.*;
 
 import java.util.*;
 
-import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
+// None of these data structures should be modified while in iteration
+public class Seq<T> implements Iterable<T>{
+    private T[] items;
 
-public class Seq<T> implements List<T>{
-    public SeqIterator i1, i2;
-    public T[] items;
+    public boolean ordered = true;
     public int size;
 
-
     public Seq(){
-        this(4);
+        this(16);
     }
 
-    public Seq(int size){
-        items = (T[])new Object[size];
-        i1 = new SeqIterator();
-        i2 = new SeqIterator();
+    public Seq(int capacity){
+        items = (T[])new Object[capacity];
     }
 
-    public Seq(Object... values){
-        this(values.length);
-        set(values);
-    }
-
-    public Seq(Iterable<T> values){
-        this();
-        for(T value : values) add(value);
-    }
-
-
-    @Override
-    public Object[] list(){
-        int i = 0;
-        Object[] values = create(size);
-        for(T value : this) values[i++] = value;
-        return values;
-    }
-
-
-    @Override //TODO: Consider changing to index, value
-    public Seq<T> set(T value, int index){
-        items[index] = value;
+    public Seq<T> ordered(boolean ordered){
+        this.ordered = ordered;
         return this;
     }
 
-    @Override
-    public Seq<T> set(Object... values){
+    public T get(int index){
+        return items[index];
+    }
+
+    public Seq<T> set(int index, T value){
+        this.items[index] = value;
+        return this;
+    }
+
+    public Seq<T> set(T[] values){
+        ensure(values.length - size);
+        System.arraycopy(values, 0, items, 0, values.length);
+        if(size > values.length) Arrays.fill(items, values.length, size, null);
+        size = values.length;
+        return this;
+    }
+
+    public Seq<T> set(Iterator<T> itr) {
+        if(itr instanceof Sized list) ensure(list.size() - size);
         clear();
-        for(Object value : values) add((T)value);
+        while(itr.hasNext()) add(itr.next());
         return this;
     }
 
-    @Override
-    public List<T> set(List<T> values){
-        clear();
-        for(T value : values) add(value);
-        return this;
-    }
-
-    /** WARNING: This only copies the array reference and not each value themselves. */
-    public Seq<T> set(Seq<T> values){
-        items = values.items;
-        size = values.size;
-        return this;
+    public Seq<T> set(Iterable<T> values){
+        return set(values.iterator());
     }
 
     public Seq<T> add(T value){
-        if(value == null) return this;
-        if(size >= items.length) resize(max(8, size * 2));
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
         items[size++] = value;
         return this;
     }
 
-    public Seq<T> add(T value, int index){
-        if(value == null) return this;
-        if(size >= items.length) resize(max(8, size * 2));
-        shift(items, index, size++, 1);
+    public Seq<T> add(int index, T value){
+        if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
+        System.arraycopy(items, index, items, index + 1, size - index);
+        size++;
         items[index] = value;
         return this;
     }
 
-    public Seq<T> addAll(T... values){
-        for(T value : values) add(value);
+    public Seq<T> addAll(Iterator<T> itr) {
+        if(itr instanceof Sized list) ensure(list.size());
+        while(itr.hasNext()) add(itr.next());
         return this;
     }
 
-    public Seq<T> addAll(List<T> values){
-        for(T value : values) add(value);
-        return this;
+    public Seq<T> addAll(Iterable<T> values){
+        return addAll(values.iterator());
     }
 
     public Seq<T> remove(int index){
-        shift(items, index + 1, size--, -1);
+        if(ordered) System.arraycopy(items, index + 1, items, index, --size - index);
+        else items[index] = items[--size];
         items[size] = null;
         return this;
     }
 
     public Seq<T> remove(T value){
-        for(int i = 0;i < size;i++){
-            if(eql(items[i], value)){
-                remove(i);
-                break;
-            }
-        }
-        return this;
-    }
-
-
-    @Override
-    public T get(int index){
-        return items[index];
-    }
-
-    @Override //This sucks
-    public int size(){
-        return size;
-    }
-
-
-    public boolean contains(T value){
-        for(int i = 0;i < size;i++) if(eql(items[i], value)) return true;
-        return false;
-    }
-
-    public boolean contains(Boolf<T> condition){
-        for(int i = 0;i < size;i++) if(condition.get(items[i])) return true;
-        return false;
-    }
-
-    public Seq<T> each(Cons<T> cons){
-        for(int i = 0;i < size;i++) cons.get(items[i]);
-        return this;
-    }
-
-    public Seq<T> sort(){
-        trim();
-        sortArr(items);
+        for(int i = 0;i < size;i++) if(value.equals(items[i])) return remove(i);
         return this;
     }
 
     public Seq<T> sort(Floatf<T> value){
-        trim();
-        sortArr(items, value);
+        sortArr(items, 0, size, value);
         return this;
     }
 
     public Seq<T> clear(){
-        fill(items, null);
+        Arrays.fill(items, 0, size, null);
         size = 0;
         return this;
     }
 
-    public Seq<T> trim(){
-        resize(size);
+    public Seq<T> ensure(int space){
+        if(size + space >= items.length) resize(size + space + 1);
         return this;
     }
 
-    public Seq<T> resize(int newSize){
-        T[] items = create(newSize, this.items);
-        copy(this.items, items, size);
-        this.items = items;
-        return this;
+    private void resize(int capacity){
+        T[] old = this.items;
+        this.items = (T[])new Object[capacity];
+        System.arraycopy(old, 0, this.items, 0, size);
     }
 
     @Override
     public Iterator<T> iterator(){
-        if(i1.index >= size){
-            i1.index = 0;
-            return i1;
-        }
-        if(i2.index >= size){
-            i2.index = 0;
-            return i2;
-        }
         return new SeqIterator();
     }
 
     @Override
     public String toString(){
-        return itrToString(this);
+        return itrToString(iterator());
     }
 
-    private class SeqIterator implements Iterator<T>{
-        public int index;
+    private class SeqIterator implements Iterator<T>, Sized{
+        public int index = 0;
 
         public SeqIterator(){
         }
@@ -203,6 +137,11 @@ public class Seq<T> implements List<T>{
         @Override
         public T next(){
             return items[index++];
+        }
+
+        @Override
+        public int size(){
+            return size;
         }
     }
 }

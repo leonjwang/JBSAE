@@ -1,7 +1,6 @@
 package jbsae.graphics.gl;
 
 import jbsae.graphics.*;
-import jbsae.struct.*;
 
 import java.nio.*;
 

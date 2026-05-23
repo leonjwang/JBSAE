@@ -37,7 +37,7 @@ public class GameLoop{
         window.swap();
     }
 
-    public static void waitTill(long targetTime){
+    public void waitTill(long targetTime){
         long sleepNs = targetTime - System.nanoTime();
         if(sleepNs > 2_000_000L) LockSupport.parkNanos(sleepNs - 1_000_000L);
         while(System.nanoTime() < targetTime) Thread.onSpinWait();

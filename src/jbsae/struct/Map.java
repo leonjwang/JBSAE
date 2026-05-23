@@ -1,164 +1,229 @@
 package jbsae.struct;
 
-import jbsae.*;
-import jbsae.func.*;
-
 import java.util.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
-
 public class Map<K, V> implements Iterable<K>{
-    public MapIterator i1, i2;
-    public K[] keys;
-    public V[] values;
-    public int size = 0;
+    private K[] keys;
+    private V[] values;
 
+    private int tableCap, stashCap;
+    private int threshold, shift, mask, steps;
+
+    private int stashSize;
+
+    public float loadFactor = 0.8f;
+    public int size;
 
     public Map(){
-        this(16);
+        this(50);
     }
 
-    public Map(int size){
-        keys = (K[])new Object[size];
-        values = (V[])new Object[size];
-        i1 = new MapIterator();
-        i2 = new MapIterator();
+    public Map(int capacity){
+        setCap(nextPow2((int)(capacity / loadFactor + 1)));
+        keys = (K[])new Object[tableCap + stashCap];
+        values = (V[])new Object[tableCap + stashCap];
     }
 
-    public Map(Object... entries){
-        this(entries.length);
-        for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (V)entries[i + 1]);
+    public Map<K, V> loadFactor(float loadFactor){
+        this.loadFactor = loadFactor;
+        this.threshold = (int)(tableCap * loadFactor);
+        return this;
     }
 
-
-    public Object[] keys(){
-        int i = 0;
-        Object[] keys = create(size);
-        for(K key : this) keys[i++] = key;
-        return keys;
+    private void setCap(int cap){
+        this.tableCap = cap;
+        this.stashCap = floorLog2(cap) * 2;
+        this.threshold = (int)(cap * loadFactor);
+        this.shift = floorLog2(cap);
+        this.mask = cap - 1;
+        this.steps = (int)(rt2(cap) / 16 + 4);
     }
-
-    public Object[] values(){
-        int i = 0;
-        Object[] values = create(size);
-        for(K key : this) values[i++] = get(key);
-        return values;
-    }
-
 
     public Map<K, V> add(K key, V value){
-        int steps = (trailZeros(keys.length) << 1) + 1;
-        for(int step = 0;step < steps;step++){
-            int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
-            for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return set(checks[i], key, value);
-            for(int i = 0;i < checks.length;i++) if(keys[checks[i]] == null) return set(checks[i], key, value);
-            int index = checks[randInt(0, checks.length - 1)];
-            K displacedKey = keys[index];
-            V displacedValue = values[index];
-            keys[index] = key;
-            values[index] = value;
-            key = displacedKey;
-            value = displacedValue;
-        }
-        return resize(keys.length << 1).add(key, value);
-    }
+        int base = key.hashCode();
+        int hash1 = base & mask;
+        int hash2 = (hash(base, shift, PRIME1) & mask);
+        int hash3 = (hash(base, shift, PRIME2) & mask);
 
-    private Map<K, V> set(int i, K key, V value){
-        if(keys[i] == null) size++;
-        keys[i] = key;
-        values[i] = value;
+        if(tryReplace(hash1, key, value)) return this;
+        if(tryReplace(hash2, key, value)) return this;
+        if(tryReplace(hash3, key, value)) return this;
+        for(int i = 0; i < stashSize; i++) if(tryReplace(tableCap + i, key, value)) return this;
+
+        if(tryPlace(hash1, key, value)) return this;
+        if(tryPlace(hash2, key, value)) return this;
+        if(tryPlace(hash3, key, value)) return this;
+
+        swapRandom(hash1, hash2, hash3, key, value);
+        key = displacedKey;
+        value = displacedValue;
+        place(key, value);
+        displacedKey = null;
+        displacedValue = null;
+
         return this;
     }
 
-    public Map<K, V> addAll(Object... entries){
-        for(int i = 0;i < entries.length;i += 2) add((K)entries[i], (V)entries[i + 1]);
-        return this;
+    private boolean tryReplace(int index, K key, V value){
+        if(!key.equals(keys[index])) return false;
+        values[index] = value;
+        return true;
     }
-
-    public Map<K, V> remove(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++){
-            if(eql(keys[checks[i]], key)){
-                keys[checks[i]] = null;
-                values[checks[i]] = null;
-                size--;
-                return this;
-            }
-        }
-        return this;
-    }
-
-    public Map<K, V> removeAll(K... keys){
-        for(K key : keys) remove(key);
-        return this;
-    }
-
 
     public V get(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return values[checks[i]];
+        if(key == null) return null;
+        int base = key.hashCode();
+        int hash1 = base & mask;
+        int hash2 = (hash(base, shift,  PRIME1) & mask);
+        int hash3 = (hash(base, shift, PRIME2) & mask);
+
+        if(key.equals(keys[hash1])) return values[hash1];
+        if(key.equals(keys[hash2])) return values[hash2];
+        if(key.equals(keys[hash3])) return values[hash3];
+
+        for(int i = 0; i < stashSize; i++) if(key.equals(keys[tableCap + i])) return values[tableCap + i];
+
         return null;
     }
 
-
-    public boolean contains(K key){
-        int[] checks = hash3(key.hashCode(), keys.length, Tmp.i3);
-        for(int i = 0;i < checks.length;i++) if(eql(keys[checks[i]], key)) return true;
-        return false;
+    public Map<K, V> remove(K key){
+        int base = key.hashCode();
+        if(tryErase(base & mask, key)) return this;
+        if(tryErase((hash(base, shift, PRIME1) & mask), key)) return this;
+        if(tryErase((hash(base, shift, PRIME2) & mask), key)) return this;
+        for(int i = 0;i < stashSize;i++) if(key.equals(keys[tableCap + i])){
+            keys[tableCap + i] = keys[tableCap + stashSize - 1];
+            values[tableCap + i] = values[tableCap + stashSize - 1];
+            keys[tableCap + stashSize - 1] = null;
+            values[tableCap + stashSize - 1] = null;
+            stashSize--;
+            size--;
+            return this;
+        }
+        return this;
     }
 
-    public Map<K, V> eachKey(Cons<K> cons){
-        for(K key : this) cons.get(key);
-        return this;
+    private boolean tryErase(int index, K key){
+        if(!key.equals(keys[index])) return false;
+        keys[index] = null;
+        values[index] = null;
+        size--;
+        return true;
     }
 
     public Map<K, V> clear(){
-        fill(keys, null);
-        fill(values, null);
-        size = 0;
+        Arrays.fill(keys, null);
+        Arrays.fill(values, null);
+        size = stashSize = 0;
         return this;
     }
 
-    public Map<K, V> resize(int newSize){
-        K[] keys = (K[])keys();
-        V[] values = (V[])values();
-        size = 0;
-        this.keys = create(newSize, keys);
-        this.values = create(newSize, values);
-        for(int j = 0;j < keys.length;j++) add(keys[j], values[j]);
+    public Map<K, V> ensure(int space){
+        int needed = (int)((size + space) / loadFactor + 1);
+        if(needed > tableCap) resize(nextPow2(needed));
         return this;
     }
 
+    private K displacedKey = null;
+    private V displacedValue = null;
+
+    private void place(K key, V value){
+        for(int i = 0; i < steps; i++){
+            int base = key.hashCode();
+            int hash1 = base & mask;
+            if(tryPlace(hash1, key, value)) return;
+
+            int hash2 = (hash(base, shift, PRIME1) & mask);
+            if(tryPlace(hash2, key, value)) return;
+
+            int hash3 = (hash(base,shift,  PRIME2) & mask);
+            if(tryPlace(hash3, key, value)) return;
+
+            swapRandom(hash1, hash2, hash3, key, value);
+            key = displacedKey;
+            value = displacedValue;
+        }
+
+        stash(key, value);
+    }
+
+    private boolean tryPlace(int index, K key, V value){
+        if(keys[index] != null) return false;
+        keys[index] = key;
+        values[index] = value;
+        if(size++ >= threshold) resize(tableCap * 2);
+        return true;
+    }
+
+    private void swapRandom(int hash1, int hash2, int hash3, K key, V value){
+        switch(abs(RAND.nexti()) % 3){
+            case 0:
+                swap(hash1, key, value);
+                return;
+            case 1:
+                swap(hash2, key, value);
+                return;
+            default:
+                swap(hash3, key, value);
+        }
+    }
+
+    private void swap(int index, K key, V value){
+        displacedKey = keys[index];
+        displacedValue = values[index];
+        keys[index] = key;
+        values[index] = value;
+    }
+
+    private void stash(K key, V value){
+        if(stashSize >= stashCap){
+            resize(tableCap * 2);
+            place(key, value);
+            return;
+        }
+        values[tableCap + stashSize] = value;
+        keys[tableCap + stashSize++] = key;
+        size++;
+    }
+
+    private void resize(int capacity){
+        K[] oldKeys = keys;
+        V[] oldVals = values;
+        setCap(capacity);
+        keys = (K[])new Object[tableCap + stashCap];
+        values = (V[])new Object[tableCap + stashCap];
+        size = stashSize = 0;
+        for(int i = 0; i < oldKeys.length; i++) if(oldKeys[i] != null) place(oldKeys[i], oldVals[i]);
+        displacedKey = null;
+        displacedValue = null;
+    }
 
     @Override
     public Iterator<K> iterator(){
-        if(i1.nextIndex >= keys.length){
-            i1.nextIndex = 0;
-            return i1;
-        }
-        if(i2.nextIndex >= keys.length){
-            i2.nextIndex = 0;
-            return i2;
-        }
-        return new MapIterator();
+        return new KeyIterator();
+    }
+
+    public Iterator<V> values(){
+        return new ValIterator();
     }
 
     @Override
     public String toString(){
-        return itrToString(this);
+        return itrToString(iterator()) + "\n" + itrToString(values());
     }
 
-    private class MapIterator implements Iterator<K>{
-        public int nextIndex = -1;
+    private class KeyIterator implements Iterator<K>, Sized{
+        public int nextIndex = 0;
 
-        public MapIterator(){
+        public KeyIterator(){
         }
 
         public void findNextIndex(){
-            for(nextIndex++;nextIndex < keys.length;nextIndex++) if(keys[nextIndex] != null) return;
+            for(; nextIndex < keys.length; nextIndex++) if(keys[nextIndex] != null) return;
         }
 
         @Override
@@ -169,7 +234,41 @@ public class Map<K, V> implements Iterable<K>{
 
         @Override
         public K next(){
-            return keys[nextIndex];
+            findNextIndex();
+            return keys[nextIndex++];
+        }
+
+        @Override
+        public int size(){
+            return size;
+        }
+    }
+
+    private class ValIterator implements Iterator<V>, Sized{
+        public int nextIndex = 0;
+
+        public ValIterator(){
+        }
+
+        public void findNextIndex(){
+            for(; nextIndex < keys.length; nextIndex++) if(keys[nextIndex] != null) return;
+        }
+
+        @Override
+        public boolean hasNext(){
+            findNextIndex();
+            return nextIndex < keys.length;
+        }
+
+        @Override
+        public V next(){
+            findNextIndex();
+            return values[nextIndex++];
+        }
+
+        @Override
+        public int size(){
+            return size;
         }
     }
 }

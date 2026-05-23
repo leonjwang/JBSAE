@@ -70,8 +70,10 @@ public class Vec2 implements Pos2{
     }
 
     public Vec2 rot(float a){
-        x = cos(a) * x - sin(a) * y;
-        y = cos(a) * y + sin(a) * x;
+        float cos = cos(a), sin = sin(a);
+        float nx = cos * x - sin * y;
+        y = cos * y + sin * x;
+        x = nx;
         return this;
     }
 

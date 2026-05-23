@@ -13,7 +13,7 @@ import java.io.*;
 import static jbsae.util.Stringf.*;
 
 public class Assets{
-    public static Map<String, AssetFi> files = new Map<>();
+    public static Map<String, AssetFi> files = new Map<>(); //TODO: Consider changing what is static and what isn't
 
     public Map<String, Font> fonts = new Map<>();
     public Map<String, Shader> shaders = new Map<>();
@@ -85,7 +85,7 @@ public class Assets{
 
     public AssetFi create(String path){
         Log.info("Creating asset: " + path);
-        if(files.contains(path)) return files.get(path);
+        if(files.get(path) != null) return files.get(path);
         if(path.endsWith(".fnt")) return new FontFi(path);
         if(path.endsWith(".frag")) return new ShaderFi(path);
         if(path.endsWith(".vert")) return new ShaderFi(path);
