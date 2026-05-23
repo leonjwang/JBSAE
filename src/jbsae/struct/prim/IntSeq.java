@@ -7,55 +7,55 @@ import java.util.*;
 
 import static jbsae.util.Stringf.*;
 
-public class FloatSeq{
-    private float[] items;
+public class IntSeq{
+    private int[] items;
 
     public boolean ordered = true;
     public int size;
 
-    public FloatSeq(){
+    public IntSeq(){
         this(16);
     }
 
-    public FloatSeq(int capacity){
-        items = new float[capacity];
+    public IntSeq(int capacity){
+        items = new int[capacity];
     }
 
-    public FloatSeq ordered(boolean ordered){
+    public IntSeq ordered(boolean ordered){
         this.ordered = ordered;
         return this;
     }
 
-    public float get(int index){
+    public int get(int index){
         return items[index];
     }
 
-    public FloatSeq set(int index, float value){
+    public IntSeq set(int index, int value){
         this.items[index] = value;
         return this;
     }
 
-    public FloatSeq set(float[] values){
+    public IntSeq set(int[] values){
         ensure(values.length - size);
         System.arraycopy(values, 0, items, 0, values.length);
         size = values.length;
         return this;
     }
 
-    public FloatSeq set(FloatIterator itr){
+    public IntSeq set(IntIterator itr){
         if(itr instanceof Sized list) ensure(list.size() - size);
         clear();
         while(itr.hasNext()) add(itr.next());
         return this;
     }
 
-    public FloatSeq add(float value){
+    public IntSeq add(int value){
         if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
         items[size++] = value;
         return this;
     }
 
-    public FloatSeq add(int index, float value){
+    public IntSeq add(int index, int value){
         if(size >= items.length) resize(items.length + (items.length >> 1) + 1);
         System.arraycopy(items, index, items, index + 1, size - index);
         size++;
@@ -63,40 +63,40 @@ public class FloatSeq{
         return this;
     }
 
-    public FloatSeq addAll(FloatIterator itr){
+    public IntSeq addAll(IntIterator itr){
         if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) add(itr.next());
         return this;
     }
 
-    public FloatSeq remove(int index){
+    public IntSeq remove(int index){
         if(ordered) System.arraycopy(items, index + 1, items, index, --size - index);
         else items[index] = items[--size];
         return this;
     }
 
-    public FloatSeq sort(){
+    public IntSeq sort(){
         Arrays.sort(items, 0, size);
         return this;
     }
 
-    public FloatSeq clear(){
+    public IntSeq clear(){
         size = 0;
         return this;
     }
 
-    public FloatSeq ensure(int space){
+    public IntSeq ensure(int space){
         if(size + space >= items.length) resize(size + space + 1);
         return this;
     }
 
     private void resize(int capacity){
-        float[] old = this.items;
-        this.items = new float[capacity];
+        int[] old = this.items;
+        this.items = new int[capacity];
         System.arraycopy(old, 0, this.items, 0, size);
     }
 
-    public FloatIterator iterator(){
+    public IntIterator iterator(){
         return new SeqIterator();
     }
 
@@ -105,7 +105,7 @@ public class FloatSeq{
         return itrToString(iterator());
     }
 
-    private class SeqIterator extends FloatIterator implements Sized{
+    private class SeqIterator extends IntIterator implements Sized{
         public int index = 0;
 
         public SeqIterator(){
@@ -117,7 +117,7 @@ public class FloatSeq{
         }
 
         @Override
-        public float nextf(){
+        public int nexti(){
             return items[index++];
         }
 
