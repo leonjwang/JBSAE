@@ -109,7 +109,7 @@ public class QuadTree<T extends Pos2>{
         b3 = new QuadTree<T>(bounds.x, bounds.y, w2, h2);
         b4 = new QuadTree<T>(cx, bounds.y, w2, h2);
 
-        for(T value : values) find(value).values.add(value);
+        for(T value : values) find(value).add(value);
         values = null;
     }
 }

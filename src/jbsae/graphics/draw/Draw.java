@@ -30,20 +30,20 @@ public class Draw{
 
             float cos = cos(r), sin = sin(r);
 
-            float nx1 = cos * x1 - sin * y1;
-            y1 = cos * y1 + sin * x1;
+            float nx1 = cos * (x1 - cx) - sin * (y1 - cy) + cx;
+            y1 = cos * (y1 - cy) + sin * (x1 - cx) + cy;
             x1 = nx1;
 
-            float nx2 = cos * x2 - sin * y2;
-            y2 = cos * y2 + sin * x2;
+            float nx2 = cos * (x2 - cx) - sin * (y2 - cy) + cx;
+            y2 = cos * (y2 - cy) + sin * (x2 - cx) + cy;
             x2 = nx2;
 
-            float nx3 = cos * x3 - sin * y3;
-            y3 = cos * y3 + sin * x3;
+            float nx3 = cos * (x3 - cx) - sin * (y3 - cy) + cx;
+            y3 = cos * (y3 - cy) + sin * (x3 - cx) + cy;
             x3 = nx3;
 
-            float nx4 = cos * x4 - sin * y4;
-            y4 = cos * y4 + sin * x4;
+            float nx4 = cos * (x4 - cx) - sin * (y4 - cy) + cx;
+            y4 = cos * (y4 - cy) + sin * (x4 - cx) + cy;
             x4 = nx4;
 
             drawi(region, x1, y1, x2, y2, x3, y3, x4, y4);

@@ -34,7 +34,7 @@ public class IntSet{
         table = new int[tableCap + stashCap];
     }
 
-    public IntSet loadFactor(int loadFactor){
+    public IntSet loadFactor(float loadFactor){
         this.loadFactor = loadFactor;
         this.threshold = (int)(tableCap * loadFactor);
         return this;

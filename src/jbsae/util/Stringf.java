@@ -18,20 +18,35 @@ public class Stringf{
 
     public static String valToString(Object... values){
         StringBuilder str = new StringBuilder(values.length * 2).append('(');
-        for(Object o : values) str.append(o.toString()).append(',');
-        return str.deleteCharAt(str.length() - 1).append(')').toString();
+        boolean first = true;
+        for(Object o : values){
+            if(!first) str.append(',');
+            else first = false;
+            str.append(o.toString());
+        }
+        return str.append(')').toString();
     }
 
     public static String arrToString(Object... arr){
         StringBuilder str = new StringBuilder(arr.length * 2).append('[');
-        for(Object o : arr) str.append(o.toString()).append(", ");
-        return str.deleteCharAt(str.length() - 1).append(']').toString();
+        boolean first = true;
+        for(Object o : arr){
+            if(!first) str.append(", ");
+            else first = false;
+            str.append(o.toString());
+        }
+        return str.append(']').toString();
     }
 
     public static <T> String itrToString(Iterator<T> itr){
         StringBuilder str = new StringBuilder().append('[');
-        while(itr.hasNext()) str.append(itr.next().toString()).append(", ");
-        return str.deleteCharAt(str.length() - 1).append(']').toString();
+        boolean first = true;
+        while(itr.hasNext()){
+            if(!first) str.append(", ");
+            else first = false;
+            str.append(itr.next().toString());
+        }
+        return str.append(']').toString();
     }
 
     public static String formatMillis(long time){

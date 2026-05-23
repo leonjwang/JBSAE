@@ -38,7 +38,7 @@ public class IntMap<V>{
         values = (V[])new Object[tableCap + stashCap];
     }
 
-    public IntMap<V> loadFactor(int loadFactor){
+    public IntMap<V> loadFactor(float loadFactor){
         this.loadFactor = loadFactor;
         this.loadThreshold = (int)(tableCap * loadFactor);
         return this;
