@@ -48,25 +48,22 @@ public class SortedDraw extends Draw{
     public void render(){
         FloatMap<Layer> layers = new FloatMap<>();
 
-//        for(DrawRequest request : requests){
-//            if(!layers.contains(request.z)) layers.add(request.z, new Layer(request.z));
-//            layers.get(request.z).requests.add(request);
-//        }
-//
-//        // TODO: Rewrite with new iterator system
-//        Object[] arr = layers.values();
-//        Seq<Layer> sorted = new Seq<Layer>(arr.length);
-//        for(Object layer : arr) sorted.add((Layer)layer);
-//        sorted.sort(l -> l.z);
-//
-//        for(Layer layer : sorted){
-//            for(DrawRequest request : layer.requests){
-//                fill.rgba8888(request.rgba8888);
-//                if(request instanceof RotatedRectDrawRequest r) super.draw(r.region, r.x, r.y, r.w, r.h, r.r);
-//                else if(request instanceof RectDrawRequest r) super.draw(r.region, r.x, r.y, r.w, r.h);
-//                else if(request instanceof DrawQuadRequest r) super.draw(r.region, r.x1, r.y1, r.x2, r.y2, r.x3, r.y3, r.x4, r.y4);
-//            }
-//        }
+        for(DrawRequest request : requests){
+            if(layers.get(request.z) == null) layers.add(request.z, new Layer(request.z));
+            layers.get(request.z).requests.add(request);
+        }
+
+        Seq<Layer> list = new Seq<Layer>().addAll(layers.values());
+        list.sort(l -> l.z);
+
+        for(Layer layer : list){
+            for(DrawRequest request : layer.requests){
+                fill.rgba8888(request.rgba8888);
+                if(request instanceof RotatedRectDrawRequest r) super.draw(r.region, r.x, r.y, r.w, r.h, r.r);
+                else if(request instanceof RectDrawRequest r) super.draw(r.region, r.x, r.y, r.w, r.h);
+                else if(request instanceof DrawQuadRequest r) super.draw(r.region, r.x1, r.y1, r.x2, r.y2, r.x3, r.y3, r.x4, r.y4);
+            }
+        }
 
         requests.clear();
     }
