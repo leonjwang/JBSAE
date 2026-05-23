@@ -24,8 +24,8 @@ public class Map<K, V> implements Iterable<K>{
 
     public Map(int capacity){
         setCap(nextPow2((int)(capacity / loadFactor + 1)));
-        keys = create(tableCap + stashCap);
-        values = create(tableCap + stashCap);
+        keys = (K[])new Object[tableCap + stashCap];
+        values = (V[])new Object[tableCap + stashCap];
     }
 
     public Map<K, V> loadFactor(float loadFactor){
@@ -130,7 +130,7 @@ public class Map<K, V> implements Iterable<K>{
 
     public Map<K, V> ensure(int space){
         int needed = (int)((size + space) / loadFactor + 1);
-        if((size + needed) > tableCap) resize(nextPow2((size + needed)));
+        if(needed > tableCap) resize(nextPow2(needed));
         return this;
     }
 
@@ -169,7 +169,7 @@ public class Map<K, V> implements Iterable<K>{
     }
 
     private void swapRandom(int hash1, int hash2, int hash3, int hash4, K key, V value){
-        switch(RAND.nexti() & 3){
+        switch(abs(RAND.nexti()) % 3){
             case 0:
                 swap(hash1, key, value);
                 return;
@@ -192,7 +192,11 @@ public class Map<K, V> implements Iterable<K>{
     }
 
     private void stash(K key, V value){
-        if(stashSize >= stashCap) resize(tableCap * 2);
+        if(stashSize >= stashCap){
+            resize(tableCap * 2);
+            place(key, value);
+            return;
+        }
         values[tableCap + stashSize] = value;
         keys[tableCap + stashSize++] = key;
         size++;
@@ -202,8 +206,8 @@ public class Map<K, V> implements Iterable<K>{
         K[] oldKeys = keys;
         V[] oldVals = values;
         setCap(capacity);
-        keys = create(tableCap + stashCap);
-        values = create(tableCap + stashCap);
+        keys = (K[])new Object[tableCap + stashCap];
+        values = (V[])new Object[tableCap + stashCap];
         size = stashSize = 0;
         for(int i = 0; i < oldKeys.length; i++) if(oldKeys[i] != null) place(oldKeys[i], oldVals[i]);
         displacedKey = null;
@@ -221,7 +225,7 @@ public class Map<K, V> implements Iterable<K>{
 
     @Override
     public String toString(){
-        return itrToString(this);
+        return itrToString(iterator()) + "\n" + itrToString(values());
     }
 
     private class KeyIterator implements Iterator<K>, Sized{

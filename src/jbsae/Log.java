@@ -95,11 +95,11 @@ public class Log{
         }
 
         public String toString(){
-            CharSeq result = new CharSeq(msg.length() + 40);
-            result.add(formatMillisCompact(time - startTime)).add(' ');
-            if(level.name().length() == 4) result.add(' ');
-            result.add(level.name()).add(' ');
-            result.add(msg);
+            StringBuilder result = new StringBuilder(msg.length() + 40);
+            result.append(formatMillisCompact(time - startTime)).append(' ');
+            if(level.name().length() == 4) result.append(' ');
+            result.append(level.name()).append(' ');
+            result.append(msg);
             return result.toString();
         }
     }

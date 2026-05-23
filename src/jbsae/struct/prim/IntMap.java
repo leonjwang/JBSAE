@@ -34,7 +34,7 @@ public class IntMap<V>{
 
     public Object[] values(){
         int[] keys = keys();
-        Object[] values = create(size);
+        Object[] values = new Object[size];
         for(int i = 0;i < keys.length;i++) values[i] = get(keys[i]);
         return values;
     }
@@ -135,7 +135,7 @@ public class IntMap<V>{
         size = 0;
         zero = null;
         this.keys = new int[newSize];
-        this.values = create(newSize, values);
+        this.values = (V[])new Object[newSize];
         for(int j = 0;j < keys.length;j++) add(keys[j], values[j]);
         return this;
     }

@@ -4,7 +4,6 @@ import java.util.*;
 
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
-import static jbsae.util.Structf.*;
 
 // Consider making this like Set, where items.length is always a power of two so we can take advantage of bitwise operations
 public class Queue<T> implements Iterable<T>{
@@ -19,7 +18,7 @@ public class Queue<T> implements Iterable<T>{
     }
 
     public Queue(int capacity){
-        items = create(capacity);
+        items = (T[])new Object[capacity];
         tail = end = capacity - 1;
         head = 0;
     }
@@ -132,7 +131,7 @@ public class Queue<T> implements Iterable<T>{
 
     public Queue<T> resize(int capacity){
         T[] old = items;
-        items = create(capacity, items);
+        items =  (T[])new Object[capacity];
         int n = min(old.length - head, size);
         System.arraycopy(old, head, items, 0, n);
         System.arraycopy(old, 0, items, n, size - n);
@@ -150,7 +149,7 @@ public class Queue<T> implements Iterable<T>{
 
     @Override
     public String toString(){
-        return itrToString(this);
+        return itrToString(iterator());
     }
 
     private class QueueIterator implements Iterator<T>, Sized{

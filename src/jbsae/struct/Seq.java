@@ -19,7 +19,7 @@ public class Seq<T> implements Iterable<T>{
     }
 
     public Seq(int capacity){
-        items = create(capacity);
+        items = (T[])new Object[capacity];
     }
 
     public Seq<T> ordered(boolean ordered){
@@ -109,7 +109,7 @@ public class Seq<T> implements Iterable<T>{
 
     private void resize(int capacity){
         T[] old = this.items;
-        this.items = create(capacity);
+        this.items = (T[])new Object[capacity];
         System.arraycopy(old, 0, this.items, 0, size);
     }
 
@@ -120,7 +120,7 @@ public class Seq<T> implements Iterable<T>{
 
     @Override
     public String toString(){
-        return itrToString(this);
+        return itrToString(iterator());
     }
 
     private class SeqIterator implements Iterator<T>, Sized{

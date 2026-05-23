@@ -23,7 +23,7 @@ public class Set<T> implements Iterable<T>{
 
     public Set(int capacity){
         setCap(nextPow2((int)(capacity / loadFactor + 1)));
-        table = create(tableCap + stashCap);
+        table = (T[])new Object[tableCap + stashCap];
     }
 
     public Set<T> loadFactor(float loadFactor){
@@ -111,7 +111,7 @@ public class Set<T> implements Iterable<T>{
 
     public Set<T> ensure(int space){
         int needed = (int)((size + space) / loadFactor + 1);
-        if((size + needed) > tableCap) resize(nextPow2((size + needed)));
+        if(needed > tableCap) resize(nextPow2(needed));
         return this;
     }
 
@@ -142,7 +142,7 @@ public class Set<T> implements Iterable<T>{
     }
 
     private T swapRandom(int hash1, int hash2, int hash3, T value){
-        switch(RAND.nexti() & 3){
+        switch(abs(RAND.nexti()) % 3){
             case 0:
                 return swap(hash1, value);
             case 1:
@@ -159,7 +159,11 @@ public class Set<T> implements Iterable<T>{
     }
 
     private void stash(T value){
-        if(stashSize >= stashCap) resize(tableCap * 2);
+        if(stashSize >= stashCap){
+            resize(tableCap * 2);
+            place(value);
+            return;
+        }
         table[tableCap + stashSize++] = value;
         size++;
     }
@@ -167,7 +171,7 @@ public class Set<T> implements Iterable<T>{
     private void resize(int capacity){
         T[] old = table;
         setCap(capacity);
-        table = create(tableCap + stashCap);
+        table = (T[])new Object[tableCap + stashCap];
         size = stashSize = 0;
         for(int i = 0;i < old.length;i++) if(old[i] != null) place(old[i]);
     }
@@ -179,7 +183,7 @@ public class Set<T> implements Iterable<T>{
 
     @Override
     public String toString(){
-        return itrToString(this);
+        return itrToString(iterator());
     }
 
 

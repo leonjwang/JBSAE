@@ -1,9 +1,13 @@
 package jbsae.struct.prim.iterator;
 
-public abstract class FloatIterator{
-    public int index = 0;
+import java.util.*;
 
+public abstract class FloatIterator implements Iterator<Float>{
     public abstract boolean hasNext();
 
-    public abstract float next();
+    public abstract float nextf();
+
+    public Float next(){
+        return nextf();
+    }
 }
