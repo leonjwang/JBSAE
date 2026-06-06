@@ -10,7 +10,7 @@ import jbsae.util.*;
 import static jbsae.JBSAE.*;
 import static jbsae.util.Mathf.*;
 
-public class PongGame extends Screen{
+public class Pong extends Screen{
     // Constants
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -211,6 +211,6 @@ public class PongGame extends Screen{
         JBSAE.width = WIDTH;
         JBSAE.height = HEIGHT;
         JBSAE.loop = new DynamicLoop();
-        jbsae(new PongGame());
+        jbsae(new Pong());
     }
 }

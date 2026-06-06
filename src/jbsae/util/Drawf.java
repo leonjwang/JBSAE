@@ -8,6 +8,7 @@ import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
 
 // TODO: Consider implementing a high level function for setting proceeding stroke width, texture, etc.
+// TODO: Text alignment ?
 public class Drawf{
     /** Set fill color. */
     public static void fill(){

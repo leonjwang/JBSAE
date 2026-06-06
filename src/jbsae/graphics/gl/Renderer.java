@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 
 public class Renderer{
-    public String vertexShaderPath = "/shaders/shader.vert", fragmentShaderPath = "/shaders/shader.frag";
+    public String vertexShaderPath = "/shaders/default.vert", fragmentShaderPath = "/shaders/default.frag";
 
     public Shader vertexShader, fragmentShader;
     public VertexArray vertexArray;
@@ -34,7 +34,6 @@ public class Renderer{
         vertexBuffer = new VertexBuffer();
         vertexBuffer.data(GL_ARRAY_BUFFER, (long)vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
 
-        // TODO: Dynamically loaded shaders? Similar to Assets
         vertexShader = ((ShaderFi)assets.create(assets.assetsFolder + vertexShaderPath).load()).shader;
         fragmentShader = ((ShaderFi)assets.create(assets.assetsFolder + fragmentShaderPath).load()).shader;
 
