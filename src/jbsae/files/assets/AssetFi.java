@@ -1,6 +1,7 @@
 package jbsae.files.assets;
 
 import jbsae.*;
+import jbsae.core.*;
 import jbsae.files.*;
 
 import java.io.*;
