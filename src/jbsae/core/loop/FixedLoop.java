@@ -1,6 +1,5 @@
 package jbsae.core.loop;
 
-import jbsae.*;
 import jbsae.time.*;
 
 import static jbsae.JBSAE.*;

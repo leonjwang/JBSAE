@@ -10,7 +10,7 @@ import static jbsae.util.Stringf.*;
 import static jbsae.util.Structf.*;
 
 public class IntSet{
-    public static boolean eqli(int a, int b) {
+    public static boolean eqli(int a, int b){
         return a == b;
     }
 
@@ -107,13 +107,14 @@ public class IntSet{
         if(tryErase(base & mask, value)) return this;
         if(tryErase(hash(base, shift, PRIME1) & mask, value)) return this;
         if(tryErase(hash(base, shift, PRIME2) & mask, value)) return this;
-        for(int i = 0;i < stashSize;i++) if(eqli(value, table[tableCap + i])){
-            table[tableCap + i] = table[tableCap + stashSize - 1];
-            table[tableCap + stashSize - 1] = 0;
-            stashSize--;
-            size--;
-            return this;
-        }
+        for(int i = 0;i < stashSize;i++)
+            if(eqli(value, table[tableCap + i])){
+                table[tableCap + i] = table[tableCap + stashSize - 1];
+                table[tableCap + stashSize - 1] = 0;
+                stashSize--;
+                size--;
+                return this;
+            }
         return this;
     }
 

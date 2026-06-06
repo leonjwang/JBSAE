@@ -58,29 +58,65 @@ public class Mat4{
     }
 
     public Mat4 add(Mat4 o){
-        m00 += o.m00; m01 += o.m01; m02 += o.m02; m03 += o.m03;
-        m10 += o.m10; m11 += o.m11; m12 += o.m12; m13 += o.m13;
-        m20 += o.m20; m21 += o.m21; m22 += o.m22; m23 += o.m23;
-        m30 += o.m30; m31 += o.m31; m32 += o.m32; m33 += o.m33;
+        m00 += o.m00;
+        m01 += o.m01;
+        m02 += o.m02;
+        m03 += o.m03;
+        m10 += o.m10;
+        m11 += o.m11;
+        m12 += o.m12;
+        m13 += o.m13;
+        m20 += o.m20;
+        m21 += o.m21;
+        m22 += o.m22;
+        m23 += o.m23;
+        m30 += o.m30;
+        m31 += o.m31;
+        m32 += o.m32;
+        m33 += o.m33;
         return this;
     }
 
     public Mat4 scl(float v){
-        m00 *= v; m01 *= v; m02 *= v; m03 *= v;
-        m10 *= v; m11 *= v; m12 *= v; m13 *= v;
-        m20 *= v; m21 *= v; m22 *= v; m23 *= v;
-        m30 *= v; m31 *= v; m32 *= v; m33 *= v;
+        m00 *= v;
+        m01 *= v;
+        m02 *= v;
+        m03 *= v;
+        m10 *= v;
+        m11 *= v;
+        m12 *= v;
+        m13 *= v;
+        m20 *= v;
+        m21 *= v;
+        m22 *= v;
+        m23 *= v;
+        m30 *= v;
+        m31 *= v;
+        m32 *= v;
+        m33 *= v;
         return this;
     }
 
     public Mat4 transpose(){
         float t;
-        t = m01; m01 = m10; m10 = t;
-        t = m02; m02 = m20; m20 = t;
-        t = m03; m03 = m30; m30 = t;
-        t = m12; m12 = m21; m21 = t;
-        t = m13; m13 = m31; m31 = t;
-        t = m23; m23 = m32; m32 = t;
+        t = m01;
+        m01 = m10;
+        m10 = t;
+        t = m02;
+        m02 = m20;
+        m20 = t;
+        t = m03;
+        m03 = m30;
+        m30 = t;
+        t = m12;
+        m12 = m21;
+        m21 = t;
+        t = m13;
+        m13 = m31;
+        m31 = t;
+        t = m23;
+        m23 = m32;
+        m32 = t;
         return this;
     }
 

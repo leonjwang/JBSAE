@@ -1,7 +1,5 @@
 package jbsae.graphics.gl;
 
-import jbsae.struct.*;
-
 import static jbsae.JBSAE.*;
 import static org.lwjgl.opengl.GL20.*;
 

@@ -44,7 +44,7 @@ public class Seq<T> implements Iterable<T>{
         return this;
     }
 
-    public Seq<T> set(Iterator<T> itr) {
+    public Seq<T> set(Iterator<T> itr){
         if(itr instanceof Sized list) ensure(list.size() - size);
         clear();
         while(itr.hasNext()) add(itr.next());
@@ -69,7 +69,7 @@ public class Seq<T> implements Iterable<T>{
         return this;
     }
 
-    public Seq<T> addAll(Iterator<T> itr) {
+    public Seq<T> addAll(Iterator<T> itr){
         if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) add(itr.next());
         return this;

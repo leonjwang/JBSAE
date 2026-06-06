@@ -52,7 +52,7 @@ public class Map<K, V> implements Iterable<K>{
         if(tryReplace(hash1, key, value)) return this;
         if(tryReplace(hash2, key, value)) return this;
         if(tryReplace(hash3, key, value)) return this;
-        for(int i = 0; i < stashSize; i++) if(tryReplace(tableCap + i, key, value)) return this;
+        for(int i = 0;i < stashSize;i++) if(tryReplace(tableCap + i, key, value)) return this;
 
         if(tryPlace(hash1, key, value)) return this;
         if(tryPlace(hash2, key, value)) return this;
@@ -78,14 +78,14 @@ public class Map<K, V> implements Iterable<K>{
         if(key == null) return null;
         int base = key.hashCode();
         int hash1 = base & mask;
-        int hash2 = (hash(base, shift,  PRIME1) & mask);
+        int hash2 = (hash(base, shift, PRIME1) & mask);
         int hash3 = (hash(base, shift, PRIME2) & mask);
 
         if(key.equals(keys[hash1])) return values[hash1];
         if(key.equals(keys[hash2])) return values[hash2];
         if(key.equals(keys[hash3])) return values[hash3];
 
-        for(int i = 0; i < stashSize; i++) if(key.equals(keys[tableCap + i])) return values[tableCap + i];
+        for(int i = 0;i < stashSize;i++) if(key.equals(keys[tableCap + i])) return values[tableCap + i];
 
         return null;
     }
@@ -95,15 +95,16 @@ public class Map<K, V> implements Iterable<K>{
         if(tryErase(base & mask, key)) return this;
         if(tryErase((hash(base, shift, PRIME1) & mask), key)) return this;
         if(tryErase((hash(base, shift, PRIME2) & mask), key)) return this;
-        for(int i = 0;i < stashSize;i++) if(key.equals(keys[tableCap + i])){
-            keys[tableCap + i] = keys[tableCap + stashSize - 1];
-            values[tableCap + i] = values[tableCap + stashSize - 1];
-            keys[tableCap + stashSize - 1] = null;
-            values[tableCap + stashSize - 1] = null;
-            stashSize--;
-            size--;
-            return this;
-        }
+        for(int i = 0;i < stashSize;i++)
+            if(key.equals(keys[tableCap + i])){
+                keys[tableCap + i] = keys[tableCap + stashSize - 1];
+                values[tableCap + i] = values[tableCap + stashSize - 1];
+                keys[tableCap + stashSize - 1] = null;
+                values[tableCap + stashSize - 1] = null;
+                stashSize--;
+                size--;
+                return this;
+            }
         return this;
     }
 
@@ -132,7 +133,7 @@ public class Map<K, V> implements Iterable<K>{
     private V displacedValue = null;
 
     private void place(K key, V value){
-        for(int i = 0; i < steps; i++){
+        for(int i = 0;i < steps;i++){
             int base = key.hashCode();
             int hash1 = base & mask;
             if(tryPlace(hash1, key, value)) return;
@@ -140,7 +141,7 @@ public class Map<K, V> implements Iterable<K>{
             int hash2 = (hash(base, shift, PRIME1) & mask);
             if(tryPlace(hash2, key, value)) return;
 
-            int hash3 = (hash(base,shift,  PRIME2) & mask);
+            int hash3 = (hash(base, shift, PRIME2) & mask);
             if(tryPlace(hash3, key, value)) return;
 
             swapRandom(hash1, hash2, hash3, key, value);
@@ -197,7 +198,7 @@ public class Map<K, V> implements Iterable<K>{
         keys = (K[])new Object[tableCap + stashCap];
         values = (V[])new Object[tableCap + stashCap];
         size = stashSize = 0;
-        for(int i = 0; i < oldKeys.length; i++) if(oldKeys[i] != null) place(oldKeys[i], oldVals[i]);
+        for(int i = 0;i < oldKeys.length;i++) if(oldKeys[i] != null) place(oldKeys[i], oldVals[i]);
         displacedKey = null;
         displacedValue = null;
     }
@@ -223,7 +224,7 @@ public class Map<K, V> implements Iterable<K>{
         }
 
         public void findNextIndex(){
-            for(; nextIndex < keys.length; nextIndex++) if(keys[nextIndex] != null) return;
+            for(;nextIndex < keys.length;nextIndex++) if(keys[nextIndex] != null) return;
         }
 
         @Override
@@ -251,7 +252,7 @@ public class Map<K, V> implements Iterable<K>{
         }
 
         public void findNextIndex(){
-            for(; nextIndex < keys.length; nextIndex++) if(keys[nextIndex] != null) return;
+            for(;nextIndex < keys.length;nextIndex++) if(keys[nextIndex] != null) return;
         }
 
         @Override

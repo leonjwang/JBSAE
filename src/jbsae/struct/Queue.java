@@ -47,7 +47,7 @@ public class Queue<T> implements Iterable<T>{
         return this;
     }
 
-    public Queue<T> addAllFirst(Iterator<T> itr) {
+    public Queue<T> addAllFirst(Iterator<T> itr){
         if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) addFirst(itr.next());
         return this;
@@ -65,7 +65,7 @@ public class Queue<T> implements Iterable<T>{
         return this;
     }
 
-    public Queue<T> addAllLast(Iterator<T> itr) {
+    public Queue<T> addAllLast(Iterator<T> itr){
         if(itr instanceof Sized list) ensure(list.size());
         while(itr.hasNext()) addLast(itr.next());
         return this;
@@ -130,7 +130,7 @@ public class Queue<T> implements Iterable<T>{
 
     public Queue<T> resize(int capacity){
         T[] old = items;
-        items =  (T[])new Object[capacity];
+        items = (T[])new Object[capacity];
         int n = min(old.length - head, size);
         System.arraycopy(old, head, items, 0, n);
         System.arraycopy(old, 0, items, n, size - n);

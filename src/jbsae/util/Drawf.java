@@ -85,11 +85,11 @@ public class Drawf{
         x2 + Tmp.v1.x, y2 + Tmp.v1.y);
     }
 
-    public static void box(Region region, float x,  float y, float w, float h){
+    public static void box(Region region, float x, float y, float w, float h){
         box(region, x, y, w, h, 1);
     }
 
-    public static void box(Region region, float x,  float y, float w, float h, float s){
+    public static void box(Region region, float x, float y, float w, float h, float s){
         line(region, x, y, x + w, y, s);
         line(region, x, y, x, y + h, s);
         line(region, x + w, y + h, x + w, y, s);

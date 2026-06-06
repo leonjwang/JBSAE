@@ -3,8 +3,6 @@ package jbsae.struct.prim;
 import jbsae.struct.*;
 import jbsae.struct.prim.iterator.*;
 
-import java.util.*;
-
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 

@@ -1,7 +1,5 @@
 package jbsae.audio;
 
-import jbsae.struct.*;
-
 import javax.sound.sampled.*;
 import java.nio.*;
 

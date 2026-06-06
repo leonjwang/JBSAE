@@ -86,13 +86,14 @@ public class Set<T> implements Iterable<T>{
         if(tryErase(base & mask, value)) return this;
         if(tryErase(hash(base, shift, PRIME1) & mask, value)) return this;
         if(tryErase(hash(base, shift, PRIME2) & mask, value)) return this;
-        for(int i = 0;i < stashSize;i++) if(value.equals(table[tableCap + i])){
-            table[tableCap + i] = table[tableCap + stashSize - 1];
-            table[tableCap + stashSize - 1] = null;
-            stashSize--;
-            size--;
-            return this;
-        }
+        for(int i = 0;i < stashSize;i++)
+            if(value.equals(table[tableCap + i])){
+                table[tableCap + i] = table[tableCap + stashSize - 1];
+                table[tableCap + stashSize - 1] = null;
+                stashSize--;
+                size--;
+                return this;
+            }
         return this;
     }
 

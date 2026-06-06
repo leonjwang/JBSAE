@@ -1,7 +1,6 @@
 package jbsae.graphics;
 
 import jbsae.graphics.gl.*;
-import jbsae.struct.*;
 import jbsae.struct.prim.*;
 
 import static jbsae.JBSAE.*;
