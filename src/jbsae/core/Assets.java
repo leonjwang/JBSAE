@@ -13,7 +13,7 @@ import java.io.*;
 import static jbsae.util.Stringf.*;
 
 public class Assets{
-    public Map<String, AssetFi> files = new Map<>(); //TODO: Consider changing what is static and what isn't
+    public Map<String, AssetFi> files = new Map<>();
 
     public Map<String, Font> fonts = new Map<>();
     public Map<String, Shader> shaders = new Map<>();

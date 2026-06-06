@@ -1,7 +1,6 @@
 package jbsae;
 
 import jbsae.struct.*;
-import jbsae.struct.prim.*;
 
 import java.io.*;
 

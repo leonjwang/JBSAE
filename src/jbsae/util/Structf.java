@@ -7,7 +7,6 @@ import java.util.*;
 import static jbsae.util.Mathf.*;
 
 
-// TODO: Delete this whole class
 public class Structf{
     public static final int PRIME1 = 0xbe1f14b1;
     public static final int PRIME2 = 0xb4b82e39;

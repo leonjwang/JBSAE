@@ -5,7 +5,6 @@ import java.util.*;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 
-// Consider making this like Set, where items.length is always a power of two so we can take advantage of bitwise operations
 public class Queue<T> implements Iterable<T>{
     private T[] items;
     private int head, tail, end;

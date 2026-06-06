@@ -37,11 +37,6 @@ public class Heap<T>{
         return this;
     }
 
-    public Heap<T> update(T value){
-        // TODO: Find and update (swim/sink)
-        return this;
-    }
-
     private void swim(int index){
         if(index == 0) return;
         int parent = (index - 1) >>> 1;

@@ -34,7 +34,7 @@ public class Renderer{
         vertexBuffer = new VertexBuffer();
         vertexBuffer.data(GL_ARRAY_BUFFER, (long)vertices.capacity() * Float.BYTES, GL_DYNAMIC_DRAW);
 
-        // TODO: Dynamically loaded shaders?
+        // TODO: Dynamically loaded shaders? Similar to Assets
         vertexShader = ((ShaderFi)assets.create(assets.assetsFolder + vertexShaderPath).load()).shader;
         fragmentShader = ((ShaderFi)assets.create(assets.assetsFolder + fragmentShaderPath).load()).shader;
 
@@ -43,7 +43,7 @@ public class Renderer{
         program.link();
         program.use();
 
-        // TODO: Expand shader capabilities
+        // TODO: Expand shader/render pipeline capabilities
         program.setVertex("position", 2, 8 * Float.BYTES, 0);
         program.setVertex("color", 4, 8 * Float.BYTES, 2 * Float.BYTES);
         program.setVertex("texCoord", 2, 8 * Float.BYTES, 6 * Float.BYTES);

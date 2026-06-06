@@ -17,6 +17,8 @@ public class JBSAE{
     public static int width = 600, height = 500;
     public static int ups = 60, fps = 60;
 
+    // TODO: Central location to manage saves and logs, and just disk related objects that we need to write to/read from. Maybe a Saves core class, similar to Assets
+
     public static Assets assets = new Assets();
     public static Time time = new Time();
     public static Window window = new Window();
@@ -81,7 +83,7 @@ public class JBSAE{
             dispose();
         }catch(Throwable e){
             Log.error(getStackTrace(e));
-            Log.writeToFile("log" + System.currentTimeMillis() + ".log"); // TODO: Dynamic log dump location
+            Log.writeToFile("log" + System.currentTimeMillis() + ".log");
         }
     }
 }

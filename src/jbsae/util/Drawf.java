@@ -7,7 +7,7 @@ import jbsae.graphics.draw.*;
 import static jbsae.JBSAE.*;
 import static jbsae.util.Colorf.*;
 
-// TODO: Consider implementing a high level function for setting proceeding stroke width, texture, etc. Also consider the responsibility of layer and fill form Draw to Drawf
+// TODO: Consider implementing a high level function for setting proceeding stroke width, texture, etc.
 public class Drawf{
     /** Set fill color. */
     public static void fill(){
