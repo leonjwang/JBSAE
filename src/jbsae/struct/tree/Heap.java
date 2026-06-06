@@ -3,7 +3,6 @@ package jbsae.struct.tree;
 import jbsae.func.prim.*;
 import jbsae.struct.*;
 
-// TODO: Turn into tournament heap?
 public class Heap<T>{
     private Seq<T> values;
 

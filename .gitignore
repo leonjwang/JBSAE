@@ -8,4 +8,5 @@
 *.DS_Store
 *.MF
 *.log
+*.save
 /assets/assetlist.lst

@@ -5,6 +5,7 @@ import jbsae.core.*;
 import jbsae.graphics.gl.*;
 import jbsae.math.interp.*;
 import jbsae.struct.*;
+import jbsae.struct.prim.*;
 import jbsae.util.*;
 
 import java.lang.reflect.*;
@@ -29,6 +30,11 @@ public class InterpVisualizer extends Screen{
 
     public static final float SCROLL_SCALE = -30f;
 
+    public FloatQueue pastValues;
+    public int pastFramesStored;
+
+    public Interp currentOver = null;
+
     public Seq<Interp> interps = new Seq<>();
     public Seq<String> names = new Seq<>();
 
@@ -42,6 +48,9 @@ public class InterpVisualizer extends Screen{
             }
         }catch(Exception e){
         }
+
+        pastFramesStored = EXAMPLE_TIME_FRAMES / 5;
+        pastValues = new FloatQueue(pastFramesStored + 4);
 
         box = assets.textures.get("square.png");
 
@@ -73,27 +82,52 @@ public class InterpVisualizer extends Screen{
 
             boolean mouseOver = Tmp.r1.set(rx, ry, DISPLAY_SIZE, DISPLAY_SIZE).contains(input.mouse);
             if(mouseOver){
+                if(currentOver != interp) pastValues.clear();
+                currentOver = interp;
+
                 realSize *= MOUSE_OVER_ZOOM;
 
                 float v1 = (interp.get((float)(time.frames % EXAMPLE_TIME_FRAMES) / EXAMPLE_TIME_FRAMES) - 0.5f) * EXAMPLE_SCALE;
                 float v2 = (interp.get((float)((time.frames + 1) % EXAMPLE_TIME_FRAMES) / EXAMPLE_TIME_FRAMES) - 0.5f) * EXAMPLE_SCALE;
-                if(time.frames % EXAMPLE_TIME_FRAMES == EXAMPLE_TIME_FRAMES - 1) v2 = v1;
+                int mod = time.frames % EXAMPLE_TIME_FRAMES;
+                if(mod == EXAMPLE_TIME_FRAMES - 1 || mod == 0){
+                    pastValues.addLast(-1000);
+                    v2 = v1;
+                }
 
-
-                Drawf.layer(1f);
+                Drawf.layer(0.5f);
                 Drawf.fill(0f, 0f, 0f, 0.5f);
                 Drawf.draw(box.full, input.mouse.x - EXAMPLE_WIDTH / 2f, input.mouse.y, EXAMPLE_WIDTH, EXAMPLE_HEIGHT);
+
+                Drawf.layer(1f);
                 float x1 = v1 * DISPLAY_SIZE + input.mouse.x, x2 = v2 * DISPLAY_SIZE + input.mouse.x;
                 Drawf.fill(1f, 1f, 1f);
                 Drawf.box(box.full, input.mouse.x - EXAMPLE_WIDTH / 2f, input.mouse.y, EXAMPLE_WIDTH, EXAMPLE_HEIGHT);
                 Drawf.line(box.full, x1, input.mouse.y + EXAMPLE_HEIGHT / 2f, x2, input.mouse.y + EXAMPLE_HEIGHT / 2f, STROKE_WIDTH * 2);
                 Drawf.drawc(box.full, x1, input.mouse.y + EXAMPLE_HEIGHT / 2f, STROKE_WIDTH * 2, STROKE_WIDTH * 2);
-                Drawf.layer(0);
 
+                pastValues.addLast(v1);
+                if(pastValues.size > pastFramesStored) pastValues.removeFirst();
+
+//                Drawf.layer(0.9f);
+                for(int v = pastValues.size - 1;v > 0;v--){
+                    if(pastValues.get(v) == -1000 || pastValues.get(v - 1) == -1000) continue;
+                    x1 = pastValues.get(v) * DISPLAY_SIZE + input.mouse.x;
+                    x2 = pastValues.get(v - 1) * DISPLAY_SIZE + input.mouse.x;
+//                    float size = (float)v / pastValues.size;
+                    float size = 1f;
+                    Drawf.layer(0.85f + ((float)v / pastValues.size) / 10f);
+                    Drawf.fill(Tmp.c1.set(Colorf.BLACK).lerp(Colorf.WHITE, (float)v / pastValues.size));
+                    Drawf.drawc(box.full, x1, input.mouse.y + EXAMPLE_HEIGHT / 2f, STROKE_WIDTH * 2 * size, STROKE_WIDTH * 2 * size);
+                    Drawf.line(box.full, x1, input.mouse.y + EXAMPLE_HEIGHT / 2f, x2, input.mouse.y + EXAMPLE_HEIGHT / 2f, STROKE_WIDTH * 2 * size);
+                }
+
+                Drawf.layer(0);
             }
 
             rx = x + tx + BOX_SIZE / 2f - realSize / 2f;
             ry = y + ty + BOX_SIZE / 2f - realSize / 2f;
+            Drawf.fill(1f, 1f, 1f);
             Drawf.box(box.full, rx, ry, realSize, realSize);
 
             for(int v = 0;v < INTERP_STATES;v++){
