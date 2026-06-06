@@ -18,7 +18,6 @@ public class JBSAE{
     public static int ups = 60, fps = 60;
 
     // TODO: Central location to manage saves and logs, and just disk related objects that we need to write to/read from. Maybe a Saves core class, similar to Assets
-
     public static Assets assets = new Assets();
     public static Time time = new Time();
     public static Window window = new Window();

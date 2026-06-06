@@ -16,7 +16,7 @@ public class AudioTest{
         jbsae(() -> {
             Drawf.font(assets.fonts.get("brandbe.fnt"));
 
-            Source song = sounds.play("Nadir.wav");
+            Source song = sounds.play("mix.wav");
             song.loop(true);
             song.pitch(1f);
             song.relative(false);
