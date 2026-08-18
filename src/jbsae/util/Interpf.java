@@ -42,4 +42,14 @@ public class Interpf{
     SWING = new Swing(1.5f),
     SWINGT = f -> (SWING.get(f / 2f + 0.5f) - 0.5f) * 2f,
     SWINGB = f -> SWING.get(f / 2f) * 2f;
+
+    public static Interp interpPhases(Interp base, Interp interp, int phases){
+        return f -> {
+            float fromPhaseInterp = (int)(f * phases) / (float)phases;
+            float from = base.get(fromPhaseInterp);
+            float to = base.get(min(1f, fromPhaseInterp + 1f / phases));
+            float currentPhaseInterp = (f * phases) - (int)(f * phases);
+            return (to - from) * interp.get(currentPhaseInterp) + from;
+        };
+    }
 }
