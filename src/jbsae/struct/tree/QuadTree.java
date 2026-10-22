@@ -7,13 +7,13 @@ public class QuadTree<T extends Pos2>{
     private Seq<T> values;
     private int size;
 
-    public QuadTree<T> b1, b2, b3, b4;
+    private QuadTree<T> b1, b2, b3, b4;
 
     private float cx, cy;
 
     public Range2 bounds;
 
-    public int depthCap = 8, valueCap = 16;
+    public int depthCap = 16, valueCap = 16; // Depth cap should never be > 20 or so because floats only have 23 bit mantissa
 
 
     public QuadTree(float w, float h){
@@ -61,30 +61,14 @@ public class QuadTree<T extends Pos2>{
     }
 
     public Seq<T> query(Seq<T> result, Range2 range){
-        result.ensure(estimate(range));
-        append(result, range);
-        return result;
-    }
-
-    private void append(Seq<T> result, Range2 range){
-        if(b1 == null) result.addAll(values);
+        if(b1 == null) for(T value : values) if(range.contains(value)) result.add(value);
         else{
-            if(b1.bounds.overlaps(range)) b1.append(result, range);
-            if(b2.bounds.overlaps(range)) b2.append(result, range);
-            if(b3.bounds.overlaps(range)) b3.append(result, range);
-            if(b4.bounds.overlaps(range)) b4.append(result, range);
+            if(b1.bounds.overlaps(range)) b1.query(result, range);
+            if(b2.bounds.overlaps(range)) b2.query(result, range);
+            if(b3.bounds.overlaps(range)) b3.query(result, range);
+            if(b4.bounds.overlaps(range)) b4.query(result, range);
         }
-    }
-
-    private int estimate(Range2 range){
-        if(b1 == null) return size;
-
-        int total = 0;
-        if(b1.bounds.overlaps(range)) total += b1.estimate(range);
-        if(b2.bounds.overlaps(range)) total += b2.estimate(range);
-        if(b3.bounds.overlaps(range)) total += b3.estimate(range);
-        if(b4.bounds.overlaps(range)) total += b4.estimate(range);
-        return total;
+        return result;
     }
 
 
@@ -104,10 +88,10 @@ public class QuadTree<T extends Pos2>{
         if(b1 != null) return;
 
         float w2 = bounds.w / 2, h2 = bounds.h / 2;
-        b1 = new QuadTree<T>(cx, cy, w2, h2);
-        b2 = new QuadTree<T>(bounds.x, cy, w2, h2);
-        b3 = new QuadTree<T>(bounds.x, bounds.y, w2, h2);
-        b4 = new QuadTree<T>(cx, bounds.y, w2, h2);
+        b1 = new QuadTree<T>(cx, cy, w2, h2).valueLimit(valueCap).depthLimit(depthCap - 1);
+        b2 = new QuadTree<T>(bounds.x, cy, w2, h2).valueLimit(valueCap).depthLimit(depthCap - 1);
+        b3 = new QuadTree<T>(bounds.x, bounds.y, w2, h2).valueLimit(valueCap).depthLimit(depthCap - 1);
+        b4 = new QuadTree<T>(cx, bounds.y, w2, h2).valueLimit(valueCap).depthLimit(depthCap - 1);
 
         for(T value : values) find(value).add(value);
         values = null;
