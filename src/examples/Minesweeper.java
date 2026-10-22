@@ -10,8 +10,7 @@ import jbsae.util.*;
 import static jbsae.JBSAE.*;
 import static jbsae.util.Mathf.*;
 
-// I originally wrote this in python (pygame), and had ChatGPT port it to java for me.
-// Thanks ChatGPT :P
+// I originally wrote this in python (pygame), and had ChatGPT port it to java for me. As such, the style and general implementation is not the cleanest.
 
 public class Minesweeper extends Screen{
     // Game Settings

@@ -3,6 +3,7 @@ package jbsae.math;
 import static jbsae.util.Mathf.*;
 import static jbsae.util.Stringf.*;
 
+// TODO: Dot and cross products and matrices, now that I've learned linalg
 public class Vec3 implements Pos3{
     public float x, y, z;
 
