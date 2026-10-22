@@ -1,5 +1,14 @@
 package jbsae.files.assets;
 
+// -----------------------------------------------------------------------------
+// Portions of this file are derived from Anuken/Arc (https://github.com/Anuken/Arc)
+// Copyright [yyyy] [name]
+// Licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+// -----------------------------------------------------------------------------
+
+// Modifications: Adapted PngReader for JBSAE
+// by Leon Wang in 10/2026.
+
 import jbsae.*;
 import jbsae.graphics.gl.*;
 import jbsae.util.*;
